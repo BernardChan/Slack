@@ -23,7 +23,11 @@ def details(token, channel_id):
 
 def messages(token, channel_id, start):
     return {
-        'messages': 
+        'messages': [{
+            "message_id": 0,
+            "message": "",
+            "time_created": 1582848000.0
+        }],
         'start': 0,
         'end': 50,
     }
