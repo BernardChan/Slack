@@ -1,17 +1,26 @@
 # Tests for the leave() function in channel.py
-# TODO: need to make sure passwords, names etc. for auth_register are valid and will not return an error
+# Dependencies on:
+#   auth_register()
+#   channel_details()
+#   channel_invite()
 
 import pytest
 import channels as chs
 import channel as ch
+from channel import channel_leave as leave
 import auth
 from error import InputError, AccessError
 
 
-# Setting global variables
+# Create a user that is part of a channel
 login = auth.auth_register("test@test.tst", "password", "name", "lastname")
 u_id = login["u_id"]
 token = login["token"]
+
+# Create a second user that is not part of the channel
+login2 = auth.auth_register("test2@test.tst", "password2", "name2", "lastname2")
+u_id2 = login2["u_id"]
+token2 = login2["token"]
 
 # Create public channel with user (token) in it
 channel_id = chs.channels_create(token, "channel1", True)
@@ -32,17 +41,31 @@ def is_member(user_id):
 #            Tests            #
 ###############################
 
-
-# Test for a normal input
-def test_leave_simple():
+# Check that the channel creator/owner may leave
+def test_leave_owner():
 
     # Check that user is actually part of the channel - if this fails, problem with dependencies
     assert(is_member(u_id))
 
-    ch.channel_leave(token, channel_id)
+    leave(token, channel_id)
 
     # Assert that user is no longer a member
     assert(not is_member(u_id))
+
+
+# Check that a non-owner channel member may leave
+def test_leave_member():
+
+    # Invite a normal member to the channel
+    ch.channel_invite(token, channel_id, u_id2)
+
+    # Check that user is actually part of the channel - if this fails, problem with dependencies
+    assert(is_member(u_id2))
+
+    leave(token2, channel_id)
+
+    # Assert that user is no longer a member
+    assert(not is_member(u_id2))
 
 
 # Test if AccessError exceptions are raised
@@ -50,26 +73,22 @@ def test_leave_simple():
 #   User is not authorised (token invalid)
 #   Authorised User is not a member of the channel_id (but channel_id exists)
 def test_leave_access_error():
-    # TODO: give an invalid token as an arg
-    # TODO: give an authorised user that isn't part of the channel
+    assert(not is_member(u_id2))
 
-    # Create a second user that is not part of the channel
-    login2 = auth.auth_register("test2@test.tst", "password2", "name2", "lastname2")
-    u_id2 = login["u_id"]
-    token2 = login["token"]
+    # User is not part of a channel, raise AccessError exception
+    with pytest.raises(AccessError):
+        leave(token2, channel_id)
 
-    pass
+    # User does not exist, raise AccessError
+    with pytest.raises(AccessError):
+        leave("INVALIDTOKEN", channel_id)
 
 
 # Test if InputError's are raised
 # Should raise when:
 #   channel_id does not exist
 def test_leave_input_error():
-    pass
-    # Dependent on channels.list(token)? How do we know if a channel is valid or not
-    # assuming that leave() calls channels_listall()
-    #
-    # with pytest.raises(InputError):
-    #     leave("VALIDTOKEN", -10)
 
-
+    # Channel does not exist, raise InputError
+    with pytest.raises(InputError):
+        leave(u_id, -100000)
