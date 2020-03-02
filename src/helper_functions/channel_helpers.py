@@ -46,3 +46,11 @@ def is_member(user_id, is_public):
         return any([user_id == person["u_id"] for person in channel_members])
     else:
         return any([user_id == person["u_id"] for person in private_channel_members])
+
+
+def is_owner(user_id, is_public):
+    if is_public:
+        return any([user_id == owner["u_id"] for owner in channel_owner])
+    else:
+        return any([user_id == owner["u_id"] for owner in private_channel_owner])
+
