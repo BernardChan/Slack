@@ -55,7 +55,7 @@ def test_join_slackr_owner():
 def test_join_access_error():
     assert(not ch.is_member(ch.member_id, True))
 
-    # User is not part of the channel, raise AccessError exception
+    # User is not admin and attempts to join a private channel
     with pytest.raises(AccessError):
         join(ch.member_id, ch.private_channel_id)
 
