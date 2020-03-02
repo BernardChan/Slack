@@ -7,3 +7,4 @@
 - Assume that any data is not persistent between function calls for tests
 - Assume that AccessError is thrown when user is not authorised (token invalidated)
 - Assume that the first person to register is the owner of the slakr
+- Assume nothing happens if the channel owner or channel member tries to channel_join() a channel they are part of
