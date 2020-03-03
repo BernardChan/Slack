@@ -23,7 +23,6 @@
 #   Authorised user is not the owner of the channel
 
 from channel import channel_removeowner as remove_owner
-import channel
 import pytest
 import channel
 import channel_helpers as ch
