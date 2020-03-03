@@ -1,9 +1,16 @@
+# Tests for channel_addowner() function
+# Dependencies:
+#   auth_register()
+#   channel_details()
+#   channel_invite()
+#   channels_create()
+
 from channel import channel_addowner as add_owner
 
 import pytest
 import channel
-from error import InputError, AccessError
 import channel_helpers as ch
+from error import InputError, AccessError
 
 
 # Test that normal member can be added as owner to the public and private channel before being added to the channel

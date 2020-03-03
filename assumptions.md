@@ -9,3 +9,4 @@
 - Assume that the first person to register is the owner of the slakr
 - Assume nothing happens if the channel owner or channel member tries to channel_join() a channel they are part of
 - Assume that channel_addowner will also add the user to the channel if they were not already a part of it
+- Assume that not having a channel owner is fine

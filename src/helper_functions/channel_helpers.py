@@ -8,6 +8,12 @@ import channels as chs
 import channel as ch
 import auth
 
+# Invalid channel ID
+invalid_channel_id = -100000
+
+# invalid user_id
+invalid_user_id = -100000
+
 # Create the slackr owner that is not part of the channel
 slackr_owner = auth.auth_register("ownertest@test.tst", "password", "owner", "lastname")
 slackr_owner_id = slackr_owner["u_id"]
