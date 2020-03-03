@@ -1,8 +1,26 @@
-# Functions and variables that are used as input for testing slakr functions
-# Contains variables for:
-#   3 users - channel owner, slackr owner, normal default member
-#   a channel with 1 member in it
-#   function that returns a boolean on whether a user is part of the above channel
+# Functions and variables that are used as input for testing slackr functions
+
+# Usage:
+#   There are 3 users: "slackr_owner", "chan_owner", "member" (slackr owner, channel owner, default member)
+#       they all have their own "_token" and "_id"
+#       e.g. "slackr_owner_token" and "member_id" can both be used by importing this file
+#       only chan_owner is part of a channel, you'll have to channel_invite() slackr_owner and member
+
+#   There are 2 channels: "channel_id" and "private_channel_id"
+#       - They are a public channel and private channel respectively
+#       - You can use them anywhere a channel_id is required
+#       They have a "_name", "_owner", "_members" variable attached
+#       e.g. "private_channel_name" or "channel_members". These are from the dictionary returned from channel_details()
+
+#   There are 2 functions: "is_member" and "is_owner"
+#       They check if a given user_id is a member or an owner of a channel respectively
+#       they both except a "user_id" and "is_public"
+#           "is_public" is a boolean: "True" or "False"
+#               - gives which channel to check (public or private channels respectively)
+#           user_id is the id of the user (e.g. "member_id")
+#   e.g. is_member(chan_owner_id, True) # returns "True", since chan_owner is a member of the public channel
+#   e.g. is_member(slackr_owner_id, False) # returns "False", since slackr_owner is not member of the private channel
+
 
 import channels as chs
 import channel as ch
