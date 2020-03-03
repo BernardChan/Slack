@@ -33,7 +33,7 @@ def test_profile_setname_success():
     
     
 # Input error if first or last names aren't 0<x<51
-def test_profile_setname_short_first_name():
+def test_profile_input_error():
 
     # Registering a test member
     member = auth_register("testmember@test.com", "password", "fname", "lname")
