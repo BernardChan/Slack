@@ -1,12 +1,32 @@
 # Assumptions for the slackr Project
-- Emails with the period `.` delimiter will be treated as different emails
+
+## General Assumptions
 - The string `"INVALIDTOKEN"` is not a valid token
-- Assuming that a non "valid channel" implies a non existent channel ID except when `InputError` is the only exception.
-- Assuming for `channel_leave()` that `InputError` is raised before `AccessError` in the case that the `channel_id` doesn't exist.
-- Assume that slackr owners are not part of every channel by default (e.g. if another member creates a channel, private OR public, then owner is NOT automatically added)
 - Assume that any data is not persistent between function calls for tests
-- Assume that AccessError is thrown when user is not authorised (token invalidated)
 - Assume that the first person to register is the owner of the slakr
+
+
+## `auth_register()`
+- Emails with the period `.` delimiter will be treated as different emails
+
+## `channel_join()`
+- Assuming that a non "valid channel" implies a non existent channel ID except when `InputError` is the only exception.
 - Assume nothing happens if the channel owner or channel member tries to channel_join() a channel they are part of
+
+## `channel_leave()`
+- Assuming that `InputError` is raised before `AccessError` in the case that the `channel_id` doesn't exist.
+
+## `channel_addowner()`
+- Assume that slackr owners are not part of every channel by default (e.g. if another member creates a channel, private OR public, then owner is NOT automatically added)
+- Assume that AccessError is thrown when user is not authorised (token invalidated)
 - Assume that channel_addowner will also add the user to the channel if they were not already a part of it
+
+## `channel_removeowner()`
 - Assume that not having a channel owner is fine
+
+## `search()`
+- Assume that search() is case sensitive
+- Assume that an empty string will return everything
+- Assume that having a search string that contains the same words does not return a match, or searching with a superset of the string
+    - e.g. searching "hello world" will not match "the world is hello" or "hello"
+- Assume that 👌🏻 and 👌 are different (different emoji skin modifiers)
