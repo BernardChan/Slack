@@ -4,7 +4,7 @@
 - The string `"INVALIDTOKEN"` is not a valid token
 - Assume that any data is not persistent between function calls for tests
 - Assume that the first person to register is the owner of the slakr
-
+- Assume that -100000 is an invalid user_id and channel_id
 
 ## `auth_register()`
 - Emails with the period `.` delimiter will be treated as different emails
