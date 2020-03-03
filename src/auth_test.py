@@ -63,4 +63,5 @@ def test_register_invalid_email():
     
     
 #python3 -m pytest auth_test.py
-#command for if forgotten or lost    
+#command for if forgotten or lost
+#test to see if my "git push -u origin auth" has worked so I don't have to push it like this every single time
