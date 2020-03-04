@@ -1,6 +1,5 @@
 # Tests for user_profile_setname() function in user.py
 # Dependencies:
-    # auth_register()
     # user_profile()
 
 #NOTES
@@ -8,57 +7,56 @@
 # u_id, email, name_first, name_last, handle_str
 
 import pytest
-import auth
+import channel_helpers as ch
 
 from user import user_profile_setname
 from user import user_profile
 
+# Helper function to assert that setname was successful
+def assert_setname_success(user_token, user_id, fname, lname):
+    # Call the profile to be tested and assert that names are correct
+    user = user_profile(user_token, user_id)
+    assert(user["name_first"] == fname)
+    assert(user["name_last"] == lname)
+
 # Tests succesful setname
 def test_profile_setname_success():
     
-    # More test cases for successes needed?
-    
-    # Registering a test member
-    member = auth_register("testmember@test.com", "password", "fname", "lname")
-    member_token = member["token"]
-    member_uid = member["u_id"]
-    
     # Calling setname
-    user_profile_setname(member_token, "Harry", "Potter")
+    user_profile_setname(ch.member_token, "Harry", "Potter")
+    assert_setname_success(ch.member_token, ch.member_id, "Harry", "Potter")    
+
+# Tests setname with numbers in name strings
+def test_profile_setname_numbers():
+
+    user_profile_setname(ch.member_token, "1234", "5678")
+    assert_setname_success(ch.member_token, ch.member_id, "1234", "5678")
     
-    # Calling their profile and asserting that names updated
-    user = user_profile(member_token, member_uid)
-    assert(user["name_first"] == "Harry")
-    assert(user["name_last"] == "Potter")
-    
+    user_profile_setname(ch.member_token, "JUL14N", "L33T")
+    assert_setname_success(ch.member_token, ch.member_id, "JUL14N", "L33T")
     
 # Input error if first or last names aren't 0<x<51
 def test_profile_input_error():
 
-    # Registering a test member
-    member = auth_register("testmember@test.com", "password", "fname", "lname")
-    member_token = member["token"]
-    member_uid = member["u_id"]
-
     # Raise error if name is empty
     with pytest.raises(InputError) as e:
-        user_profile_setname(member_token, "", "Potter")
+        user_profile_setname(ch.member_token, "", "Potter")
 
     with pytest.raises(InputError) as e:
-        user_profile_setname(member_token, "Harry", "")
+        user_profile_setname(ch.member_token, "Harry", "")
     
     with pytest.raises(InputError) as e:
-        user_profile_setname(member_token, "", "")
+        user_profile_setname(ch.member_token, "", "")
 
     # Raise error if name > 50
     with pytest.raises(InputError) as e:
-        user_profile_setname(member_token,"a" * 51, "Potter")
+        user_profile_setname(ch.member_token,"a" * 51, "Potter")
 
     with pytest.raises(InputError) as e:
-        user_profile_setname(member_token, "Harry", "a" * 51)
+        user_profile_setname(ch.member_token, "Harry", "a" * 51)
     
     with pytest.raises(InputError) as e:
-        user_profile_setname(member_token, "a" * 51, "b" * 51)
+        user_profile_setname(ch.member_token, "a" * 51, "b" * 51)
 
    
     
