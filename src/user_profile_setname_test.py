@@ -1,6 +1,7 @@
 # Tests for user_profile_setname() function in user.py
 # Dependencies:
     # user_profile()
+    # auth_register()
 
 #NOTES
 # A user is a dictionary containing 
