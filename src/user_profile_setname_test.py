@@ -12,12 +12,13 @@ import pytest
 from auth import auth_register
 from user import user_profile_setname
 from user import user_profile
+from error import InputError, AccessError
 
 # Pytest fixture to regiser a new test user
 @pytest.fixture
 def get_new_user():
     data = auth_register("test.user@test.com", "password123", "fname", "lname")
-    return (data["u_id"], data["token"])
+    return data["u_id"], data["token"]
 
 # Helper function to assert that setname was successful
 def assert_setname_success(user_token, user_id, fname, lname):
@@ -27,7 +28,7 @@ def assert_setname_success(user_token, user_id, fname, lname):
     assert(user["name_last"] == lname)
 
 # Tests succesful setname
-def test_profile_setname_success():
+def test_profile_setname_success(get_new_user):
     
     user_id, user_token = get_new_user
     
@@ -43,7 +44,7 @@ def test_profile_setname_success():
     assert_setname_success(user_token, user_id, "Red+Blue", "=Purple")
 
 # Tests setname with numbers in name strings
-def test_profile_setname_numbers():
+def test_profile_setname_numbers(get_new_user):
 
     user_id, user_token = get_new_user
 
@@ -57,7 +58,7 @@ def test_profile_setname_numbers():
     assert_setname_success(user_token, user_id, "2+2", "=4")
     
 # Tests setname with special characters in name strings
-def test_profile_setname_special_characters():
+def test_profile_setname_special_characters(get_new_user):
 
     user_id, user_token = get_new_user
 
@@ -68,7 +69,7 @@ def test_profile_setname_special_characters():
     assert_setname_success(user_token, user_id, "Harry\n", "Potter\t")
     
 # Input error if first or last names aren't 0<x<51
-def test_profile_setname_input_error():
+def test_profile_setname_input_error(get_new_user):
 
     user_id, user_token = get_new_user
 
