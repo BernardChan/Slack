@@ -40,7 +40,22 @@ def test_profile_setemail_success(user1):
     
     user_profile_setemail(user_token, "coolemail@notgmail.net")
     assert_setemail_success(user_token, user_id, "coolemail@notgmail.net")
-    
+
+# Invalid email (not following correct method) results in InputError
+def test_profile_setemail_invalid(user1):
+
+    user_token, user_id = user1
+    with pytest.raises(InputError) as e:
+        user_profile_setemail(user_token, "invalidemail.com")
+        
+    with pytest.raises(InputError) as e:
+        user_profile_setemail(user_token, "invalidemail@no")
+        
+    with pytest.raises(InputError) as e:
+        user_profile_setemail(user_token, "a.b.c@g.m")
+        
+    with pytest.raises(InputError) as e:
+        user_profile_setemail(user_token, "hello!")
     
 # TODO - don't use helper function or fixtures for making two users
 '''    
