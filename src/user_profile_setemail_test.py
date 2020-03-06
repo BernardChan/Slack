@@ -58,7 +58,7 @@ def test_profile_setemail_invalid(user1):
         user_profile_setemail(user_token, "hello!")
 
 # Input error if email address is being used by another user
-def test_profile_setemail_duplicate_email()
+def test_profile_setemail_duplicate_email():
     
     member1 = auth_register("test.user@test.com", "password123", "fname", "lname")
     member2 = auth_register("test2.user2@yer.com", "123password", "Harry", "Potter")
