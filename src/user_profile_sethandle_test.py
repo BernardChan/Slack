@@ -1,4 +1,4 @@
-# Tests for user_profile_setname() function in user.py
+# Tests for user_profile_sethandle() function in user.py
 # Dependencies:
     # user_profile()
     # auth_register()
