@@ -30,3 +30,6 @@
 - Assume that having a search string that contains the same words does not return a match, or searching with a superset of the string
     - e.g. searching "hello world" will not match "the world is hello" or "hello"
 - Assume that 👌🏻 and 👌 are different (different emoji skin modifiers)
+
+## `user_profile()`
+- Assume that user1 can request profile information of user2
