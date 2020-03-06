@@ -56,17 +56,20 @@ def test_profile_setemail_invalid(user1):
         
     with pytest.raises(InputError) as e:
         user_profile_setemail(user_token, "hello!")
-    
-# TODO - don't use helper function or fixtures for making two users
-'''    
+
 # Input error if email address is being used by another user
 def test_profile_setemail_duplicate_email(user1, user2)
     
-    token1, id1 = user1
-    token2, id2 = user2
+    member1 = auth_register("test.user@test.com", "password123", "fname", "lname")
+    member2 = auth_register("test2.user2@yer.com", "123password", "Harry", "Potter")
     
-    user_profile_setemail(token1, 
-'''
+    # Member 1 tries to set email that is same as member2's
+    with pytest.raises(InputError) as e:
+        user_profile_setemail(member1["token"], "test2.user2@yer.com")
+        
+    # Member 2 tries to set email that is same as member1's
+    with pytest.raises(InputError) as e:
+        user_profile_setemail(member2["token"], "test.user@test.com")
 
 # Access error if token passed is invalid
 def test_profile_setname_access_error():
