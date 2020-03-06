@@ -30,10 +30,20 @@ def assert_sethandle_success(user_token, user_id, handle):
     assert(user["handle_str"] == handle)
 
 # Test successful sethandle
+def test_profile_sethandle_success(user1):
 
+    user_token, user_id = user1
+    user_profile_sethandle(user_token, "newhandle")
+    assert_sethandle_success(user_token, user_id, "newhandle")
+    
+    user_profile_sethandle(user_token, "cool.handle18")
+    assert_sethandle_success(user_token, user_id, "cool.handle18")
+    
+    user_profile_sethandle(user_token, "red+blue=purple")
+    assert_sethandle_success(user_token, user_id, "red+blue=purple")
 
 # Input error when handle is not between 3 and 20 characters
-def test_profile_set_handle(user1):
+def test_profile_sethandle(user1):
 
     user_token, user_id = user1
     with pytest.raises(InputError) as e:
@@ -64,3 +74,8 @@ def test_profile_sethandle_duplicate_handle():
 
 
 # Access error when used with invalid token
+def test_profile_sethandle_access_error():
+
+    # Raise error if invalid token
+    with pytest.raises(AccessError) as e:
+        user_profile_sethandle("INVALIDTOKEN", "newhandle")
