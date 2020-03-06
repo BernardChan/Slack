@@ -67,4 +67,11 @@ def test_profile_setemail_duplicate_email(user1, user2)
     
     user_profile_setemail(token1, 
 '''
-    
+
+# Access error if token passed is invalid
+def test_profile_setname_access_error():
+
+    # Raise error if user does not exist
+    with pytest.raises(AccessError):
+        user_profile_setemail("INVALIDTOKEN", "coolemail@test.com")
+
