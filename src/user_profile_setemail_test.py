@@ -42,7 +42,7 @@ def test_profile_setemail_success(user1):
     assert_setemail_success(user_token, user_id, "coolemail@notgmail.net")
     
 # Tests very similar emails
-def test _profile_setemail_similar(user1, user2):
+def test_profile_setemail_similar(user1, user2):
 
     token1, uid1 = user1
     token2, uid2 = user2
