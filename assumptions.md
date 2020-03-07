@@ -33,3 +33,4 @@
 
 ## `user_profile_sethandle()`
 - Assume that special characters ("\n", "\t") can be used in a handle
+- Assume that "between 3 and 20 characters" is inclusive of 3 and 20.

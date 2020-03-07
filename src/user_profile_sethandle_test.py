@@ -70,18 +70,21 @@ def test_profile_sethandle(user1):
         user_profile_sethandle(user_token, "a" * 50)
 
 # Input error when handle is in use by another user
-def test_profile_sethandle_duplicate_handle():
+def test_profile_sethandle_duplicate_handle(user1, user2):
 
-    member1 = auth_register("test.user@test.com", "password123", "fname", "lname")
-    member2 = auth_register("test2.user2@yer.com", "123password", "Harry", "Potter")
+    token1, uid1 = user1
+    token2, uid2 = user2
+
+    user_profile_sethandle(token1, "1CoolHandle")
+    user_profile_sethandle(token2, "2BetterHandle")
     
     # Member 1 tries to set handle that is same as member2's
     with pytest.raises(InputError) as e:
-        user_profile_sethandle(member1["token"], "harrypotter")
+        user_profile_sethandle(token1, "2BetterHandle")
         
     # Member 2 tries to set handle that is same as member1's
     with pytest.raises(InputError) as e:
-        user_profile_sethandle(member2["token"], "fnamelname")
+        user_profile_sethandle(token2, "1CoolHandle")
 
 
 # Access error when used with invalid token
