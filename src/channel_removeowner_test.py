@@ -25,7 +25,7 @@
 from channel import channel_removeowner as remove_owner
 import pytest
 import channel
-import channel_helpers as ch
+import helper_functions.channel_helpers as ch
 from error import InputError, AccessError
 
 

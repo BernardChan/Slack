@@ -18,9 +18,9 @@
 
 from other import search
 from message import message_send as send
-from channel_helpers import chan_owner_token as token
-from channel_helpers import chan_owner_token as id
-from channel_helpers import chan_owner_token as private_id
+from helper_functions.channel_helpers import chan_owner_token as token
+from helper_functions.channel_helpers import chan_owner_token as id
+from helper_functions.channel_helpers import chan_owner_token as private_id
 
 
 # Returns boolean on whether the messages returned match exactly the given msg_IDs list

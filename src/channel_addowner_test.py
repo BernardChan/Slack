@@ -9,7 +9,7 @@ from channel import channel_addowner as add_owner
 
 import pytest
 import channel
-import channel_helpers as ch
+import helper_functions.channel_helpers as ch
 from error import InputError, AccessError
 
 
