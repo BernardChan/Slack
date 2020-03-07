@@ -30,3 +30,6 @@
 - Assume that having a search string that contains the same words does not return a match, or searching with a superset of the string
     - e.g. searching "hello world" will not match "the world is hello" or "hello"
 - Assume that 👌🏻 and 👌 are different (different emoji skin modifiers)
+
+## `user_profile_sethandle()`
+- Assume that special characters ("\n", "\t") can be used in a handle

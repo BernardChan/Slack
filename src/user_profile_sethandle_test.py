@@ -41,6 +41,17 @@ def test_profile_sethandle_success(user1):
     
     user_profile_sethandle(user_token, "red+blue=purple")
     assert_sethandle_success(user_token, user_id, "red+blue=purple")
+    
+# Tests sethandle with special characters
+def test_profile_sethandle_special_characters:
+
+    user_token, user_id = user1
+    user_profile_sethandle(user_token, "Hey\n")
+    assert_sethandle_success(user_token, user_id, "Hey\n")
+    
+    user_profile_sethandle(user_token, "Hi!\t")
+    assert_sethandle_success(user_token, user_id, "Hi!\t")
+    
 
 # Input error when handle is not between 3 and 20 characters
 def test_profile_sethandle(user1):
