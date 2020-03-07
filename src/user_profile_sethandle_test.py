@@ -43,7 +43,7 @@ def test_profile_sethandle_success(user1):
     assert_sethandle_success(user_token, user_id, "red+blue=purple")
     
 # Tests sethandle with special characters
-def test_profile_sethandle_special_characters:
+def test_profile_sethandle_special_characters(user1):
 
     user_token, user_id = user1
     user_profile_sethandle(user_token, "Hey\n")
