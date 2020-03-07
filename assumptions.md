@@ -32,4 +32,5 @@
 - Assume that 👌🏻 and 👌 are different (different emoji skin modifiers)
 
 ## `user_profile_setemail()`
-- Emails with the period `.` delimiter will be treated as different emails
+- Assume that emails with the period `.` delimiter will be treated as different emails
+- Assume that a user can set their email again to their current email
