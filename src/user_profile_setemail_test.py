@@ -40,7 +40,19 @@ def test_profile_setemail_success(user1):
     
     user_profile_setemail(user_token, "coolemail@notgmail.net")
     assert_setemail_success(user_token, user_id, "coolemail@notgmail.net")
+    
+# Tests very similar emails
+def test _profile_setemail_similar(user1, user2):
 
+    token1, uid1 = user1
+    token2, uid2 = user2
+    
+    user_profile_setemail(token1, "new.email@test.com")
+    assert_setemail_success(token1, uid1, "new.email@test.com")
+    # without "." delimiter - treated as different email
+    user_profile_setemail(token2, "newemail@test.com")
+    assert_setemail_success(token2, uid2, "newemail@test.com")
+    
 # Invalid email (not following correct method) results in InputError
 def test_profile_setemail_invalid(user1):
 
