@@ -36,4 +36,5 @@
 - Names with numbers in them are valid
 - Names with special characters ("\n", "\t", etc.) are valid names as long as they are in a string
 - "Between 1 and 50 characters" in project spec is inclusive (includes names with 1 and 50 characters)
+- Assume that two users can have the same names
 
