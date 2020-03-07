@@ -14,4 +14,4 @@ def test_channels_list():
     assert channels_list(ch.member_token) == {}    
     
     # empty channel list for slackr owner
-    assert channels_list(ch.slackr_owner_token) == {}ß
+    assert channels_list(ch.slackr_owner_token) == {}
