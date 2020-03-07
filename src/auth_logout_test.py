@@ -10,5 +10,6 @@ def test_logout():
     # attempt to logout an invalid token
     assert auth_logout(ch.token) == False
     assert auth_logout(Token) == False
+    assert auth_logout() == False
     
 
