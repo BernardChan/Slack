@@ -27,7 +27,7 @@ from helper_functions.channel_helpers import chan_owner_token as private_id
 def is_correct_message(messages, msg_IDs):
 
     # check that the message and amount of messages matches the msg_IDs list
-    for message in messages:
+    for message in messages["messages"]:
         try:
             msg_IDs.remove(message["message_id"])
         except ValueError:
