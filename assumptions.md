@@ -30,3 +30,7 @@
 - Assume that having a search string that contains the same words does not return a match, or searching with a superset of the string
     - e.g. searching "hello world" will not match "the world is hello" or "hello"
 - Assume that 👌🏻 and 👌 are different (different emoji skin modifiers)
+
+## `user_profile_setemail()`
+- Assume that emails with the period `.` delimiter will be treated as different emails
+- Assume that a user can set their email again to their current email
