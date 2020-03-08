@@ -3,6 +3,29 @@
 # Dependancies:
     # user_profile()
     #auth_register()
+    #auth_login()
+    #auth_logout()
+    
+# Assumptions 
+    # Special characters are permitted for first/last names
+    # Registration gives a session so it must log you in when you register
+    
+# Test what happens when:
+# Testing of individual elements
+    # password is entered correctly
+    # password is below minimum characters
+    # first name entered correctly
+    # first name entered with too many characters
+    # first name entered incorrectly (as integer)
+    # last name entered correctly (as string)
+    # last name entered with too many characters
+    # email entered correctly
+    # email entered incorrectly
+# Test for:
+# Testing of interconnected elements
+    # that register returns a uid and token
+    # duplicate registration requests
+    #
 
 import pytest
 from auth import auth_login
@@ -27,7 +50,7 @@ def test_auth_register_short_password():
         auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
 
 def test_auth_register_valid_password():
-    auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
+    assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
 
 #auth_register() First Name Validation
@@ -36,12 +59,22 @@ def test_auth_register_invalid_first_name():
         auth_register("bill.gates@microsoft.com", "123", "B"*51, "Gates")
 
 def test_auth_register_valid_first_name():
-    auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
-
-
+    assert auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
+    
+def test_auth_register_integer_first_name():
+    passwordInteger = 123456
+    if not isinstance(passwordInteger, str):
+        with pytest.raises(InputError) as e:
+            auth_register("bill.gates@microsoft.com", 123456, "Bill", "Gates")
+            
+def test_auth_register_string_first_name():
+    passwordString = "123456"
+    if not isinstance(passwordString, str):
+        assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
+            
 #auth_register() Last Name Validation
 def test_auth_register_valid_last_name():
-    auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
+    assert auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
 
 def test_auth_register_invalid_last_name():
     with pytest.raises(InputError) as e:
@@ -49,7 +82,7 @@ def test_auth_register_invalid_last_name():
 
 #auth_register() Email Validation
 def test__auth_register_valid_email():
-    auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
+    assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
 def test_auth_register_invalid_email():
     with pytest.raises(InputError) as e:
@@ -61,13 +94,17 @@ register() interconnected validation functions
 """
     
 # make sure register() returns a uID and token
+def test_auth_register_return():
+    register1 = auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
+ 
+# test for duplicate registration attempts with the same user_profile
 def test_auth_register_duplicate_registration():
     register1 = auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
  
     with pytest.raises(InputError) as e:
         #Email address is already being used by another user
         register2 = auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
-        assert (register1 != register2)
+        # assert (register1 != register2)
     
 #python3 -m pytest auth_test.py
 #command for if forgotten or lost
