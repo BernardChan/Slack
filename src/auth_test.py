@@ -1,19 +1,25 @@
+# Tests for auth_register
+
+# Dependancies:
+    # user_profile()
+    #auth_register()
+
 import pytest
 from auth import auth_login
 from auth import auth_logout
 from auth import auth_register
+from user import user_profile
 from error import InputError, AccessError
 
 import sys
 sys.path.append('../')
 
-#Regular Expressions Module
-#Used for email regular expressions
-import re
-
+# fixture is a good idea. So I call only one of the user profile ones 
+# and go from there. 
 
 """
-auth_register() validation function. 
+auth_register() elemental validation functions. 
+# making sure each input to register() is valid
 """
 #auth_register() Password Validation
 def test_auth_register_short_password():
@@ -41,27 +47,29 @@ def test_auth_register_invalid_last_name():
     with pytest.raises(InputError) as e:
         auth_register("bill.gates@microsoft.com", "123", "Bill", "G"*51)
 
-
 #auth_register() Email Validation
-def check_email(email):
-    regex = r"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-    if(re.search(regex,email)): 
-        #success needs do nothing right??
-        auth_register(email, "123456", "Bill", "Gates")
-    else:  
-        with pytest.raises(InputError) as e:
-            auth_register(email, "123456", "Bill", "Gates")
-       
+def test__auth_register_valid_email():
+    auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
-def test_register_valid_email():
-    email = "bill.gates@microsoft.com"
-    check_email(email) 
-  
-def test_register_invalid_email():
-    email = "billyboi.com"
-    check_email(email) 
+def test_auth_register_invalid_email():
+    with pytest.raises(InputError) as e:
+        auth_register("bill.microsoft.com", "123456", "Bill", "Gates")
+
+"""
+register() interconnected validation functions
+# making sure output behavior from register() is correct and valid
+"""
     
+# make sure register() returns a uID and token
+def test_auth_register_duplicate_registration():
+    register1 = auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
+ 
+    with pytest.raises(InputError) as e:
+        #Email address is already being used by another user
+        register2 = auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
+        assert (register1 != register2)
     
 #python3 -m pytest auth_test.py
 #command for if forgotten or lost
-#test to see if my "git push -u origin auth" has worked so I don't have to push it like this every single time
+#test to see if my "git push -u origin auth" has worked 
+#so I don't have to push it like this every single time
