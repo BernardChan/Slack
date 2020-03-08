@@ -38,3 +38,11 @@
 - "Between 1 and 50 characters" in project spec is inclusive (includes names with 1 and 50 characters)
 - Assume that two users can have the same names
 
+## `user_profile_sethandle()`
+- Assume that special characters ("\n", "\t") can be used in a handle
+- Assume that "between 3 and 20 characters" is inclusive of 3 and 20.
+
+## `user_profile_setemail()`
+- Assume that emails with the period `.` delimiter will be treated as different emails
+- Assume that a user can set their email again to their current email
+
