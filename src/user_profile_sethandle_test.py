@@ -54,7 +54,7 @@ def test_profile_sethandle_special_characters(user1):
     
 
 # Input error when handle is not between 3 and 20 characters
-def test_profile_sethandle(user1):
+def test_profile_sethandle_input_error(user1):
 
     user_token, user_id = user1
     with pytest.raises(InputError) as e:
