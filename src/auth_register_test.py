@@ -39,6 +39,7 @@ sys.path.append('../')
 
 # fixture is a good idea. So I call only one of the user profile ones 
 # and go from there. 
+register0 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
 """
 auth_register() elemental validation functions. 
@@ -95,18 +96,18 @@ register() interconnected validation functions
     
 # make sure register() returns a uID and token
 def test_auth_register_return():
-    register1 = auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
+    register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
  
 # test for duplicate registration attempts with the same user_profile
 def test_auth_register_duplicate_registration():
-    register1 = auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
+    register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
  
     with pytest.raises(InputError) as e:
         #Email address is already being used by another user
-        register2 = auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
+        register2 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
         # assert (register1 != register2)
     
-#python3 -m pytest auth_test.py
+#python3 -m pytest auth_register_test.py
 #command for if forgotten or lost
 #test to see if my "git push -u origin auth" has worked 
 #so I don't have to push it like this every single time
