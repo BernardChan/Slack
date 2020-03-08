@@ -1,5 +1,5 @@
 import channels
-import channel_helpers as ch
+import helper_functions.channel_helpers as ch
 
 def test_channels_list():
     
