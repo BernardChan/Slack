@@ -1,5 +1,5 @@
 import auth
-import channel_helpers as ch
+import helper_functions.channel_helpers as ch
 
 def test_logout():
     # check logout for each token
@@ -8,8 +8,14 @@ def test_logout():
     assert auth_logout(ch.member_token) == True
     
     # attempt to logout an invalid token
+    
+    # token not in helper function
     assert auth_logout(ch.token) == False
+    
+    # random string
     assert auth_logout(Token) == False
+    
+    # no input 
     assert auth_logout() == False
     
 
