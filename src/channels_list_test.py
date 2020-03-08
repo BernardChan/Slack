@@ -2,9 +2,6 @@ import channels
 import channel_helpers as ch
 
 def test_channels_list():
-    ch.chan_owner_token
-    ch.channel_id
-    ch.private_channel_id
     
     # checks channels list for a channel owner token
     assert channels_list(ch.chan_owner_token) == 
