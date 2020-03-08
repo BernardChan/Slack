@@ -31,6 +31,12 @@
     - e.g. searching "hello world" will not match "the world is hello" or "hello"
 - Assume that 👌🏻 and 👌 are different (different emoji skin modifiers)
 
+## `user_profile_setname()`
+- ".", "+", "=" and other symbols can be in a name as long as they are in a string
+- Names with numbers in them are valid
+- Names with special characters ("\n", "\t", etc.) are valid names as long as they are in a string
+- "Between 1 and 50 characters" in project spec is inclusive (includes names with 1 and 50 characters)
+- Assume that two users can have the same names
 
 ## `user_profile_sethandle()`
 - Assume that special characters ("\n", "\t") can be used in a handle
@@ -39,3 +45,4 @@
 ## `user_profile_setemail()`
 - Assume that emails with the period `.` delimiter will be treated as different emails
 - Assume that a user can set their email again to their current email
+
