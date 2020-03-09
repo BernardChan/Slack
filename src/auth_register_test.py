@@ -14,11 +14,13 @@
 # Testing of individual elements
     # password is entered correctly
     # password is below minimum characters
+    # password entered with empty value
     # first name entered correctly
     # first name entered with too many characters
-    # first name entered incorrectly (as integer)
-    # last name entered correctly (as string)
+    # first name entered with empty value
+    # last name entered correctly
     # last name entered with too many characters
+    # last name entered with empty value
     # email entered correctly
     # email entered incorrectly
 # Test for:
@@ -37,9 +39,6 @@ from error import InputError, AccessError
 import sys
 sys.path.append('../')
 
-# fixture is a good idea. So I call only one of the user profile ones 
-# and go from there. 
-register0 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
 """
 auth_register() elemental validation functions. 
@@ -53,6 +52,8 @@ def test_auth_register_short_password():
 def test_auth_register_valid_password():
     assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
+def test_auth_register_no_password():
+    assert auth_register("bill.gates@microsoft.com",, "Bill", "Gates")
 
 #auth_register() First Name Validation
 def test_auth_register_invalid_first_name():
@@ -62,17 +63,9 @@ def test_auth_register_invalid_first_name():
 def test_auth_register_valid_first_name():
     assert auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
     
-def test_auth_register_integer_first_name():
-    passwordInteger = 123456
-    if not isinstance(passwordInteger, str):
-        with pytest.raises(InputError) as e:
-            auth_register("bill.gates@microsoft.com", 123456, "Bill", "Gates")
-            
-def test_auth_register_string_first_name():
-    passwordString = "123456"
-    if not isinstance(passwordString, str):
-        assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
-            
+def test_auth_register_no_first_name():
+    assert auth_register("bill.gates@microsoft.com", "123",, "Gates")
+    
 #auth_register() Last Name Validation
 def test_auth_register_valid_last_name():
     assert auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
@@ -80,6 +73,9 @@ def test_auth_register_valid_last_name():
 def test_auth_register_invalid_last_name():
     with pytest.raises(InputError) as e:
         auth_register("bill.gates@microsoft.com", "123", "Bill", "G"*51)
+
+def test_auth_register_no_first_name():
+    assert auth_register("bill.gates@microsoft.com", "123","Bill",)
 
 #auth_register() Email Validation
 def test__auth_register_valid_email():
