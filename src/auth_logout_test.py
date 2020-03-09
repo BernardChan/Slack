@@ -2,6 +2,7 @@ import auth as a
 import helper_functions.channel_helpers as ch
 
 def test_logout():
+
     # check logout for each token
     assert a.auth_logout(ch.chan_owner_token) == True
     assert a.auth_logout(ch.slackr_owner_token) == True
