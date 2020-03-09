@@ -9,7 +9,7 @@ import pytest
 from channel import channel_join as join
 import channel
 from error import InputError, AccessError
-import channel_helpers as ch
+import helper_functions.channel_helpers as ch
 
 
 # Helper function to check if a member joined successfully
