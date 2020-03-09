@@ -36,26 +36,28 @@ def test_auth_login_wrong_password():
     register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
     with pytest.raises(InputError) as e:
         login1 = auth_login("bill.gates@microsoft.com", "wrong_password")
-    
-def test_auth_login_duplicate_id():
+
+def test_auth_login_invalid_email_format():
+    register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
+    with pytest.raises(InputError) as e:
+        login1 = auth_login("bill.gatemicrosoft.com", "123456")
+
+def test_auth_login_different_ids():
     register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
     login1 = auth_login("bill.gates@microsoft.com", "123456")
     register2 = auth_register("andy.gates@microsoft.com", "24681012", "Andy", "Gates")
     login2 = auth_login("andy.gates@microsoft.com", "24681012")
     with pytest.raises(InputError) as e:
-        assert register1['u_id'] != login1['u_id']
+        assert login2['u_id'] != login1['u_id']
+        # currently fails as stub provides same u_id, but will work later
         
-def test_auth_login_invalid_email():
-    register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
-    with pytest.raises(InputError) as e:
-        login1 = auth_login("bill.gatemicrosoft.com", "123456")
-    
 def test_auth_login_different_tokens():
     register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
     login1 = auth_login("bill.gates@microsoft.com", "123456")
     register2 = auth_register("andy.gates@microsoft.com", "24681012", "Andy", "Gates")
     login2 = auth_login("andy.gates@microsoft.com", "24681012")
     with pytest.raises(InputError) as e:
-        assert register1['token'] != login1['token']
+        assert login1['token'] != login2['token']
+        # currently fails as stub provides same token, but will work later
 
 # python3 -m pytest auth_login_test.py
