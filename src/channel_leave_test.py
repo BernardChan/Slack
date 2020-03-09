@@ -17,7 +17,7 @@ import pytest
 from channel import channel_invite
 from channel import channel_leave as leave
 from error import InputError, AccessError
-import channel_helpers as ch
+import helper_functions.channel_helpers as ch
 
 
 # Helper function that asserts that a member left a channel
