@@ -3,8 +3,12 @@
 
 # Dependencies:
 #   channel/details (needed to get list of members of a channel
-from channel import channel_details  # TODO: remove this if we move AccessError check to helper file
+# from channel import channel_details  # TODO: remove this if we move AccessError check to helper file
+# from message import message_send
 from error import InputError, AccessError
+import threading
+import time
+import sched
 
 
 channels = [
@@ -109,8 +113,23 @@ def is_message_valid(message, channel_id):
     ## TODO: add Access Errror for when a user hasn't joined a channel they're posting to
 
 
+def message_send(message):
+    print(message)
+
+
+def set_sched(time_sent, message):
+    s = sched.scheduler(time.time, time.sleep)
+    s.enterabs(time_sent, 0, message_send, [message])
+    s.run()
+
+
 def send_later(token, channel_id, message, time_sent):
     is_message_valid(message, channel_id)
 
+    t = threading.Thread(target=set_sched, args=(time_sent, message))
+    t.start()
 
 
+if __name__ == "__main__":
+    send_later(0,0, "2", time.time() + 10)  # sends this second
+    send_later(0,0, "1", time.time() + 5)  # sends this first
