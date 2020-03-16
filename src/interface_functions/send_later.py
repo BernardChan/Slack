@@ -15,7 +15,7 @@ from error import InputError
 # Message queue for sending a message later
 q = []
 do_work = threading.Event()
-
+is_thread_running_flag = False
 
 # TODO: import the real message_send function
 # Dequeues send_later_queue whenever a new item is added to it
@@ -42,8 +42,14 @@ def set_sched():
 # TODO: move this to server.py
 # Creates a thread for setting a schedule
 def start_thread_helper():
-    t = threading.Thread(target=set_sched)
-    t.start()
+    global is_thread_running_flag
+    if is_thread_running_flag:
+        return
+
+    else:
+        is_thread_running_flag = True
+        t = threading.Thread(target=set_sched)
+        t.start()
 
 
 # Adds a message to be sent at a later date
@@ -67,4 +73,5 @@ if __name__ == "__main__":
 
     time.sleep(20)
     send_later(0, 0, "yoyoyo", time.time())
+    start_thread_helper() # Should do nothing
 
