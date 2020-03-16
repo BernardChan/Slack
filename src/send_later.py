@@ -11,60 +11,6 @@ import time
 import sched
 
 
-# gets the user dictionary based on the key given
-# If user is not found, return None
-# TODO: should I make an exception or try/catch for when the wrong key_type is given?
-#   e.g. f"key_type of {key_type} does not exist in the dictionary"
-def get_user(key_type, key):
-    for user in DATABASE["users"]:
-        if user[key_type] == key:
-            return user
-
-    return None
-
-
-# Returns true if a user is a part of channel_id, else false
-def is_member(token, channel_id):
-    # TODO: get user_id from token
-    members = channel_details(token, channel_id)["all_members"]
-    user = get_user("token", token)
-
-    if user is None:
-        return False
-
-    for member in members:
-        if member["u_id"] == user["u_id"]:
-            return True
-
-
-# Gets the dictionary containing the channel_id
-# Returns the channel dictionary, or None if not found
-def get_channel_with_id(channel_id):
-    for channel in channels:
-        if channel["channel_id"] == channel_id:
-            return channel
-
-    # Could not find the channel with channel_id
-    return None
-
-
-# Check is a channel_id is valid
-# Returns true if it finds the channel with channel_id, else false
-def channel_is_valid(channel_id):
-    return True if get_channel_with_id(channel_id) else False
-
-
-# Throws errors where needed
-def is_message_valid(message, channel_id):
-    if len(message) > 1000:
-        raise InputError("Message exceeded 1000 Characters")
-
-    elif not channel_is_valid(channel_id):
-        raise InputError("The given channel_id was not found")
-
-    # TODO: add Access Error for when a user hasn't joined a channel they're posting to
-
-
 # TODO: delete this message_send and import the real one. This is for testing purposes only
 def message_send(message):
     print(message)
