@@ -63,6 +63,11 @@ def send_later(token, channel_id, message, time_sent):
     q.append({"message": message, "time_sent": time_sent, "priority": time.time(), "token": token, "channel_id": channel_id})
     do_work.set()
 
+    # TODO: send a message_id back.
+    #   need to create a message_id, then pass it into message_send() and then return message_id
+    # TODO: add an optional arg to message_send()
+    #   accepts the message_id, and uses that instead of creating one itself
+
 
 if __name__ == "__main__":
     start_thread_helper()  # Should only be called once
