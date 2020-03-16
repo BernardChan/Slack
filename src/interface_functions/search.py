@@ -1,25 +1,4 @@
-#
-# messages = [
-#     {
-#         "message_id": 0,
-#         "u_id": 1,
-#         "message": "hello",
-#         "time_created": 1,
-#         "reacts": None,
-#         "is_pinned": False,
-#         "channel_id": 0
-#     },
-#     {
-#         "message_id": 2,
-#         "u_id": 1,
-#         "message": "ahello",
-#         "time_created": 2,
-#         "reacts": None,
-#         "is_pinned": False,
-#         "channel_id": 0
-#     }
-# ]
-
+from database_files.database_retrieval import get_messages
 
 # Sorts by time_created
 # Can be altered to accept any parameter and sort by that if needed
@@ -28,6 +7,9 @@ def sort_messages(messages):
 
 
 def search(token, query_str):
+
+    messages = get_messages()
+
     found_messages = []
     for message in messages:
         if query_str in message["message"]:

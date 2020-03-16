@@ -27,5 +27,23 @@ def get_channel_messages(channel_id):
     return [message for message in messages if message["channel_id"] == channel_id]
 
 
+# Gets all the channels a user is a part of
+def get_user_channels(token):
+    channels = get_channels()
+
+    user_channels = []
+
+    # Find what channels a user is in
+    for channel in channels():
+        for user in channel["members"]:
+
+            # If we found the user's token in one of the channels
+            # Add it to user_channels
+            if token == user["token"]:
+                user_channels.append(channel["channel_id"])
+
+    return user_channels
+
+
 if __name__ == "__main__":
     print(get_channel_messages(0))
