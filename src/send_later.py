@@ -110,7 +110,7 @@ def is_message_valid(message, channel_id):
     elif not channel_is_valid(channel_id):
         raise InputError("The given channel_id was not found")
 
-    ## TODO: add Access Errror for when a user hasn't joined a channel they're posting to
+    # TODO: add Access Error for when a user hasn't joined a channel they're posting to
 
 
 def message_send(message):
@@ -133,3 +133,6 @@ def send_later(token, channel_id, message, time_sent):
 if __name__ == "__main__":
     send_later(0,0, "2", time.time() + 10)  # sends this second
     send_later(0,0, "1", time.time() + 5)  # sends this first
+
+    for i in range(0, 2000):
+        send_later(0, 0, "3", time.time() + 1)  # sends this first
