@@ -1,5 +1,5 @@
-import channels as c 
-import helper_functions.channel_helpers as ch
+from interface_functions import channels as c
+import helper_functions.test_helper_file as ch
 
 def test_channels_list():
     

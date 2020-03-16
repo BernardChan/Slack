@@ -14,10 +14,10 @@
 #   channels_create()
 
 import pytest
-from channel import channel_invite
-from channel import channel_leave as leave
+from interface_functions.channel import channel_invite
+from interface_functions.channel import channel_leave as leave
 from error import InputError, AccessError
-import helper_functions.channel_helpers as ch
+import helper_functions.test_helper_file as ch
 
 
 # Helper function that asserts that a member left a channel

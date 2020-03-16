@@ -1,6 +1,6 @@
 # Tests for auth_register
 
-# Dependancies:
+# Dependencies:
     # user_profile()
     #auth_register()
     #auth_login()
@@ -30,11 +30,8 @@
     #
 
 import pytest
-from auth import auth_login
-from auth import auth_logout
-from auth import auth_register
-from user import user_profile
-from error import InputError, AccessError
+from interface_functions.auth import auth_register
+from error import InputError
 
 import sys
 sys.path.append('../')
@@ -44,6 +41,7 @@ sys.path.append('../')
 auth_register() elemental validation functions. 
 # making sure each input to register() is valid
 """
+# TODO: fix tests, since assert(auth_register()) will always return True
 #auth_register() Password Validation
 def test_auth_register_short_password():
     with pytest.raises(InputError) as e:
@@ -53,7 +51,7 @@ def test_auth_register_valid_password():
     assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
 def test_auth_register_no_password():
-    assert auth_register("bill.gates@microsoft.com",, "Bill", "Gates")
+    assert auth_register("bill.gates@microsoft.com","a", "Bill", "Gates")
 
 #auth_register() First Name Validation
 def test_auth_register_invalid_first_name():
@@ -64,7 +62,7 @@ def test_auth_register_valid_first_name():
     assert auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
     
 def test_auth_register_no_first_name():
-    assert auth_register("bill.gates@microsoft.com", "123",, "Gates")
+    assert auth_register("bill.gates@microsoft.com", "123","b", "Gates")
     
 #auth_register() Last Name Validation
 def test_auth_register_valid_last_name():
@@ -74,8 +72,9 @@ def test_auth_register_invalid_last_name():
     with pytest.raises(InputError) as e:
         auth_register("bill.gates@microsoft.com", "123", "Bill", "G"*51)
 
+# TODO: fix this: why is there a duplicate test_auth_register_no_first_name() ???
 def test_auth_register_no_first_name():
-    assert auth_register("bill.gates@microsoft.com", "123","Bill",)
+    assert auth_register("bill.gates@microsoft.com", "123", "b", "Bill")
 
 #auth_register() Email Validation
 def test__auth_register_valid_email():
