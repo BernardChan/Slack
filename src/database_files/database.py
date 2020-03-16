@@ -25,17 +25,39 @@ DATABASE = {
     "channels": [],
 }
 
+MOCK_DATA = {
+    "users": [
+        {"u_id": 0, "email": "asd@asd.com", "name_first": "0", "name_last": "0", "handle_str": "0", "token": 0},
+        {"u_id": 1, "email": "asd1@asd.com", "name_first": "1", "name_last": "1", "handle_str": "1"},
+        {"u_id": 2, "email": "asd2@asd.com", "name_first": "2", "name_last": "2", "handle_str": "2"}
+    ],
+
+    "messages": [
+        {"message_id": 0, "u_id": 0, "message": "str", "time_created": 0,
+            "reacts": {"react_id": 0, "u_ids": [0, 1, 2], "is_this_user_reacted": False},
+         "is_pinned": False, "channel_id": 0},
+        {"message_id": 1, "u_id": 1, "message": "1str", "time_created": 1, "reacts": None, "is_pinned": False, "channel_id": 1},
+        {"message_id": 2, "u_id": 2, "message": "2str", "time_created": 2, "reacts": None, "is_pinned": False, "channel_id": 2}
+    ],
+
+    "channels": [
+        {"channel_id": 0, "name": "0", "members": [{"u_id": 0, "name_first": "0", "name_last": "0"}]},
+        {"channel_id": 1, "name": "1"},
+        {"channel_id": 2, "name": "2"}
+    ],
+}
+
 
 # Saves the current database_files
 def pickle_database():
-    with open("database_files.p", "wb") as FILE:
+    with open("database.p", "wb") as FILE:
         pickle.dump(DATABASE, FILE)
 
 
 # Restores the database_files from last save
 def unpickle_database():
     global DATABASE
-    DATABASE = pickle.load(open("database_files.p", "rb"))
+    DATABASE = pickle.load(open("database.p", "rb"))
 
 
 unpickle_database()

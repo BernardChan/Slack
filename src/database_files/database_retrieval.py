@@ -6,10 +6,26 @@
 import database_files.database as db
 
 
+def get_messages():
+    return db.DATABASE["messages"]
+
+
+# Returns all channel dictionaries
+def get_channels():
+    return db.DATABASE["channels"]
+
+
+def get_users():
+    return db.DATABASE["users"]
+
+
 # returns all messages from a given channel_id
 def get_channel_messages(channel_id):
-    return []
+    messages = db.DATABASE["messages"]
+    # messages = db.MOCK_DATA["messages"]
+
+    return [message for message in messages if message["channel_id"] == channel_id]
 
 
-def get_channels():
-    return []
+if __name__ == "__main__":
+    print(get_channel_messages(0))
