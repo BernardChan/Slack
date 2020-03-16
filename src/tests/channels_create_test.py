@@ -1,7 +1,6 @@
-import message
-import helper_functions.channel_helpers as ch
-import channel
-import channels
+import helper_functions.test_helper_file as ch
+from interface_functions import channels
+
 
 def test_channels_create():
     is_public = False

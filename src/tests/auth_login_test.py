@@ -5,11 +5,9 @@
     #auth_register()
 
 import pytest
-from auth import auth_login
-from auth import auth_logout
-from auth import auth_register
-from user import user_profile
-from error import InputError, AccessError
+from interface_functions.auth import auth_login
+from interface_functions.auth import auth_register
+from error import InputError
 
 import sys
 sys.path.append('../')
