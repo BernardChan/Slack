@@ -1,7 +1,7 @@
-import message
-import helper_functions.channel_helpers as ch
-import channel
-from error import InputError, AccessError
+import helper_functions.test_helper_file as ch
+from interface_functions import channel, message
+from error import InputError
+
 
 def test_message_send():
     
