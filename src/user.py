@@ -1,13 +1,14 @@
 # user/... functions for slackr app
 
 from error import AccessError, InputError
-import database_files.database as db
+from database_files.database_retrieval import get_users
 
 # Helper function for checking if a token is valid or not
 # Assumes that a token is the user's userid
 def valid_token(token):
     # Go through all user ids and check if it exists
-    for user in db.users:
+    users = get_users()
+    for user in users:
         if user["u_id"] == token:
             return True
     return False
@@ -26,7 +27,8 @@ def user_profile(token, u_id):
     
     # Go through all users and collect the correct user dictionary
     profile = {}
-    for user in db.users:
+    users = get_users()
+    for user in users:
         if user["u_id"] == u_id:
             profile = user
 
