@@ -22,10 +22,10 @@
 # Test AccessError is thrown when:
 #   Authorised user is not the owner of the channel
 
-from channel import channel_removeowner as remove_owner
+from interface_functions.channel import channel_removeowner as remove_owner
 import pytest
-import channel
-import helper_functions.channel_helpers as ch
+from interface_functions import channel
+import helper_functions.test_helper_file as ch
 from error import InputError, AccessError
 
 

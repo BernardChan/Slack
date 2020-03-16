@@ -22,9 +22,7 @@
 #   e.g. is_member(slackr_owner_id, False) # returns "False", since slackr_owner is not member of the private channel
 
 
-import channels as chs
-import channel as ch
-import auth
+from interface_functions import auth, channel as ch, channels as chs
 
 # Invalid channel ID
 invalid_channel_id = -100000
