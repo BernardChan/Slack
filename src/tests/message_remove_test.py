@@ -1,6 +1,6 @@
-import message
-import helper_functions.channel_helpers as ch
-import channel
+import helper_functions.test_helper_file as ch
+from interface_functions import channel, message
+
 
 def test_message_remove():
     

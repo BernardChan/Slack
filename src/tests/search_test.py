@@ -16,11 +16,11 @@
 
 # Note: chose to keep asserts outside of the is_correct_message() function to make its purpose clearer and to stand out
 
-from other import search
-from message import message_send as send
-from helper_functions.channel_helpers import chan_owner_token as token
-from helper_functions.channel_helpers import chan_owner_token as id
-from helper_functions.channel_helpers import chan_owner_token as private_id
+from interface_functions.other import search
+from interface_functions.message import message_send as send
+from helper_functions.test_helper_file import chan_owner_token as token
+from helper_functions.test_helper_file import chan_owner_token as id
+from helper_functions.test_helper_file import chan_owner_token as private_id
 
 
 # Returns boolean on whether the messages returned match exactly the given msg_IDs list
