@@ -4,8 +4,8 @@
     
 import pytest
 
-from auth import auth_register
-from user import user_profile
+from interface_functions.auth import auth_register
+from interface_functions.user import user_profile
 from error import InputError, AccessError
 
 # Pytest fixture to regiser a new test user

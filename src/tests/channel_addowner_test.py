@@ -5,11 +5,9 @@
 #   channel_invite()
 #   channels_create()
 
-from channel import channel_addowner as add_owner
+from interface_functions.channel import channel_addowner as add_owner
 import pytest
-import channel
-from helper_functions.helpers import public_channel, private_channel
-from helper_functions.helpers import member, channel_owner, is_owner, slackr_owner
+from interface_functions import channel
 from error import InputError, AccessError
 
 
