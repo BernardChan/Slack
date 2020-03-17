@@ -1,7 +1,6 @@
 import pytest
-import auth
-import channels as chs
-import channel as ch
+from interface_functions import auth, channel as ch, channels as chs
+
 
 # Get Invalid IDs
 @pytest.fixture
