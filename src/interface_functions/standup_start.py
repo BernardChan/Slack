@@ -8,9 +8,10 @@ from helper_functions.interface_function_helpers import check_channel_validity
 from error import InputError
 import time
 
+
 # Sets the standup tag on the given channel_id to True/False (is_active)
 # Throws InputError if channel["standup"] was already True AND we're trying to set it as True
-def set_standup(channel_id, is_active):
+def set_standup(channel_id, is_active, time_finish):
 
     # Find the channel with channel_id
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
@@ -19,13 +20,14 @@ def set_standup(channel_id, is_active):
         raise InputError("Standup was already active")
     else:
         channel["standup"]["active"] = is_active
+        channel["standup"]["time_finish"] = time_finish
 
 
 # Sends the collected messages to the channel
 def end_standup(token, channel_id):
 
     # Set "standup" key to False
-    set_standup(channel_id, False)
+    set_standup(channel_id, False, None)
     standup_message = db.get_channel_standup(channel_id)  # TODO: standup send needs to access this as well
     message_send(token, channel_id, standup_message["msg_queue"])
 
@@ -38,13 +40,14 @@ def end_standup(token, channel_id):
 def standup_start(token, channel_id, length):
     check_channel_validity(channel_id)
     # Set the "standup" key on channel dict to True to show a standup has started
-    set_standup(channel_id, True)
+    time_finish = time.time() + length
+    set_standup(channel_id, True, time_finish)
 
     # Set the "standup" key on channel dict to False after length seconds
     t = threading.Timer(length, end_standup, [token, channel_id])
     t.start()
 
-    return {"time_finish": time.time() + length}
+    return {"time_finish": time_finish}
 
 
 if __name__ == "__main__":
