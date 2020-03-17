@@ -59,21 +59,21 @@ MOCK_DATA = {
             "channel_id": 0,
             "name": "0",
             "members": [{"u_id": 0, "name_first": "0", "name_last": "0", "token": 0}],
-            "standup": {"active": False, "msg_queue": "", }
+            "standup": {"active": False, "msg_queue": "", "time_finish": None}
         },
         {
             "channel_id": 1,
             "name": "1",
             "members": [{"u_id": 1, "name_first": "1", "name_last": "1", "token": 1},
                         {"u_id": 0, "name_first": "0", "name_last": "0", "token": 0}],
-            "standup": {"active": False, "msg_queue": "", }
+            "standup": {"active": False, "msg_queue": "", "time_finish": None}
         },
 
         {
             "channel_id": 2,
             "name": "2",
             "members": [{"u_id": 2, "name_first": "2", "name_last": "2", "token": 2}],
-            "standup": {"active": False, "msg_queue": "", }
+            "standup": {"active": False, "msg_queue": "", "time_finish": None}
         }
     ],
 }
