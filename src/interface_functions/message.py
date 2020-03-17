@@ -1,5 +1,5 @@
 def message_send(token, channel_id, message):
-    print(message)
+    print(f"message from token {token} to channel_id {channel_id} was: {message}")
     return {
         'message_id': 1,
     }
