@@ -44,7 +44,7 @@ def standup_start(token, channel_id, length):
     t = threading.Timer(length, end_standup, [token, channel_id])
     t.start()
 
-    return time.time() + length
+    return {"time_finish": time.time() + length}
 
 
 if __name__ == "__main__":
