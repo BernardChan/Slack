@@ -40,6 +40,12 @@ def get_channel_messages(channel_id):
     return [message for message in messages if message["channel_id"] == channel_id]
 
 
+# gets channels by key
+def get_channels_by_key(key, value):
+    channels = get_channels()
+    return [channel for channel in channels if channel[key] == value]
+
+
 # gets specific users by key
 def get_users_by_key(key, value):
     users = get_users()
@@ -81,6 +87,12 @@ def get_user_channels_by_key(key, value):
                 user_channels.append(channel)
 
     return user_channels
+
+
+# gets the standup queue in channel_id
+def get_channel_standup(channel_id):
+    channel = get_channels_by_key("channel_id", channel_id)[0]
+    return channel["standup"]
 
 
 # Sanity checking that functions are behaving as expected
