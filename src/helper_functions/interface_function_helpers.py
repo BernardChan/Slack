@@ -34,3 +34,8 @@ def is_message_valid(token, message, channel_id):
     check_channel_validity(channel_id)
 
     check_member_status_of_channel(token, channel_id)
+
+
+def is_user_valid_channel_member(token, channel_id):
+    if not db.is_user_in_channel("token", token, channel_id):
+        raise AccessError(f"User is not in channel with channel_id {channel_id}")

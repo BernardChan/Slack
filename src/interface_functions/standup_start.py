@@ -28,7 +28,7 @@ def end_standup(token, channel_id):
 
     # Set "standup" key to False
     set_standup(channel_id, False, None)
-    standup_message = db.get_channel_standup(channel_id)  # TODO: standup send needs to access this as well
+    standup_message = db.get_channel_standup(channel_id)
     message_send(token, channel_id, standup_message["msg_queue"])
 
 
