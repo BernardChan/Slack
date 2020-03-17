@@ -6,7 +6,7 @@ from database_files.database import DATABASE
 import database_files.database_retrieval as db
 from helper_functions.interface_function_helpers import check_channel_validity
 from error import InputError
-
+import time
 
 # Sets the standup tag on the given channel_id to True/False (is_active)
 # Throws InputError if channel["standup"] was already True AND we're trying to set it as True
@@ -43,6 +43,8 @@ def standup_start(token, channel_id, length):
     # Set the "standup" key on channel dict to False after length seconds
     t = threading.Timer(length, end_standup, [token, channel_id])
     t.start()
+
+    return time.time() + length
 
 
 if __name__ == "__main__":
