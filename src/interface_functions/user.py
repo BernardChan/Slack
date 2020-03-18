@@ -4,6 +4,7 @@ from error import AccessError, InputError
 from database_files.database_retrieval import get_users
 from database_files.database_retrieval import get_users_by_key
 import database_files.database as db
+import re
 
 # USER/PROFILE
 # Will use a GET request
@@ -72,9 +73,23 @@ def user_profile_setemail(token, email):
     # Raise an AccessError if not a valid token
     #TODO
 
+    # Inner helper function for determining a valid email
+    def valid_email(string):
+        # Make a regular expression for validating email
+        regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        # Pass the regular expression and the string using search() to check if valid
+        if (re.search(regex, string)):
+            return True
+        else:
+            return False
     # Raise an InputError if not a valid email
+    if not valid_email(email):
+        raise InputError(description="Invalid email!")
 
     # Raise an InputError if email is being used by another user
+    # if get_users_by_key doesn't return an empty list (if users with profile["email"] = email are found)
+    if get_users_by_key("email", email) != []:
+        raise InputError(description="Email address in use by another user!")
 
     # Get the user with the matching u_id by token
     #TODO
