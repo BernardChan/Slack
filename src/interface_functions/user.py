@@ -2,10 +2,12 @@
 
 from error import AccessError, InputError
 from database_files.database_retrieval import get_users
-import database_files.database
+from database_files.database_retrieval import get_users_by_key
+import database_files.database as db
 
 # USER/PROFILE
 # For a valid user, returns information about their user id, email, first name, last name, and handle
+# Returns a profile dictionary
 # Input Error for:
     # User with u_id is not a valid user
 # Access Error for:
@@ -30,6 +32,7 @@ def user_profile(token, u_id):
 
 # USER/PROFILE/SETNAME
 # Update the authorised user's first and last name
+# Returns an empty dictionary
 # Input Error for:
     # First or last name is not between 1 and 50 characters inclusive
 # Access Error for:
@@ -45,8 +48,19 @@ def user_profile_setname(token, name_first, name_last):
     if len(name_last) < 1 or len(name_last) > 50:
         raise InputError(description="Last name is not between 1 and 50 characters!")
     
-    return {
-    }
+    # Get the user with the matching u_id to token
+    #TODO:
+    u_id = get_uid_by_token(token)
+
+    # Update first and last name for the correct user
+    # iterate through all profiles in database of users
+    for profile in db.DATABASE["users"]:
+        if profile["u_id"] == u_id:
+            profile["name_first"] = name_first
+            profile["name_last"] = name_last
+            break
+
+    return {}
 
 def user_profile_setemail(token, email):
     return {
