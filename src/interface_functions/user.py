@@ -68,6 +68,8 @@ def user_profile_setname(token, name_first, name_last):
 # Input Error for:
     # Email entered is not a valid email
     # Email address is being used by another user
+# Acces Error for:
+    # Invalid token
 def user_profile_setemail(token, email):
     
     # Raise an AccessError if not a valid token
@@ -102,6 +104,35 @@ def user_profile_setemail(token, email):
     
     return {}
 
+# USER/PROFILE/SETHANDLE
+# Will use PUT request
+# Update the authorised user's handle (display name), returns an empty dict
+# Input Error for:
+    # Handle not between 2 and 20 characters inclusive
+    # Handle is in use by another user
+# Access Error for:
+    # Invalid token
 def user_profile_sethandle(token, handle_str):
-    return {
-    }
+    
+    # Raise an AccessError if not a valid token
+    #TODO
+
+    # Raise an InputError if either name is out of bounds
+    if len(handle_str) < 2 or len(handle_str) > 20:
+        raise InputError(description="Handle (display name) is not between 2 and 20 characters!")
+
+    # Raise an input error if handle is being used by another user
+    # if get_users_by_key doesn't return an empty list (if users with profile["handle_str"] = handle are found)
+    if get_users_by_key("handle_str", handle_str) != []:
+        raise InputError(description="Handle (display name) in use by another user!")
+
+    # Get the user with the matching u_id by token
+    #TODO
+    u_id = get_uid_by_token(token)
+    # Update handle for the correct user
+    for profile in db.DATABASE["users"]:
+        if profile["u_id"] == u_id:
+            profile["handle_str"] = handle_str
+            break
+
+    return {}
