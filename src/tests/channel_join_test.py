@@ -6,10 +6,10 @@
 #   channels_create()
 
 import pytest
-from channel import channel_join as join
-import channel
+from interface_functions.channel import channel_join as join
+from interface_functions import channel
 from error import InputError, AccessError
-import channel_helpers as ch
+import helper_functions.test_helper_file as ch
 
 
 # Helper function to check if a member joined successfully
