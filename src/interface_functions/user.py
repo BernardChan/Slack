@@ -20,16 +20,11 @@ def user_profile(token, u_id):
     #TODO
     
     # Go through all users and collect the correct user dictionary
-    profile = {}
-    users = get_users()
-    for user in users:
-        if user["u_id"] == u_id:
-            profile = user
-            break
-
-    # If profile is empty, u_id is invalid because user does not exist, so raise InputError
-    if profile == {}:
+    # If no users found with u_id, invalid u_id because user does not exist
+    if get_users_by_key("u_id", u_id) == []:
         raise InputError(description="Invalid user id!")
+    else:
+        profile = get_users_by_key("u_id", u_id)[0]
 
     return profile
 
