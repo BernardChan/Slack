@@ -25,6 +25,7 @@ def user_profile(token, u_id):
     for user in users:
         if user["u_id"] == u_id:
             profile = user
+            break
 
     # If profile is empty, u_id is invalid because user does not exist, so raise InputError
     if profile == {}:
@@ -51,8 +52,8 @@ def user_profile_setname(token, name_first, name_last):
         raise InputError(description="Last name is not between 1 and 50 characters!")
     
     # Get the user with the matching u_id by token
-    #TODO:
-    u_id = get_uid_by_token(token)
+    match = get_users_by_key("token", token)
+    u_id = match[0]["u_id"]
     # Update first and last name for the correct user
     for profile in db.DATABASE["users"]:
         if profile["u_id"] == u_id:
@@ -94,8 +95,8 @@ def user_profile_setemail(token, email):
         raise InputError(description="Email address in use by another user!")
 
     # Get the user with the matching u_id by token
-    #TODO
-    u_id = get_uid_by_token(token)
+    match = get_users_by_key("token", token)
+    u_id = match[0]["u_id"]
     # Update email for the correct user
     for profile in db.DATABASE["users"]:
         if profile["u_id"] == u_id:
@@ -127,8 +128,8 @@ def user_profile_sethandle(token, handle_str):
         raise InputError(description="Handle (display name) in use by another user!")
 
     # Get the user with the matching u_id by token
-    #TODO
-    u_id = get_uid_by_token(token)
+    match = get_users_by_key("token", token)
+    u_id = match[0]["u_id"]
     # Update handle for the correct user
     for profile in db.DATABASE["users"]:
         if profile["u_id"] == u_id:
