@@ -16,6 +16,7 @@ DATABASE = {
 # - "token" key added to "user" dictionary
 # - "channel_id" key added to "message" dictionary
 # - "members" key added to "channels" dictionary
+# - "standup" key added to "channels" dictionary - is a boolean for whether a standup is active
 MOCK_DATA = {
     "users": [
         {"u_id": 0, "email": "asd@asd.com", "name_first": "0", "name_last": "0", "handle_str": "0", "token": 0},
@@ -57,20 +58,22 @@ MOCK_DATA = {
         {
             "channel_id": 0,
             "name": "0",
-            "members": [{"u_id": 0, "name_first": "0", "name_last": "0", "token": 0}]
+            "members": [{"u_id": 0, "name_first": "0", "name_last": "0", "token": 0}],
+            "standup": {"active": False, "msg_queue": "", }
         },
         {
             "channel_id": 1,
             "name": "1",
             "members": [{"u_id": 1, "name_first": "1", "name_last": "1", "token": 1},
-                        {"u_id": 0, "name_first": "0", "name_last": "0", "token": 0}]
-
+                        {"u_id": 0, "name_first": "0", "name_last": "0", "token": 0}],
+            "standup": {"active": False, "msg_queue": "", }
         },
 
         {
             "channel_id": 2,
             "name": "2",
-            "members": [{"u_id": 2, "name_first": "2", "name_last": "2", "token": 2}]
+            "members": [{"u_id": 2, "name_first": "2", "name_last": "2", "token": 2}],
+            "standup": {"active": False, "msg_queue": "", }
         }
     ],
 }
@@ -78,8 +81,8 @@ MOCK_DATA = {
 
 # Saves the current database_files
 def pickle_database():
-    with open("../database_files/database1.p", "wb") as FILE:
-        pickle.dump(DATABASE, FILE)
+    with open("../database_files/database.p", "wb") as FILE:
+        pickle.dump(MOCK_DATA, FILE)
 
 
 # Restores the database_files from last save
@@ -88,4 +91,5 @@ def unpickle_database():
     DATABASE = pickle.load(open("../database_files/database.p", "rb"))
 
 
+# pickle_database()
 unpickle_database()

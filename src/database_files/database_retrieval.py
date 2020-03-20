@@ -89,6 +89,12 @@ def get_user_channels_by_key(key, value):
     return user_channels
 
 
+# gets the standup queue in channel_id
+def get_channel_standup(channel_id):
+    channel = get_channels_by_key("channel_id", channel_id)[0]
+    return channel["standup"]
+
+
 # Sanity checking that functions are behaving as expected
 if __name__ == "__main__":
     # Use from database_files.database import MOCK_DATA as DATABASE

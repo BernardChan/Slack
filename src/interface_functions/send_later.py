@@ -17,6 +17,7 @@ q = []
 do_work = threading.Event()
 is_thread_running_flag = False
 
+
 # TODO: import the real message_send function
 # Dequeues send_later_queue whenever a new item is added to it
 def set_sched():
@@ -78,5 +79,5 @@ if __name__ == "__main__":
 
     time.sleep(20)
     send_later(0, 0, "yoyoyo", time.time())
-    start_thread_helper() # Should do nothing
+    start_thread_helper()  # Should do nothing
 
