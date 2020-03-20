@@ -48,4 +48,4 @@
 
 ## `user_profile_setemail()`
 - Assume that emails with the period `.` delimiter will be treated as different emails
-- Assume that a user can set their email again to their current email
+- Assume that a user CANNOT set their email again to their current email - considers it in use by another user
