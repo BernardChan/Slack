@@ -40,6 +40,12 @@ def get_channel_messages(channel_id):
     return [message for message in messages if message["channel_id"] == channel_id]
 
 
+# gets channels by key
+def get_channels_by_key(key, value):
+    channels = get_channels()
+    return [channel for channel in channels if channel[key] == value]
+
+
 # gets specific users by key
 def get_users_by_key(key, value):
     users = get_users()
