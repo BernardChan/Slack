@@ -1,7 +1,7 @@
 from error import AccessError, InputError
 from database_files.database_retrieval import get_users_by_key
-from interface_function_helpers import check_valid_uid
-from interface_function_helpers import check_slackr_admin
+from interface_function_helpers import is_valid_uid
+from interface_function_helpers import is_slackr_admin
 import database_files.database as db
 
 # ADMIN/USERPERMISSION/CHANGE
@@ -20,11 +20,11 @@ def admin_userpermission_change(token, u_id, permission_id):
     # if invalid token
     #TODO
     # if authorised user is not an admin or owner
-    check_slackr_admin(token)
+    is_slackr_admin(token)
 
     # Input errors:
     # Check if u_id is valid
-    check_valid_uid(u_id)
+    is_valid_uid(u_id)
     # Check if permission_id is valid
     if (permission_id != 1 or permission_id != 2):
         raise InputError(description="Permission id does not refer to a value permission!")
@@ -34,5 +34,5 @@ def admin_userpermission_change(token, u_id, permission_id):
         if profile["u_id"] == u_id:
             profile["permission_id"] = permission_id
             break
-        
+
     return {}

@@ -40,13 +40,13 @@ def is_user_valid_channel_member(token, channel_id):
     if not db.is_user_in_channel("token", token, channel_id):
         raise AccessError(f"User is not in channel with channel_id {channel_id}")
 
-# Checks if u_id actually exists for a profile
-def check_valid_uid(u_id):
+# Checks if u_id actually exists for a profile, throws Inputerror if not
+def is_valid_uid(u_id):
     if db.get_users_by_key("u_id", u_id) == []:
-        raise InputError(description="Invalid user id!")
+        raise InputError(description="The given user id was not found!")
 
-# Checks whether a user with token is an admin or owner
-def check_slackr_admin(token):
+# Checks whether a user with token is an admin or owner, throws Accesserror if not
+def is_slackr_admin(token):
     match = db.get_users_by_key("token", token)
     if (match[0]["permission_id"] != 1):
-        raise InputError(description="User is not an admin or owner!")
+        raise AccessError(description="User is not an admin or owner!")
