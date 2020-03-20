@@ -34,5 +34,5 @@ def admin_userpermission_change(token, u_id, permission_id):
         if profile["u_id"] == u_id:
             profile["permission_id"] = permission_id
             break
-
+        
     return {}
