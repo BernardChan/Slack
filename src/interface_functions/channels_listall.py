@@ -12,4 +12,4 @@ def channels_list(token):
     channels = get_channels()
     
     # return the list
-    return { channels }
+    return { "channels": channels }
