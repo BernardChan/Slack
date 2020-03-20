@@ -12,4 +12,4 @@ def channels_list(token):
     channels = get_user_channels_by_key("token", token)
     
     # return the list
-    return { channels }
+    return { "channels": channels }
