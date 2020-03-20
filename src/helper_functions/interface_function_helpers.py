@@ -39,3 +39,12 @@ def is_message_valid(token, message, channel_id):
 def is_user_valid_channel_member(token, channel_id):
     if not db.is_user_in_channel("token", token, channel_id):
         raise AccessError(f"User is not in channel with channel_id {channel_id}")
+
+def check_valid_uid(u_id):
+    if db.get_users_by_key("u_id", u_id) == []:
+        raise InputError(description="Invalid user id!")
+
+def check_slackr_owner(token):
+    match = db.get_users_by_key("token", token)
+    if (match[0]["permission_id"] != 1):
+        raise InputError(description="User is not an admin or owner!")
