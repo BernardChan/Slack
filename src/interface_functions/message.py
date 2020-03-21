@@ -14,8 +14,7 @@ def message_send(token, channel_id, message):
     message_id = time.time()
     user = db.get_users_by_key("token", token)[0]
 
-    messages.append(
-        {
+    messages.insert(0, {
             "message_id": message_id,
             "u_id": user["u_id"],
             "message": message,
@@ -29,6 +28,7 @@ def message_send(token, channel_id, message):
     return {
         'message_id': message_id,
     }
+
 
 def message_remove(token, message_id):
     return {

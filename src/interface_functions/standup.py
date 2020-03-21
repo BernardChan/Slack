@@ -35,8 +35,7 @@ def end_standup(token, channel_id):
     user = db.get_users_by_key("token", token)[0]
 
     # Can't reuse message send due to error checking and this function behaving slightly differently
-    messages.append(
-        {
+    messages.insert(0, {
             "message_id": message_id,
             "u_id": user["u_id"],
             "message": standup_message["msg_queue"],
