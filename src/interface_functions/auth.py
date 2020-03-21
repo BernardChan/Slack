@@ -4,120 +4,71 @@
 
 """
 from error import AccessError, InputError
-from database_files.database import get_users
-from database_files.database_retrieval import get_users_by_key
-# import database_files.database as db
-from database_files.database import add_user_to_database
-from database_files.database import clear_database
-from database_files.database import login_user
-from database_files.database import logout_user
-
+import database_files.database as db
+import database_files.database_retrieval as dr
+import helper_functions.auth_helper as ah
 import pytest
-import hashlib
-from datetime import datetime
-import re
-
-"""
-----------------------------------------------------------------------------------
-Validation Functions
-----------------------------------------------------------------------------------
-"""
-def validate_email(email):
-    regex = r"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-    if(re.search(regex,email)): 
-        return True
-    else:  
-        raise InputError(description='Incorrect email format')
-        return False
-               
-        
-def validate_password(password):
-    if len(password) >= 6: 
-        return True
-    else:  
-        raise InputError(description='Password must be 6 or more characters long')
-        return False
-
-
-def validate_name_first(name_first):
-    # name_first not is between 1 and 50 characters inclusive in length
-    if len(name_first) >= 1 and len(name_first) <= 50:
-        return True
-    else:
-        raise InputError(description = 'First name must be 1 to 50 characters long') 
-        return False  
-        
-        
-def validate_name_last(name_last):
-    # name_last is not between 1 and 50 characters inclusive in length
-    if len(name_last) >= 1 and len(name_last) <= 50:
-        return True
-    else:
-        raise InputError(description = 'Last name must be 1 to 50 characters long')
-        return False
-
-"""
-----------------------------------------------------------------------------------
-Database Checking Functions
-----------------------------------------------------------------------------------
-"""        
-def duplicate_check(key, value):
-    db_user = get_users_by_key(key, value)
-    #print(f"Database Duplicate = {db_user}")
-    if db_user != []:
-        return True
-    else:
-        return False 
-
-
-def get_u_id():
-    u_id_last = len(get_users()) + 1
-    #print(f"Get u_id length = {len(get_users())}")
-    #print(get_users())
-    return u_id_last
-    
+import time
 
 """
 ----------------------------------------------------------------------------------
 User Interface Functions
 ----------------------------------------------------------------------------------
 """     
-def auth_login(email, password):
-    return {
-        'u_id': 1,
-        'token': '12345',
+def auth_register(email, password, name_first, name_last):
+    # Stage 1 - Validate input. 
+    ah.validate_email(email)
+    ah.validate_password(password)
+    ah.validate_name_first(name_first)
+    ah.validate_name_last(name_last)
+    
+    # Stage 2 - check database
+    if dr.is_duplicate_check("email", email):
+        raise InputError(description = 'Email address is already being used by another user')
+    
+    # Stage 3 - Generate input transformations
+    token = ah.get_valid_token(email)
+    u_id_returned = ah.get_u_id()
+    
+    # Stage 4 - Store all user information in the database
+    db.add_user_to_database(email, \
+        ah.hash_data(password), name_first, name_last, \
+        ah.create_handle(name_first, name_last), \
+        token, u_id_returned \
+    )
+    
+    register_dict = {
+        'u_id' : u_id_returned,
+        'token' : token
     }
+    return register_dict
+     
+ 
+        
+def auth_login(email, password):
+    # Validate Email
+    ah.validate_email(email)
+    user_rec =  dr.get_users_by_key("email", email)
+    if user_rec == []:
+        raise InputError(description = 'Email entered does not belong to a user')
+    
+    # Validate Password
+    hash_pw = ah.hash_data(password)
+    if hash_pw != user_rec[0]["password"]:
+        raise InputError(description = 'Password is not correct')
 
+    # Create and assign token to database
+    new_token = ah.get_valid_token(email)
+    login_dict = db.login_user(email, new_token)
 
+    return login_dict
+        
+        
 def auth_logout(token):
     return {
         'is_success': True,
     }
 
-
-def auth_register(email, password, name_first, name_last):
-    # Stage 1 - Validate input. 
-    validate_email(email)
-    validate_password(password)
-    validate_name_first(name_first)
-    validate_name_last(name_last)
     
-    # Stage 2 - Generate input transformations
-    hashed_password = hash_data(password)
-    token = get_valid_token(email)
-    
-    # Stage 3 - check database
-    if duplicate_check("email", email):
-        raise InputError(description = 'Email address is already being used by another user')
-    u_id_returned = get_u_id()
-    handle = create_handle(name_first, name_last)
-    
-    # Stage 4 - Store all user information in the database
-    add_user_to_database(email, \
-        hashed_password, name_first, name_last, \
-        handle, token, u_id_returned \
-    )
-    register_dict = {}
-    register_dict['u_id'] = u_id_returned
-    register_dict['token'] = token
-    return register_dict
+if __name__ == '__main__':
+    pass
