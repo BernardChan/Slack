@@ -59,5 +59,14 @@ def standup_active():
     return dumps(su.standup_active(token, int(channel_id)))
 
 
+@APP.route("/standup/send", methods=['POST'])
+def standup_send():
+    token = request.args.get("token")
+    channel_id = int(request.args.get("channel_id"))
+    message = request.args.get("message")
+
+    return dumps(su.standup_send(token, channel_id, message))
+
+
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8080))

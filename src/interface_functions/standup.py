@@ -73,6 +73,7 @@ def validate_active_standup(channel_id):
 # Adds given message to the standup message queue to be sent
 # later when the standup finishes
 def standup_send(token, channel_id, message):
+
     # Error check
     help.is_message_valid(token, message, channel_id)
     help.is_user_valid_channel_member(token, channel_id)
