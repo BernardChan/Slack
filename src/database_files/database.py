@@ -4,14 +4,16 @@
 
 """
 # Usage
-    
-# Example of what the database will look like available in 
+
+# Example of what the database will look like:
+# Available in database_plan.md
 # If you have additions, add them, make a merge request, and post it on slack.
 # Make sure all the keys are there when you're adding to this
 # Additions:
 # - "token" key added to "user" dictionary
 # - "channel_id" key added to "message" dictionary
 # - "members" key added to "channels" dictionary
+# - "standup" key added to "channels" dictionary - is a boolean for whether a standup is active
 # 21/03/20 Additions
     # - "permission_id added to user. 1 for owner and 2 for everyone else
 
