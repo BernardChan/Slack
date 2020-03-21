@@ -1,12 +1,9 @@
-# File for functions to interface with the database
-# Avoid directly accessing database since implementation/structure may change (A G I L E LUL)
-# Basically lets us work on our functions without
-#   having to wait for everyone to agree on a database structure
+"""
+ database_retrieval.py
+This file contains functions to interface with the database, so to avoid directly accessing database at all times possible since implementation/structure may change during the agile iteration process.
+"""
 
 # Usage:
-#   Functions named "get_datatypes()"
-#   - Returns the ENTIRE array of that given data type.
-
 #   Functions ending with "_by_key(key, value)"
 #   - Accept a "key" and a "value"
 #   - The key tells the function what part of the dictionary you want to check
@@ -14,25 +11,12 @@
 #       e.g. I want all users with the first name Hayden:
 #       get_users_by_key("name_first", "Hayden")
 
-
 import database_files.database as db
 from database_files.database import DATABASE as DATABASE
 
-
-# Returns messages list
-def get_messages():
-    return DATABASE["messages"]
-
-
-# Returns channels list
-def get_channels():
-    return DATABASE["channels"]
-
-
-# Returns users list
-def get_users():
-    return DATABASE["users"]
-
+from database_files.database import get_messages
+from database_files.database import get_channels
+from database_files.database import get_users
 
 # returns all messages from a given channel_id
 def get_channel_messages(channel_id):
