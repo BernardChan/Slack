@@ -82,15 +82,15 @@ MOCK_DATA = {
 
 # Saves the current database_files
 def pickle_database():
-    with open("../database_files/database.p", "wb") as FILE:
+    with open("database_files/database.p", "wb") as FILE:
         pickle.dump(MOCK_DATA, FILE)
 
 
 # Restores the database_files from last save
 def unpickle_database():
     global DATABASE
-    DATABASE = pickle.load(open("../database_files/database.p", "rb"))
+    DATABASE = pickle.load(open("database_files/database.p", "rb"))
 
 
-# pickle_database()
+pickle_database()
 unpickle_database()

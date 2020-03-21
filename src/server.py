@@ -4,6 +4,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from error import InputError
 import interface_functions.other as other
+import interface_functions.standup as su
 
 def defaultHandler(err):
     response = err.get_response()
@@ -37,18 +38,25 @@ def echo():
 def search():
     query = request.args.get("query_str")
     token = request.args.get("token")
-    messages = other.search(token, query)
 
-    return dumps(messages)
-
+    return dumps(other.search(token, query))
 
 
+@APP.route("/standup/start", methods=['POST'])
+def standup_start():
+    token = request.args.get("token")
+    channel_id = request.args.get("channel_id")
+    length = request.args.get("length")
+
+    return dumps(su.standup_start(token, int(channel_id), int(length)))
 
 
+@APP.route("/standup/active", methods=['GET'])
+def standup_active():
+    token = request.args.get("token")
+    channel_id = request.args.get("channel_id")
 
-
-
-
+    return dumps(su.standup_active(token, int(channel_id)))
 
 
 if __name__ == "__main__":

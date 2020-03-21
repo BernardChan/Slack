@@ -1,12 +1,12 @@
-# Function for standup_start
-
-import threading
-from interface_functions.message import message_send
-from database_files.database import DATABASE
+import helper_functions.interface_function_helpers as help
 import database_files.database_retrieval as db
+from interface_functions.message import message_send
 from helper_functions.interface_function_helpers import check_channel_validity
 from error import InputError
 import time
+import threading
+
+# TODO: Add AccessErrors
 
 
 # Sets the standup tag on the given channel_id to True/False (is_active)
@@ -50,7 +50,37 @@ def standup_start(token, channel_id, length):
     return {"time_finish": time_finish}
 
 
-if __name__ == "__main__":
-    print([d["standup"] for d in DATABASE["channels"][0:]])
-    standup_start(1, 0, 4)
-    print([d["standup"] for d in DATABASE["channels"][0:]])
+# Returns info about a standup in the given channel
+def standup_active(token, channel_id):
+
+    # Check for errors
+    help.check_channel_validity(channel_id)
+
+    # Retrieve and return the relevant information from the database
+    standup = db.get_channel_standup(channel_id)
+    is_active = standup["active"]
+    time_finish = standup["time_finish"]
+
+    return {"is_active": is_active, "time_finish": time_finish}
+
+
+def validate_active_standup(channel_id):
+    channel = db.get_channels_by_key("channel_id", channel_id)[0]
+    if not channel["standup"]["active"]:
+        raise InputError("Attempted to send standup message while standup was not active")
+
+
+# Adds given message to the standup message queue to be sent
+# later when the standup finishes
+def standup_send(token, channel_id, message):
+    # Error check
+    help.is_message_valid(token, message, channel_id)
+    help.is_user_valid_channel_member(token, channel_id)
+    validate_active_standup(channel_id)
+
+    # Add the user's message to the message queue
+    msg = db.get_channel_standup(channel_id)
+    user = db.get_users_by_key("token", token)[0]
+    msg["msg_queue"] += user["handle_str"] + " : " + message + "\n"
+
+    return {}
