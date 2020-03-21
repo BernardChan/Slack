@@ -5,27 +5,7 @@
 """
 # Usage
     
-
-import pickle
-from os import path
-import os
-
-
-DATABASE = {
-    "users": [],
-    "messages": [],
-    "channels": [],
-}
-
-DATABASE_EMPTY = {
-    "users": [],
-    "messages": [],
-    "channels": [],
-}
-
-unpickle = False
-
-# Example of what the database will look like.
+# Example of what the database will look like available in 
 # If you have additions, add them, make a merge request, and post it on slack.
 # Make sure all the keys are there when you're adding to this
 # Additions:
@@ -35,24 +15,26 @@ unpickle = False
 # 21/03/20 Additions
     # - "permission_id added to user. 1 for owner and 2 for everyone else
 
-# Returns messages list
-def get_messages():
-    global DATABASE
-    return DATABASE["messages"]
 
-# Returns channels list
-def get_channels():
-    global DATABASE
-    return DATABASE["channels"]
-
-# Returns users list
-def get_users():
-    global DATABASE
-    return DATABASE["users"]
-    
+import pickle
+from os import path
+import os
+from database_files.database_retrieval import get_users
 
 
+DATABASE = {
+    "users": [],
+    "messages": [],
+    "channels": [],
+}
 
+unpickle = False
+
+"""
+----------------------------------------------------------------------------------
+Core Database Functions
+----------------------------------------------------------------------------------
+"""    
 # Saves the current database_files
 def pickle_database():
     if path.exists("../database_files/database.p"):
@@ -81,23 +63,31 @@ def unpickle_database():
 # Function to clear the database
 def clear_database():
     global DATABASE
-    global DATABASE_EMPTY
-    DATABASE = DATABASE_EMPTY
+    DATABASE = {
+    "users": [],
+    "messages": [],
+    "channels": [],
+}  
     pickle_database()
 
+"""
+----------------------------------------------------------------------------------
+Data Entry Functions
+----------------------------------------------------------------------------------
+"""    
 # Adding user.
 def add_user_to_database(email, password, name_first, name_last, handle, token, u_id):
     if not unpickle:
         unpickle_database()
     global DATABASE
-    #print("Initial Database Printout VVVVVVVVVVVVVVVVVVVVVV")
-    #print(DATABASE)
-    #print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+    
     permission_id = 0
-    if u_id == 1:
+    #if u_id == 1:
+    if len(get_users()) == 0:
         permission_id = 1
     else:
         permission_id = 2
+    
     new_user = {
         "u_id": u_id, 
         "email": email, 
@@ -110,49 +100,23 @@ def add_user_to_database(email, password, name_first, name_last, handle, token, 
     }
 
     DATABASE['users'].append(new_user)
-    print("Database Printout VVVVVVVVVVVVVVVVVVVVVV")
-    print(DATABASE)
-    print("^^^^^^^^^^^^^^^^^^^^^^^^")
     pickle_database()
     
     
     
 def login_user(email, token):
-    #print("These are the arguments passed into login_user")
-    #print(f"Email = {email}")
-    #rint(f"Token = {token}")
     if not unpickle:
         unpickle_database()
     global DATABASE
     i = 0
     for user in get_users():
-        #print(f"Pass {i} ==========================")
-        #print(f"User[{i}] = {user['email']}")
-        #print(f"Email   = {email}") 
         if user["email"] == email:
-            print("True")
             existing_user = user
-            #user['token'] = token
-            index = user['u_id'] - 1
-            print(f"Index{index}")
-            print(f"Before: {DATABASE['users'][index]['token']}")
-            DATABASE['users'][index]['token'] = token
-            print(f"After: {DATABASE['users'][index]['token']}")
-            
-            #j = i
-            print(f"Existing user = {existing_user['email']}")
+            #index = user['u_id'] - 1
+            DATABASE['users'][i]['token'] = token
         i += 1
-        
-    #print("this is the user selected by the database.login_user() function")
-    #print(existing_user["email"])
-    # existing_user['token'] = token
-    #print(f"DATABASE token b4 = {DATABASE['users'][j]['token']}")
-    #DATABASE['users'][j]['token'] = token
-    #print(f"DATABASE token aft = {DATABASE['users'][j]['token']}")
-    
+                    
     ret_u_id = existing_user['u_id']
-    # ret_u_id = DATABASE['users'][j]['u_id']
-    #print(f"ret_u_id = {ret_u_id}")
     return {
         'u_id': ret_u_id,
         'token': token,

@@ -12,17 +12,43 @@ This file contains functions to interface with the database, so to avoid directl
 #       get_users_by_key("name_first", "Hayden")
 
 import database_files.database as db
-from database_files.database import DATABASE as DATABASE
 
-from database_files.database import get_messages
-from database_files.database import get_channels
-from database_files.database import get_users
+"""
+----------------------------------------------------------------------------------
+Database Get Functions
+----------------------------------------------------------------------------------
+"""
+# Returns messages list
+def get_messages():
+    #global DATABASE
+    return db.DATABASE["messages"]
 
+# Returns channels list
+def get_channels():
+    #global DATABASE
+    return db.DATABASE["channels"]
+
+# Returns users list
+def get_users():
+    #global DATABASE
+    return db.DATABASE["users"]
+    
 # returns all messages from a given channel_id
 def get_channel_messages(channel_id):
     messages = DATABASE["messages"]
     return [message for message in messages if message["channel_id"] == channel_id]
 
+"""
+----------------------------------------------------------------------------------
+Database Query Functions
+----------------------------------------------------------------------------------
+"""    
+def is_duplicate_check(key, value):
+    db_user = get_users_by_key(key, value)
+    if db_user != []:
+        return True
+    else:
+        return False 
 
 # gets specific users by key
 def get_users_by_key(key, value):
@@ -36,7 +62,7 @@ def get_users_by_key(key, value):
 def is_user_in_channel(key, value, channel_id):
     channels = get_channels()
 
-    # Go through the list of channels and check only the ones matching channel_id
+# Go through the list of channels and check only the ones matching channel_id
     for channel in channels:
         if channel["channel_id"] == channel_id:
 
@@ -65,5 +91,3 @@ def get_user_channels_by_key(key, value):
 
 if __name__ == "__main__":
     pass
-
-
