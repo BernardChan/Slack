@@ -29,7 +29,23 @@ def end_standup(token, channel_id):
     # Set "standup" key to False
     set_standup(channel_id, False, None)
     standup_message = db.get_channel_standup(channel_id)
-    message_send(token, channel_id, standup_message["msg_queue"])
+
+    messages = db.get_messages()
+    message_id = time.time()
+    user = db.get_users_by_key("token", token)[0]
+
+    # Can't reuse message send due to error checking and this function behaving slightly differently
+    messages.append(
+        {
+            "message_id": message_id,
+            "u_id": user["u_id"],
+            "message": standup_message["msg_queue"],
+            "time_created": message_id,
+            "reacts": {"react_id": None, "u_ids": [], "is_this_user_reacted": False},
+            "is_pinned": False,
+            "channel_id": channel_id,
+        }
+    )
 
 
 # Works by:
