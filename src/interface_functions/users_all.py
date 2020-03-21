@@ -9,6 +9,6 @@ def users_all(token):
     # TODO
 
     # Get the list of all users
-    users = get_users
+    users = get_users()
     # return the list
     return { "users": users }
