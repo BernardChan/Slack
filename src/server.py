@@ -3,6 +3,7 @@ from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
 from error import InputError
+import interface_functions.other as other
 
 def defaultHandler(err):
     response = err.get_response()
@@ -30,6 +31,25 @@ def echo():
     return dumps({
         'data': data
     })
+
+
+@APP.route("/search", methods=['GET'])
+def search():
+    query = request.args.get("query_str")
+    token = request.args.get("token")
+    messages = other.search(token, query)
+
+    return dumps(messages)
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8080))
