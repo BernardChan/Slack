@@ -4,23 +4,12 @@ import urllib
 import urllib.parse
 import helper_functions.test_helper_file as ch
 
-# TODO: move BASE_URL to the helper file
-BASE_URL = 'http://127.0.0.1:8080'
+
 HTTP_ROUTE = "channel/leave"
 
-# Reset the database
-def reset():
-    requests.get(f"{BASE_URL}/workspace/reset")
 
 
-# Make a post request
-# Accepts route (HTTP route e.g. channel/leave, message/send etc.)
-# Accepts a dict, containing the required inputs for the function
-def make_post_request(route, dict):
 
-    # Make the http POST request and return a dictionary with the response
-    req = requests.post(f"{BASE_URL}/{route}", json=dict)
-    return req.json()
 
 
 # Helper function that asserts that a member left a channel
