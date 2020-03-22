@@ -17,6 +17,7 @@ def channels_create(token, name, is_public):
         {
             "channel_id": channel_id,
             "name": name,
+            "owner_members": [user],
             "members": [user],
             "standup": {"active": False, "msg_queue": "", "time_finish": None},
             "is_public": is_public
