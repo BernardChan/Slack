@@ -1,9 +1,8 @@
-import database_files.database_retrieval as db
 import helper_functions.interface_function_helpers as help
 from database_files.database import DATABASE as DATABASE
 from error import InputError
 
-def channel_addowner(token, channel_id, u_id) 
+def channel_removeowner(token, channel_id, u_id) 
 
     # include valid token function here, stub function atm
     def is_token_valid(token):
