@@ -9,6 +9,7 @@
 # Available in database_plan.md
 # If you have additions, add them, make a merge request, and post it on slack.
 # Make sure all the keys are there when you're adding to this
+
 # Additions:
 # - "token" key added to "user" dictionary
 # - "channel_id" key added to "message" dictionary
@@ -16,6 +17,8 @@
 # - "standup" key added to "channels" dictionary - is a boolean for whether a standup is active
 # 21/03/20 Additions
     # - "permission_id added to user. 1 for owner and 2 for everyone else
+# 23/03/20 Additions
+    # Login and logout working
 
 
 import pickle
@@ -37,8 +40,16 @@ unpickle = False
 Core Database Functions
 ----------------------------------------------------------------------------------
 """    
-""" #original
+ #original
 # Saves the current database_files
+# Saves the current database_files
+def pickle_database(): 
+    global DATABASE
+    with open("../database_files/database.p", "wb") as FILE:
+        pickle.dump(DATABASE, FILE)
+    unpickle = False
+
+"""
 def pickle_database():
     if path.exists("../database_files/database.p"):
         with open("../database_files/database.p", "wb") as FILE:
@@ -49,7 +60,7 @@ def pickle_database():
         with open("../database_files/database.p", "wb") as FILE:
             pickle.dump(DATABASE, FILE)
     unpickle = False
-
+"""
 # Restores the database_files from last save
 def unpickle_database():
     global DATABASE
@@ -62,27 +73,8 @@ def unpickle_database():
             "channels": [],
         }
     unpickle = True
-    """
-    
-# Saves the current database_files
-def pickle_database(): 
-    global DATABASE
-    with open("../database_files/database.p", "wb") as FILE:
-        pickle.dump(DATABASE, FILE)
     
 
-# Restores the database_files from last save
-def unpickle_database():
-    global DATABASE
-    if path.exists("../database_files/database.p"):
-        DATABASE = pickle.load(open("../database_files/database.p", "rb"))
-    else:
-        DATABASE = {
-            "users": [],
-            "messages": [],
-            "channels": [],
-        }
-        
 # Function to clear the database
 def clear_database():
     global DATABASE
@@ -100,16 +92,16 @@ Data Entry Functions
 """    
 # Adding user.
 def add_user_to_database(email, password, name_first, name_last, handle, token, u_id):
-    """ """
+    """
     if not unpickle:
         unpickle_database()
     global DATABASE
-    """ """
-    
     """
+    
+
     unpickle_database() # delete
     global DATABASE
-    """
+
     
     permission_id = 0
     #if u_id == 1:
@@ -130,89 +122,51 @@ def add_user_to_database(email, password, name_first, name_last, handle, token, 
     }
 
     DATABASE['users'].append(new_user)
-    print(DATABASE['users'])
     pickle_database()
     
     
     
 def login_user(email, token):
-    """ """
+    """
     if not unpickle:
         unpickle_database()
-    """ """
-    """
-    unpickle_database() # delete
     global DATABASE
     """
+
+    unpickle_database() # delete
+    global DATABASE
+
     
-    i = 0
     for user in get_users():
         if user["email"] == email:
-            existing_user = user
-            #index = user['u_id'] - 1
-            DATABASE['users'][i]['token'] = token
-        i += 1
-                    
-    ret_u_id = existing_user['u_id']
+            DATABASE['users'][user['u_id'] - 1]['token'] = token
+            u_id = user['u_id']
+
+    pickle_database()
     return {
-        'u_id': ret_u_id,
+        'u_id': u_id,
         'token': token,
     }
-    pickle_database()
     
-"""
-def logout_user(token):
-    if not unpickle:
-        unpickle_database()
-    existing_user = get_users_by_key("token", token)
-    existing_user['token'] = ""
-    return True
-    pickle_database()
-"""
-
-"""
-def logout_user(token):
-    if not unpickle:
-        unpickle_database()
-    for user in get_users():
-        if user["token"] == token:
-            existing_user = user
-    print(user)
-    existing_user['token'] = token
-    ret_u_id = existing_user['u_id']
-    return {
-        'u_id': ret_u_id,
-        'token': token,
-    }
-    pickle_database()
-"""
-
-def logout_user(token):
-    """ """
-    if not unpickle:
-        unpickle_database()
-    """ """
     
-    """
-    unpickle_database() # delete
+def logout_user(token):
+    """ 
+    if not unpickle:
+        unpickle_database()
     global DATABASE
     """
-    
-    i = 0
+
+    unpickle_database() # delete
+    global DATABASE
+
+
     is_success = False
     for user in get_users():
-        print(f"For Pass: {i}")
-        print(f"Pass: {i} User: {user['email']} \nToken:\ndb: {user['token']}\nfn: {token}")
         if user["token"] == token:
-            print("If Pass")
-            #index = user['u_id'] - 1
-            print(f"Pass: {i} User: {user['email']} \nToken: {user['token']}\n{token}")
-            DATABASE['users'][i]['token'] = ""
-            print(f"db value: {DATABASE['users'][i]['token']}")
+            DATABASE['users'][user['u_id'] - 1]['token'] = ""
             is_success = True
-        i += 1
-                    
-    return is_success
     pickle_database()
+    return is_success
+    
     
 unpickle_database

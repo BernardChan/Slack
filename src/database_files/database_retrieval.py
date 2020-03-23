@@ -11,6 +11,10 @@ This file contains functions to interface with the database, so to avoid directl
 #       e.g. I want all users with the first name Hayden:
 #       get_users_by_key("name_first", "Hayden")
 
+# Additions
+    # 21/03/20
+    # added is_duplicate moved here from auth file. 
+
 import database_files.database as db
 
 """

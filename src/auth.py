@@ -3,6 +3,15 @@
 # This function takes in input from the user, validates it, checks against the database, then authenticates them if everything is correct.
 
 """
+# Usage
+    # Used for Validation of input only. 
+
+# Additions:
+# 21/03/20
+    # - register finished
+# 23/03/20
+    # - Login and Logout
+
 from error import AccessError, InputError
 import database_files.database as db
 import database_files.database_retrieval as dr
@@ -63,22 +72,6 @@ def auth_login(email, password):
 
     return login_dict
         
-"""
-def auth_logout(token):
-    # TODO Search user by token
-    user_rec =  dr.get_users_by_key("token", token)
-    if user_rec == []:
-        return {
-        'is_success': False,
-    }
-    else:
-        db.logout_user(token)
-        # TODO Remove Token
-        # TODO Return true on succcessful logout
-    return {
-        'is_success': True,
-    }
-"""
 
 def auth_logout(token):
     is_success = db.logout_user(token)
@@ -86,7 +79,7 @@ def auth_logout(token):
     
 if __name__ == '__main__':
     pass
-
+"""
     db.clear_database()
     print("Register 1")
     item1 = auth_register("dankoenen0@gmail.com", "password@123", "Daniel", "Koenen")
@@ -134,6 +127,7 @@ if __name__ == '__main__':
     print("=================================")
     print("=================================")
     
+    print("Logout Test 1: dankoenen0@gmail.com")
     logout1 = auth_logout(login1['token'])
     print(f"Logout Test 1: {logout1}")
     print(f"Token Used: {login1['token']}")
@@ -147,4 +141,4 @@ if __name__ == '__main__':
     item5 = auth_register("yeeboi-m8@gmail.com", "password@456", "iPutANameHere", "aSecondNameGoesHere")
     print(f"Item 5 = {item5['u_id']} : {item5['token']}")
     print("=================================")
-
+"""
