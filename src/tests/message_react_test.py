@@ -4,7 +4,7 @@
     # channels_create()
     # message_send
     # channel_messages
-    
+   
 import pytest
 
 from interface_functions.auth import auth_register
@@ -37,7 +37,7 @@ def data():
 # helper function to assert that a message has been reacted to
 def assert_is_reacted(token, user_id, channel_id, message_id):
     # channel messages returns a dictionary containing messages, start, end
-    messages  = channel_messages(token, channel_id, 0)["messages"]
+    messages = channel_messages(token, channel_id, 0)["messages"]
     # messages is a list of dictionaries containing message_id, u_id, message, time_created, reacts, is_pinned
     # find the message with message_id and assert that its reacted with react id 1 and the given u_id
     for message in messages:
