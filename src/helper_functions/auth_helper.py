@@ -66,7 +66,7 @@ def create_handle(name_first, name_last):
     if len(handle) > 20:
         handle = handle[0:20]
     while dr.duplicate_check("handle_str", handle):
-        hashed_input = hash_data(handle).upper()
+        hashed_input = hash_data(handle).lower()
         character = handle[0:-1] + hashed_input[1]
         handle = character
     return handle
