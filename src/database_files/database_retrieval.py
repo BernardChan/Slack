@@ -43,13 +43,14 @@ def get_channel_messages(channel_id):
 Database Query Functions
 ----------------------------------------------------------------------------------
 """    
-def is_duplicate_check(key, value):
+def is_duplicate(key, value):
     db_user = get_users_by_key(key, value)
     if db_user != []:
         return True
     else:
         return False 
-
+        
+        
 # gets specific users by key
 def get_users_by_key(key, value):
     users = get_users()

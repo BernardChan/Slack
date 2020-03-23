@@ -23,7 +23,7 @@ def auth_register(email, password, name_first, name_last):
     ah.validate_name_last(name_last)
     
     # Stage 2 - check database
-    if dr.is_duplicate_check("email", email):
+    if dr.is_duplicate("email", email):
         raise InputError(description = 'Email address is already being used by another user')
     
     # Stage 3 - Generate input transformations
@@ -82,7 +82,7 @@ def auth_logout(token):
     
 if __name__ == '__main__':
     pass
-"""
+
     db.clear_database()
     item1 = auth_register("dankoenen0@gmail.com", "password@123", "Daniel", "Koenen")
     print("Register 1")
@@ -125,4 +125,4 @@ if __name__ == '__main__':
     print(f"{time.time()}")
     
     #auth_logout("dankoenen0@gmail.com")
-    """
+
