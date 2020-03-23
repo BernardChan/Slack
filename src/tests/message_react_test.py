@@ -13,11 +13,26 @@ from interface_functions.channel import channel_messages
 from interface_functions.channels import channels_create
 from error import InputError, AccessError
 
-# Pytest fixture to register a test user
+# Pytest fixture to register a test user, create a channel and send a message
 @pytest.fixture
-def user1():
-    data = auth_register("test.user1@test.com", "password123", "fname1", "lname1")
-    return data
+def data():
+    # register a user
+    user = auth_register("test.user1@test.com", "password123", "fname1", "lname1")
+    u_id = user["u_id"]
+    token = user["token"]
+    # create a public channel, assumes that user automatically joins and is owner of that channel
+    channel = channels_create(token, "newchannel", True)
+    ch_id = channel["channel_id"]
+    # send a message
+    message = message_send(token, ch_id, "Hello world!")
+    message_id = message["message_id"]
+
+    return {
+        "u_id": u_id,
+        "token": token,
+        "ch_id": ch_id,
+        "message_id": message_id,
+    }
 
 # helper function to assert that a message has been reacted to
 def assert_is_reacted(token, user_id, channel_id, message_id):
@@ -32,34 +47,24 @@ def assert_is_reacted(token, user_id, channel_id, message_id):
             assert(message["reacts"][0]["u_id"] == user_id)
 
 # test succesful
-def test_message_react_success(user1):
-    # CREATE A USER AND CHANNEL, SEND A MESSAGE
-    # register a test user using pytest fixture
-    token = user1["token"]
-    u_id = user1["u_id"]
-    # create a public channel, assumes that user automatically joins and is owner of that channel
-    channel = channels_create(token, "newchannel", True)
-    ch_id = channel["channel_id"]
-    # send a message
-    message = message_send(token, ch_id, "Hello world!")
-    message_id = message["message_id"]
-    
-    # react to that message
+def test_message_react_success(data):
+    # data fixture creates a user and channel then sends a message with message_id
+    # save this data
+    u_id = data["u_id"]
+    token = data["token"]
+    ch_id = data["ch_id"]
+    message_id = data["message_id"]
+    # react to the message
     message_react(token, message_id, 1)
     # assert message was reacted
     assert_is_reacted(token, u_id, ch_id, message_id)
 
 # test for input errors
-def test_message_react_input_errors(user1):
+def test_message_react_input_errors(data):
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
-    # register a test user
-    token = user1["token"]
-    # create a public channel, assumes that user automatically joins and is owner of that channel
-    channel = channels_create(token, "newchannel", True)
-    ch_id = channel["channel_id"]
-    # send a message
-    message = message_send(token, ch_id, "Hello world!")
-    message_id = message["message_id"]
+    # save required data variables
+    token = data["token"]
+    message_id = data["message_id"]
 
     # INVALID MESSAGE_ID
     with pytest.raises(InputError):
@@ -80,14 +85,8 @@ def test_message_react_input_errors(user1):
 # test for access error from invalid token
 def test_message_react_invalid_token(user1):
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
-    # register a test user
-    token = user1["token"]
-    # create a public channel, assumes that user automatically joins and is owner of that channel
-    channel = channels_create(token, "newchannel", True)
-    ch_id = channel["channel_id"]
-    # send a message
-    message = message_send(token, ch_id, "Hello world!")
-    message_id = message["message_id"]
+    # save required data variables (only needs message id)
+    message_id = data["message_id"]
 
     # INVALID TOKEN
     with pytest.raises(AccessError):
