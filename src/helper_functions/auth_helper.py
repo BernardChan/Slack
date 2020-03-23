@@ -71,10 +71,15 @@ def create_handle(name_first, name_last):
         handle = character
     return handle
     
-
 def get_u_id():
-    u_id_last = len(dr.get_users())
-    while dr.is_duplicate("u_id", u_id_last):
-        u_id_last += 1
+    u_id_last = len(dr.get_users()) + 1
     return u_id_last
 
+""" If they still don't agree
+def get_u_id():
+    u_id_last = len(dr.get_users()) + 1
+    for user in dr.get_users():
+        if dr.is_duplicate("u_id", u_id_last):
+            u_id_last += 1
+    return u_id_last
+"""

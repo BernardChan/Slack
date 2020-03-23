@@ -63,7 +63,7 @@ def auth_login(email, password):
 
     return login_dict
         
-        
+"""
 def auth_logout(token):
     # TODO Search user by token
     user_rec =  dr.get_users_by_key("token", token)
@@ -78,24 +78,30 @@ def auth_logout(token):
     return {
         'is_success': True,
     }
+"""
 
+def auth_logout(token):
+    is_success = db.logout_user(token)
+    return is_success
     
 if __name__ == '__main__':
     pass
 
     db.clear_database()
-    item1 = auth_register("dankoenen0@gmail.com", "password@123", "Daniel", "Koenen")
     print("Register 1")
+    item1 = auth_register("dankoenen0@gmail.com", "password@123", "Daniel", "Koenen")
+    
     print(f"Item 1 = u_id: {item1['u_id']} Token: {item1['token']}")
     print("=================================")
     
-    item2 = auth_register("cutiepie@gmail.com", "password@123", "Daniellellaqueze", "Koenenopolis")
     print("Register 2")
+    item2 = auth_register("cutiepie@gmail.com", "password@123", "Daniellellaqueze", "Koenenopolis")
     print(f"Item 2 = {item2['u_id']} : {item2['token']}")
     print("=================================")
-    
-    item3 = auth_register("cutiepie1@gmail.com", "password@123", "AlphaBetaCharlie", "DeltaEchoFoxtrot")
+        
     print("Register 3")
+    item3 = auth_register("cutiepie1@gmail.com", "password@123", "AlphaBetaCharlie", "DeltaEchoFoxtrot")
+
     print(f"Item 3 = {item3['u_id']} : {item3['token']}")
     print("=================================")
     
@@ -118,11 +124,27 @@ if __name__ == '__main__':
     
     print("=================================")
     
-    item4 = auth_register("yomumma@gmail.com", "eyylmaoboi", "Waddup", "MyLadski")
     print("Register 4")
+    item4 = auth_register("yomumma@gmail.com", "eyylmaoboi", "Waddup", "MyLadski")
     print(f"Item 4 = {item4['u_id']} : {item4['token']}")
     
-    print(f"{time.time()}")
+    # print(f"{time.time()}")
+    print("=================================")
+    print("=================================")
+    print("=================================")
+    print("=================================")
     
-    #auth_logout("dankoenen0@gmail.com")
+    logout1 = auth_logout(login1['token'])
+    print(f"Logout Test 1: {logout1}")
+    print(f"Token Used: {login1['token']}")
+    
+    print("=================================")
+    print("=================================")
+    print("=================================")
+    print("=================================")
+    
+    print("Register 5")
+    item5 = auth_register("yeeboi-m8@gmail.com", "password@456", "iPutANameHere", "aSecondNameGoesHere")
+    print(f"Item 5 = {item5['u_id']} : {item5['token']}")
+    print("=================================")
 
