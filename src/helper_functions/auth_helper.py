@@ -65,17 +65,16 @@ def create_handle(name_first, name_last):
     handle = handle.lower()
     if len(handle) > 20:
         handle = handle[0:20]
-    while dr.duplicate_check("handle_str", handle):
+    while dr.is_duplicate("handle_str", handle):
         hashed_input = hash_data(handle).lower()
         character = handle[0:-1] + hashed_input[1]
         handle = character
     return handle
     
- 
+
 def get_u_id():
-    u_id_last = len(database.get_users())
-    while dr.duplicate_check("u_id", u_id_last):
+    u_id_last = len(dr.get_users())
+    while dr.is_duplicate("u_id", u_id_last):
         u_id_last += 1
-    # u_id_last = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
     return u_id_last
 
