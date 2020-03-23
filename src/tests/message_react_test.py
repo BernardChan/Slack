@@ -83,7 +83,7 @@ def test_message_react_input_errors(data):
 
 
 # test for access error from invalid token
-def test_message_react_invalid_token(user1):
+def test_message_react_invalid_token(data):
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
     # save required data variables (only needs message id)
     message_id = data["message_id"]
