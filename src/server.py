@@ -30,8 +30,6 @@ def echo():
 
 # TODO: Remove this. This is purely for debugging. It catches all routes that aren't implemented and echos
 #   what was received instead of throwing a 404 error.
-# @APP.route('/', defaults={'u_path': ''})
-# @APP.route('/<path:u_path>')
 @APP.route("/<path:dummy>", methods=["GET", "POST", "PUT", "DELETE"])
 def catch_all(dummy):
     # Ternary is too long for this if else
