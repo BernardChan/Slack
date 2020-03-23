@@ -1,7 +1,31 @@
-# Example DATABASE shown at the bottom of the file
-# Gives 2 functions to save and restore the DATABASE from database_files.py
+"""
+ database.py
+# This function stores input given from a file. Preserving the state by pickling the results and unpickling it when data needs to be added. All of the functions that directly access data are also added here. 
+
+"""
+# Usage
+
+# Example of what the database will look like:
+# Available in database_plan.md
+# If you have additions, add them, make a merge request, and post it on slack.
+# Make sure all the keys are there when you're adding to this
+
+# Additions:
+# - "token" key added to "user" dictionary
+# - "channel_id" key added to "message" dictionary
+# - "members" key added to "channels" dictionary
+# - "standup" key added to "channels" dictionary - is a boolean for whether a standup is active
+# 21/03/20 Additions
+    # - "permission_id added to user. 1 for owner and 2 for everyone else
+# 23/03/20 Additions
+    # Login and logout working
+
 
 import pickle
+from os import path
+import os
+from database_files.database_retrieval import get_users
+
 
 DATABASE = {
     "users": [],
@@ -9,64 +33,18 @@ DATABASE = {
     "channels": [],
 }
 
-DATABASE_EMPTY = {
-    "users": [],
-    "messages": [],
-    "channels": [],
-}
-
-unpickle = False
-
-# Example of what the database will look like.
-# If you have additions, add them, make a merge request, and post it on slack.
-# Additions:
-# - "token" key added to "user" dictionary
-# - "channel_id" key added to "message" dictionary
-# - "members" key added to "channels" dictionary
-# 21/03/20 Additions
-    # - "permission_id added to user. 1 for owner and 2 for everyone else
-
 
 """
 ----------------------------------------------------------------------------------
-Query Functions
+Core Database Functions
 ----------------------------------------------------------------------------------
-""" 
-# These functions full information from the database.
-
-# Returns messages list
-def get_messages():
+"""    
+# Saves the current database_files
+def pickle_database(): 
     global DATABASE
-    return DATABASE["messages"]
+    with open("../database_files/database.p", "wb") as FILE:
+        pickle.dump(DATABASE, FILE)
 
-# Returns channels list
-def get_channels():
-    global DATABASE
-    return DATABASE["channels"]
-
-# Returns users list
-def get_users():
-    global DATABASE
-    return DATABASE["users"]
-    
-
-"""
-----------------------------------------------------------------------------------
-Database Functions
-----------------------------------------------------------------------------------
-""" 
-# These functions support the large scale operation of the database.
-
-def pickle_database():
-    if path.exists("../database_files/database.p"):
-        with open("../database_files/database.p", "wb") as FILE:
-            pickle.dump(DATABASE, FILE)
-    else:
-        filename = "../database_files/database.p"
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open("../database_files/database.p", "wb") as FILE:
-            pickle.dump(DATABASE, FILE)
-    unpickle = False
 
 # Restores the database_files from last save
 def unpickle_database():
@@ -79,32 +57,35 @@ def unpickle_database():
             "messages": [],
             "channels": [],
         }
-    unpickle = True
-        
+    
+
 # Function to clear the database
 def clear_database():
     global DATABASE
-    global DATABASE_EMPTY
-    DATABASE = DATABASE_EMPTY
+    DATABASE = {
+    "users": [],
+    "messages": [],
+    "channels": [],
+}  
     pickle_database()
-    
+
 """
 ----------------------------------------------------------------------------------
-Data Operation Functions
+Data Entry Functions
 ----------------------------------------------------------------------------------
-""" 
-# These functions actually change data in the database.
-    
+"""    
 # Adding user.
 def add_user_to_database(email, password, name_first, name_last, handle, token, u_id):
-    if not unpickle:
-        unpickle_database()
+   
+    unpickle_database() # delete
     global DATABASE
+
     permission_id = 0
-    if u_id == 1:
+    if len(get_users()) == 0:
         permission_id = 1
     else:
         permission_id = 2
+    
     new_user = {
         "u_id": u_id, 
         "email": email, 
@@ -118,7 +99,35 @@ def add_user_to_database(email, password, name_first, name_last, handle, token, 
 
     DATABASE['users'].append(new_user)
     pickle_database()
+    
+    
+    
+def login_user(email, token):
+    unpickle_database() # delete
+    global DATABASE
 
+    for user in get_users():
+        if user["email"] == email:
+            DATABASE['users'][user['u_id'] - 1]['token'] = token
+            u_id = user['u_id']
 
-# pickle_database()
-unpickle_database()
+    pickle_database()
+    return {
+        'u_id': u_id,
+        'token': token,
+    }
+    
+    
+def logout_user(token):
+    unpickle_database() # delete
+    global DATABASE
+
+    is_success = False
+    for user in get_users():
+        if user["token"] == token:
+            DATABASE['users'][user['u_id'] - 1]['token'] = ""
+            is_success = True
+    pickle_database()
+    return is_success
+    
+unpickle_database

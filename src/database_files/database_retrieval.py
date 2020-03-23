@@ -11,30 +11,54 @@ This file contains functions to interface with the database, so to avoid directl
 #       e.g. I want all users with the first name Hayden:
 #       get_users_by_key("name_first", "Hayden")
 
+# Additions
+    # 21/03/20
+    # added is_duplicate moved here from auth file. 
+
 import database_files.database as db
-from database_files.database import DATABASE as DATABASE
 
-from database_files.database import get_messages
-from database_files.database import get_channels
-from database_files.database import get_users
+"""
+----------------------------------------------------------------------------------
+Database Get Functions
+----------------------------------------------------------------------------------
+"""
+# Returns messages list
+def get_messages():
+    #global DATABASE
+    return db.DATABASE["messages"]
 
+# Returns channels list
+def get_channels():
+    #global DATABASE
+    return db.DATABASE["channels"]
+
+# Returns users list
+def get_users():
+    #global DATABASE
+    return db.DATABASE["users"]
+    
 # returns all messages from a given channel_id
 def get_channel_messages(channel_id):
     messages = DATABASE["messages"]
     return [message for message in messages if message["channel_id"] == channel_id]
 
-
-# gets channels by key
-def get_channels_by_key(key, value):
-    channels = get_channels()
-    return [channel for channel in channels if channel[key] == value]
-
-
+"""
+----------------------------------------------------------------------------------
+Database Query Functions
+----------------------------------------------------------------------------------
+"""    
+def is_duplicate(key, value):
+    db_user = get_users_by_key(key, value)
+    if db_user != []:
+        return True
+    else:
+        return False 
+        
+        
 # gets specific users by key
 def get_users_by_key(key, value):
     users = get_users()
     return [user for user in users if user[key] == value]
-
 
 # returns boolean if a user is part of a channel
 # user key is what property (key) of the user we're searching
@@ -43,7 +67,7 @@ def get_users_by_key(key, value):
 def is_user_in_channel(key, value, channel_id):
     channels = get_channels()
 
-    # Go through the list of channels and check only the ones matching channel_id
+# Go through the list of channels and check only the ones matching channel_id
     for channel in channels:
         if channel["channel_id"] == channel_id:
 
@@ -51,7 +75,6 @@ def is_user_in_channel(key, value, channel_id):
             for member in channel["members"]:
                 if member[key] == value:
                     return True
-
     return False
 
 
@@ -64,7 +87,6 @@ def get_user_channels_by_key(key, value):
     # Find what channels a user is in
     for channel in channels:
         for user in channel["members"]:
-
             # If we found the user's token in one of the channels
             # Add it to user_channels
             if user[key] == value:
@@ -72,16 +94,5 @@ def get_user_channels_by_key(key, value):
 
     return user_channels
 
-
-# gets the standup queue in channel_id
-def get_channel_standup(channel_id):
-    channel = get_channels_by_key("channel_id", channel_id)[0]
-    return channel["standup"]
-
-
-# Sanity checking that functions are behaving as expected
 if __name__ == "__main__":
-    # Use from database_files.database import MOCK_DATA as DATABASE
     pass
-
-
