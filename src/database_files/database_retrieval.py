@@ -25,17 +25,14 @@ Database Get Functions
 """
 # Returns messages list
 def get_messages():
-    #global DATABASE
     return db.DATABASE["messages"]
 
 # Returns channels list
 def get_channels():
-    #global DATABASE
     return db.DATABASE["channels"]
 
 # Returns users list
 def get_users():
-    global DATABASE
     return db.DATABASE["users"]
     
 # returns all messages from a given channel_id
