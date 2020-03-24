@@ -9,6 +9,8 @@
 # Additions:
 # 21/03/20
     # - register finished
+# 23/03/20
+    # - Login and Logout
 
 from error import AccessError, InputError
 import database_files.database_update as du
@@ -49,9 +51,8 @@ def auth_login(email, password):
     return login_dict
         
 def auth_logout(token):
-    return {
-        'is_success': True,
-    }
+    is_success = du.logout_user(token)
+    return is_success
 
 if __name__ == '__main__':
     pass
