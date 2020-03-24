@@ -41,5 +41,14 @@ def user_profile():
 
     return dumps(user.user_profile(token, u_id))
 
+@APP.route("user/profile/setname", methods=['PUT'])
+def user_profile_setname():
+    data = request.get_json()
+    token = data["token"]
+    name_first = data["name_first"]
+    name_last = data["name_last"]
+
+    return dumps(user.user_profile_setname(token, name_first, name_last))
+
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8080))
