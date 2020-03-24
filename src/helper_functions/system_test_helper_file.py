@@ -21,7 +21,7 @@ BASE_URL = "http://127.0.0.1:42069"
 #       e.g. {"token": token, "u_id": id}
 
 # ============================== IMPORTANT ==============================
-# For POST/PUT/DELETE requests, use request.form NOT request.args in
+# For POST/PUT/DELETE requests, use request.get_json() NOT request.args in
 # the server to get data. For GET requests, use request.args like normal.
 # =======================================================================
 
