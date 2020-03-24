@@ -23,9 +23,9 @@ DATABASE = {
 #   in the "members" dictionary as well
 MOCK_DATA = {
     "users": [
-        {"u_id": 0, "email": "asd@asd.com", "name_first": "first0", "name_last": "last0", "handle_str": "handle0", "token": 0, "permission_id": 1},
-        {"u_id": 1, "email": "asd1@asd.com", "name_first": "first1", "name_last": "last1", "handle_str": "handle1", "token": 1, "permission_id": 2},
-        {"u_id": 2, "email": "asd2@asd.com", "name_first": "first2", "name_last": "last2", "handle_str": "handle2", "token": 2, "permission_id": 2}
+        {"u_id": 0, "email": "asd@asd.com", "name_first": "first0", "name_last": "last0", "handle_str": "handle0", "token": "0", "permission_id": 1},
+        {"u_id": 1, "email": "asd1@asd.com", "name_first": "first1", "name_last": "last1", "handle_str": "handle1", "token": "1", "permission_id": 2},
+        {"u_id": 2, "email": "asd2@asd.com", "name_first": "first2", "name_last": "last2", "handle_str": "handle2", "token": "2", "permission_id": 2}
     ],
 
     "messages": [
@@ -91,15 +91,15 @@ MOCK_DATA = {
 
 # Saves the current database_files
 def pickle_database():
-    with open("../database_files/database.p", "wb") as FILE:
+    with open("database_files/database.p", "wb") as FILE:
         pickle.dump(MOCK_DATA, FILE)
 
 
 # Restores the database_files from last save
 def unpickle_database():
     global DATABASE
-    DATABASE = pickle.load(open("../database_files/database.p", "rb"))
+    DATABASE = pickle.load(open("database_files/database.p", "rb"))
 
 
-# pickle_database()
+pickle_database()
 unpickle_database()
