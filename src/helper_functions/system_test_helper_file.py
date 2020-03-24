@@ -21,7 +21,7 @@ BASE_URL = "http://127.0.0.1:42069"
 #       e.g. {"token": token, "u_id": id}
 
 # ============================== IMPORTANT ==============================
-# For POST/PUT/DELETE requests, use request.form NOT request.args in
+# For POST/PUT/DELETE requests, use request.get_json() NOT request.args in
 # the server to get data. For GET requests, use request.args like normal.
 # =======================================================================
 
@@ -34,19 +34,19 @@ def make_get_request(route, dict):
 
 # Make a POST request
 def make_post_request(route, dict):
-    req = requests.post(f"{BASE_URL}/{route}", data=dict)
+    req = requests.post(f"{BASE_URL}/{route}", json=dict)
     return req.json()
 
 
 # Make DELETE request
 def make_delete_request(route, dict):
-    req = requests.delete(f"{BASE_URL}/{route}", data=dict)
+    req = requests.delete(f"{BASE_URL}/{route}", json=dict)
     return req.json()
 
 
 # Make PUT request
 def make_put_request(route, dict):
-    req = requests.put(f"{BASE_URL}/{route}", data=dict)
+    req = requests.put(f"{BASE_URL}/{route}", json=dict)
     return req.json()
 
 
