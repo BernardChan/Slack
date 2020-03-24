@@ -13,7 +13,7 @@
     # - Login and Logout
 
 from error import AccessError, InputError
-import database_files.database as db
+import database_files.database_update as du
 import database_files.database_retrieval as dr
 import helper_functions.auth_helper as ah
 import pytest
@@ -31,7 +31,7 @@ def auth_login(email, password):
     }
 
 def auth_logout(token):
-    is_success = db.logout_user(token)
+    is_success = du.logout_user(token)
     return is_success
 
 def auth_register(email, password, name_first, name_last):
