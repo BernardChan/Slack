@@ -11,6 +11,7 @@
     # - register finished
 
 from error import AccessError, InputError
+import database_files.database_update as du
 import database_files.database_retrieval as dr
 import helper_functions.auth_helper as ah
 import pytest
