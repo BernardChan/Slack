@@ -11,7 +11,6 @@
     # - register finished
 
 from error import AccessError, InputError
-import database_files.database as db
 import database_files.database_retrieval as dr
 import helper_functions.auth_helper as ah
 import pytest
@@ -33,6 +32,7 @@ def auth_login(email, password):
     # Validate Email
     ah.validate_email(email)
     user_rec =  dr.get_users_by_key("email", email)
+    print(user_rec)
     if user_rec == []:
         raise InputError(description = 'Email entered does not belong to a user')
     
@@ -42,8 +42,8 @@ def auth_login(email, password):
         raise InputError(description = 'Password is not correct')
 
     # Create and assign token to database
-    new_token = ah.get_valid_token(email)
-    login_dict = db.login_user(email, new_token)
+    # new_token = ah.get_valid_token(email)
+    login_dict = du.login_user(email)
 
     return login_dict
         
