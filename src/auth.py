@@ -13,7 +13,8 @@
     # - Login and Logout
 
 from error import AccessError, InputError
-import database_files.database as db
+import database_files.database as db #Just for clear database for tests
+import database_files.database_update as du
 import database_files.database_retrieval as dr
 import helper_functions.auth_helper as ah
 import pytest
@@ -35,21 +36,18 @@ def auth_register(email, password, name_first, name_last):
     if dr.is_duplicate("email", email):
         raise InputError(description = 'Email address is already being used by another user')
     
+    '''
     # Stage 3 - Generate input transformations
     token = ah.get_valid_token(email)
+    '''
     u_id_returned = ah.get_u_id()
     
     # Stage 4 - Store all user information in the database
-    db.add_user_to_database(email, \
-        ah.hash_data(password), name_first, name_last, \
-        ah.create_handle(name_first, name_last), \
-        token, u_id_returned \
+    register_dict = du.add_user_to_database(email, ah.hash_data(password),\
+        name_first, name_last, ah.create_handle(name_first, name_last), \
+        u_id_returned \
     )
     
-    register_dict = {
-        'u_id' : u_id_returned,
-        'token' : token
-    }
     return register_dict
      
  
@@ -58,6 +56,7 @@ def auth_login(email, password):
     # Validate Email
     ah.validate_email(email)
     user_rec =  dr.get_users_by_key("email", email)
+    print(user_rec)
     if user_rec == []:
         raise InputError(description = 'Email entered does not belong to a user')
     
@@ -67,19 +66,19 @@ def auth_login(email, password):
         raise InputError(description = 'Password is not correct')
 
     # Create and assign token to database
-    new_token = ah.get_valid_token(email)
-    login_dict = db.login_user(email, new_token)
+    # new_token = ah.get_valid_token(email)
+    login_dict = du.login_user(email)
 
     return login_dict
         
 
 def auth_logout(token):
-    is_success = db.logout_user(token)
+    is_success = du.logout_user(token)
     return is_success
     
 if __name__ == '__main__':
     pass
-"""
+
     db.clear_database()
     print("Register 1")
     item1 = auth_register("dankoenen0@gmail.com", "password@123", "Daniel", "Koenen")
@@ -141,4 +140,4 @@ if __name__ == '__main__':
     item5 = auth_register("yeeboi-m8@gmail.com", "password@456", "iPutANameHere", "aSecondNameGoesHere")
     print(f"Item 5 = {item5['u_id']} : {item5['token']}")
     print("=================================")
-"""
+
