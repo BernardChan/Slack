@@ -1,6 +1,6 @@
 """
  database_retrieval.py
-This file contains functions to interface with the database, so to avoid directly accessing database at all times possible since implementation/structure may change during the agile iteration process.
+This file contains functions to query the database, so to avoid directly accessing database at all times possible since implementation/structure may change during the agile iteration process.
 """
 
 # Usage:
@@ -16,6 +16,7 @@ This file contains functions to interface with the database, so to avoid directl
     # added is_duplicate moved here from auth file. 
 
 import database_files.database as db
+#from database_files.database import DATABASE
 
 """
 ----------------------------------------------------------------------------------
@@ -34,7 +35,7 @@ def get_channels():
 
 # Returns users list
 def get_users():
-    #global DATABASE
+    global DATABASE
     return db.DATABASE["users"]
     
 # returns all messages from a given channel_id
@@ -58,18 +59,20 @@ def get_channel_standup(channel_id):
 Database Query Functions
 ----------------------------------------------------------------------------------
 """    
+
+# gets specific users by key
+def get_users_by_key(key, value):
+    users = get_users()
+    return [user for user in users if user[key] == value]
+    
+    
 def is_duplicate(key, value):
     db_user = get_users_by_key(key, value)
     if db_user != []:
         return True
     else:
         return False 
-        
-        
-# gets specific users by key
-def get_users_by_key(key, value):
-    users = get_users()
-    return [user for user in users if user[key] == value]
+
 
 # returns boolean if a user is part of a channel
 # user key is what property (key) of the user we're searching
