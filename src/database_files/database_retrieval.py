@@ -41,6 +41,17 @@ def get_users():
 def get_channel_messages(channel_id):
     messages = DATABASE["messages"]
     return [message for message in messages if message["channel_id"] == channel_id]
+    
+# gets channels by key
+def get_channels_by_key(key, value):
+    channels = get_channels()
+    return [channel for channel in channels if channel[key] == value]
+    
+# gets the standup queue in channel_id
+def get_channel_standup(channel_id):
+    channel = get_channels_by_key("channel_id", channel_id)[0]
+    return channel["standup"]
+
 
 """
 ----------------------------------------------------------------------------------
