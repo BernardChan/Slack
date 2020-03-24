@@ -44,9 +44,10 @@ def search():
 
 @APP.route("/standup/start", methods=['POST'])
 def standup_start():
-    token = request.args.get("token")
-    channel_id = request.args.get("channel_id")
-    length = request.args.get("length")
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    length = int(resp["length"])
 
     return dumps(su.standup_start(token, int(channel_id), int(length)))
 
@@ -61,14 +62,14 @@ def standup_active():
 
 @APP.route("/standup/send", methods=['POST'])
 def standup_send():
-    token = request.args.get("token")
-    channel_id = int(request.args.get("channel_id"))
-    message = request.args.get("message")
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    message = resp["message"]
 
     return dumps(su.standup_send(token, channel_id, message))
 
 
 
-
 if __name__ == "__main__":
-    APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8080))
+    APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 42069))
