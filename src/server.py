@@ -3,6 +3,8 @@ from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
 from error import InputError
+import interface_functions.user as user
+import interface_functions.channels as channels
 
 def defaultHandler(err):
     response = err.get_response()
@@ -30,6 +32,14 @@ def echo():
     return dumps({
         'data': data
     })
+
+
+@APP.route("/user/profile", methods=['GET'])
+def user_profile():
+    token = request.args.get("token")
+    u_id = request.args.get("u_id")
+
+    return dumps(user.user_profile(token, u_id))
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8080))
