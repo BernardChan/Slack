@@ -4,6 +4,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from error import InputError
 import interface_functions.user as user
+import interface_functions.admin_userpermission_change as admin
 import interface_functions.channels as channels
 
 def defaultHandler(err):
@@ -65,6 +66,15 @@ def user_profile_sethandle():
     handle_str = data["handle_str"]
 
     return dumps(user.user_profile_sethandle(token, handle_str))
+
+@APP.route("admin/userpermission/change", methods=['POST'])
+def admin_userpermission_change():
+    data = request.get_json()
+    token = data["token"]
+    u_id = data["u_id"]
+    permission_id = data["permission_id"]
+
+    return dumps(admin.admin_userpermission_change(token, u_id, permission_id))
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8080))
