@@ -24,7 +24,7 @@ def check_channel_validity(channel_id):
 # check if a token is part of a channel with channel_id
 def check_member_status_of_channel(token, channel_id):
     if not db.is_user_in_channel("token", token, channel_id):
-        raise AccessError("Invalid channel_id provided")
+        raise AccessError("User was not a member of the channel_id provided")
 
 
 # Throws errors where needed
