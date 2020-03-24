@@ -25,6 +25,9 @@
 ## `channel_removeowner()`
 - Assume that not having a channel owner is fine
 
+## `channels_create()`
+- Assume that user joins channel immediately becomes channel owner and a member
+
 ## `search()`
 - Assume that search() is case sensitive
 - Assume that an empty string will return everything
