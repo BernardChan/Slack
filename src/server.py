@@ -58,5 +58,13 @@ def user_profile_setemail():
 
     return dumps(user.user_profile_setemail(token, email))
 
+@APP.route("user/profile/sethandle", methods=['PUT'])
+def user_profile_sethandle():
+    data = request.get_json()
+    token = data["token"]
+    handle_str = data["handle_str"]
+
+    return dumps(user.user_profile_sethandle(token, handle_str))
+
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8080))
