@@ -24,18 +24,35 @@ import time
 User Interface Functions
 ----------------------------------------------------------------------------------
 """     
-def auth_login(email, password):
-    return {
-        'u_id': 1,
-        'token': '12345',
-    }
-
-def auth_logout(token):
-    is_success = du.logout_user(token)
-    return is_success
-
 def auth_register(email, password, name_first, name_last):
     return {
         'u_id': 1,
         'token': '12345',
-    }
+    }     
+ 
+        
+def auth_login(email, password):
+    # Validate Email
+    ah.validate_email(email)
+    user_rec =  dr.get_users_by_key("email", email)
+    print(user_rec)
+    if user_rec == []:
+        raise InputError(description = 'Email entered does not belong to a user')
+    
+    # Validate Password
+    hash_pw = ah.hash_data(password)
+    if hash_pw != user_rec[0]["password"]:
+        raise InputError(description = 'Password is not correct')
+
+    # Create and assign token to database
+    # new_token = ah.get_valid_token(email)
+    login_dict = du.login_user(email)
+
+    return login_dict
+        
+def auth_logout(token):
+    is_success = du.logout_user(token)
+    return is_success
+
+if __name__ == '__main__':
+    pass
