@@ -7,6 +7,8 @@ import interface_functions.other as other
 import interface_functions.standup as su
 import interface_functions.message as msg
 import interface_functions.channel as ch
+import interface_functions.channels as chs
+
 
 def defaultHandler(err):
     response = err.get_response()
@@ -118,6 +120,18 @@ def message_send():
     message = resp["message"]
 
     return dumps(msg.message_send(token, channel_id, message))
+
+
+@APP.route("/channels/create", methods=['POST'])
+def channels_create():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    name = resp["name"]
+    is_public = resp["is_public"]
+
+    return dumps(chs.channels_create(token, name, is_public))
 
 
 if __name__ == "__main__":
