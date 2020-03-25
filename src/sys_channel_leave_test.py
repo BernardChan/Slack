@@ -33,6 +33,7 @@ def test_channel_leave_simple():
     # 1. Choose the function based on the HTTP Method
     #       (channel_leave is POST, so we used make_post_request())
     # 2. Give the function your HTTP Route as a string
+    #       (REMOVE the leading "/" if your route has it, e.g. /search becomes "search")
     #       (channel_leave uses channel/leave, so we give "channel/leave")
     # 3. Give it your data as a dictionary
     #       (channel_leave uses token, channel_id so I give {"token": ..., "channel_id":...}

@@ -16,7 +16,7 @@ BASE_URL = "http://127.0.0.1:42069"
 
 # Usage:
 # make_    _request(route, dict)
-#    Accepts `route` as a string (HTTP route e.g. channel/leave, message/send etc.)
+#    Accepts `route` as a string (HTTP route e.g. channel/leave, message/send etc. remove the leading "/" if it has one)
 #    Accepts a `dict` dictionary, containing the required inputs for the function
 #       e.g. {"token": token, "u_id": id}
 
