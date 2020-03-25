@@ -5,6 +5,7 @@ from flask_cors import CORS
 from error import InputError
 import interface_functions.other as other
 import interface_functions.standup as su
+import interface_functions.message as msg
 
 def defaultHandler(err):
     response = err.get_response()
@@ -68,6 +69,20 @@ def standup_send():
     message = resp["message"]
 
     return dumps(su.standup_send(token, channel_id, message))
+
+
+@APP.route("/message/sendlater", methods=['POST'])
+def message_sendlater():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    message = resp["message"]
+    time_sent = resp["time_sent"]
+
+    return dumps(msg.send_later(token, channel_id, message, time_sent))
+
 
 
 
