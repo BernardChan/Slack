@@ -97,5 +97,18 @@ def channel_messages():
     return dumps(ch.channel_messages(token, channel_id, start))
 
 
+@APP.route("/channel/details", methods=['GET'])
+def channel_details():
+    resp = request.args
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+
+    return dumps(ch.channel_details(token, channel_id))
+
+
+
+
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 42069))
