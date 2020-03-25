@@ -1,5 +1,4 @@
 import helper_functions.system_test_helper_file as ch
-import database_files.database_retrieval as db
 
 # Test is very basic since it only needs to test the HTTP request portion of
 # the function, rather than their functionality (which is covered by integration tests)
@@ -41,4 +40,7 @@ def test_channel_leave_simple():
     assert ch.make_post_request("channel/leave", data) == {}
 
     # Check that the user was removed correctly
-    assert not db.is_user_in_channel("token", token, channel_id)
+    # ========= IMPORTANT ==========
+    # DO NOT ACCESS THE DATABASE DIRECTLY. Use/make helper functions that make requests for you
+    # Accessing the database will NOT work.
+    assert not ch.is_member(token, channel_id)

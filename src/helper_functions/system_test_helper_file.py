@@ -127,20 +127,26 @@ def get_private_channel_details(token, channel_id):
     return channel["name"], channel["owner"], channel["members"]
 
 
-# TODO: update these functions based on whether we can access the database directly or not
-# Returns true if given user ID is part of the channel, else false
-# def is_member(user_id, is_public):
-#     if is_public:
-#         return any([user_id == person["u_id"] for person in channel_members])
-#     else:
-#         return any([user_id == person["u_id"] for person in private_channel_members])
-#
-#
-# def is_owner(user_id, is_public):
-#     if is_public:
-#         return any([user_id == owner["u_id"] for owner in channel_owner])
-#     else:
-#         return any([user_id == owner["u_id"] for owner in private_channel_owner])
+def is_member(token, channel_id):
+    channel_details = make_get_request("channel/details", {"token": token, "channel_id": channel_id})
+    members = channel_details["all_members"]
+
+    for member in members:
+        if member["token"] == token:
+            return True
+
+    return False
+
+
+def is_owner(token, channel_id):
+    channel_details = make_get_request("channel/details", {"token": token, "channel_id": channel_id})
+    members = channel_details["owner_members"]
+
+    for member in members:
+        if member["token"] == token:
+            return True
+
+    return False
 
 
 if __name__ == "__main__":
