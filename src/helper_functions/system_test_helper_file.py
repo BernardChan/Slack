@@ -143,6 +143,18 @@ def is_owner(user_id, is_public):
         return any([user_id == owner["u_id"] for owner in private_channel_owner])
 
 
+# Send the given message to the given channel_id from authorised user
+def system_send_message(token, channel_id, message):
+    data = {
+        "token": token,
+        "channel_id": channel_id,
+        "message": message
+    }
+
+    # Send a message to the channel
+    make_post_request("message/send", data)
+
+
 if __name__ == "__main__":
     foo = make_get_request("easdcho", {"token": "asd", "ch_id": 1})
     print(foo)
