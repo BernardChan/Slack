@@ -21,7 +21,7 @@ BASE_URL = "http://127.0.0.1:42069"
 #       e.g. {"token": token, "u_id": id}
 
 # ============================== IMPORTANT ==============================
-# For POST/PUT/DELETE requests, use request.form NOT request.args in
+# For POST/PUT/DELETE requests, use request.get_json() NOT request.args in
 # the server to get data. For GET requests, use request.args like normal.
 # =======================================================================
 
@@ -34,19 +34,19 @@ def make_get_request(route, dict):
 
 # Make a POST request
 def make_post_request(route, dict):
-    req = requests.post(f"{BASE_URL}/{route}", data=dict)
+    req = requests.post(f"{BASE_URL}/{route}", json=dict)
     return req.json()
 
 
 # Make DELETE request
 def make_delete_request(route, dict):
-    req = requests.delete(f"{BASE_URL}/{route}", data=dict)
+    req = requests.delete(f"{BASE_URL}/{route}", json=dict)
     return req.json()
 
 
 # Make PUT request
 def make_put_request(route, dict):
-    req = requests.put(f"{BASE_URL}/{route}", data=dict)
+    req = requests.put(f"{BASE_URL}/{route}", json=dict)
     return req.json()
 
 
@@ -129,18 +129,18 @@ def get_private_channel_details(token, channel_id):
 
 # TODO: update these functions based on whether we can access the database directly or not
 # Returns true if given user ID is part of the channel, else false
-def is_member(user_id, is_public):
-    if is_public:
-        return any([user_id == person["u_id"] for person in channel_members])
-    else:
-        return any([user_id == person["u_id"] for person in private_channel_members])
-
-
-def is_owner(user_id, is_public):
-    if is_public:
-        return any([user_id == owner["u_id"] for owner in channel_owner])
-    else:
-        return any([user_id == owner["u_id"] for owner in private_channel_owner])
+# def is_member(user_id, is_public):
+#     if is_public:
+#         return any([user_id == person["u_id"] for person in channel_members])
+#     else:
+#         return any([user_id == person["u_id"] for person in private_channel_members])
+#
+#
+# def is_owner(user_id, is_public):
+#     if is_public:
+#         return any([user_id == owner["u_id"] for owner in channel_owner])
+#     else:
+#         return any([user_id == owner["u_id"] for owner in private_channel_owner])
 
 
 if __name__ == "__main__":
