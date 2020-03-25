@@ -6,6 +6,7 @@ from error import InputError
 import interface_functions.other as other
 import interface_functions.standup as su
 import interface_functions.message as msg
+import interface_functions.channel as ch
 
 def defaultHandler(err):
     response = err.get_response()
@@ -79,11 +80,21 @@ def message_sendlater():
     token = resp["token"]
     channel_id = int(resp["channel_id"])
     message = resp["message"]
-    time_sent = resp["time_sent"]
+    time_sent = int(resp["time_sent"])
 
     return dumps(msg.send_later(token, channel_id, message, time_sent))
 
 
+@APP.route("/channel/messages", methods=['GET'])
+def channel_messages():
+    resp = request.args
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    start = int(resp["start"])
+
+    return dumps(ch.channel_messages(token, channel_id, start))
 
 
 if __name__ == "__main__":
