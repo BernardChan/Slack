@@ -3,6 +3,8 @@ from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
 from error import InputError
+import interface_functions.other as other
+import interface_functions.standup as su
 import interface_functions.user as user
 import interface_functions.admin_userpermission_change as admin
 import interface_functions.channels as channels
@@ -33,6 +35,42 @@ def echo():
     return dumps({
         'data': data
     })
+
+
+@APP.route("/search", methods=['GET'])
+def search():
+    query = request.args.get("query_str")
+    token = request.args.get("token")
+
+    return dumps(other.search(token, query))
+
+
+@APP.route("/standup/start", methods=['POST'])
+def standup_start():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    length = int(resp["length"])
+
+    return dumps(su.standup_start(token, int(channel_id), int(length)))
+
+
+@APP.route("/standup/active", methods=['GET'])
+def standup_active():
+    token = request.args.get("token")
+    channel_id = request.args.get("channel_id")
+
+    return dumps(su.standup_active(token, int(channel_id)))
+
+
+@APP.route("/standup/send", methods=['POST'])
+def standup_send():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    message = resp["message"]
+
+    return dumps(su.standup_send(token, channel_id, message))
 
 
 @APP.route("/user/profile", methods=['GET'])
@@ -77,4 +115,4 @@ def admin_userpermission_change():
     return dumps(admin.admin_userpermission_change(token, u_id, permission_id))
 
 if __name__ == "__main__":
-    APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 8080))
+    APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 42069))
