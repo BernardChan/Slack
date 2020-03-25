@@ -108,6 +108,16 @@ def channel_details():
     return dumps(ch.channel_details(token, channel_id))
 
 
+@APP.route("/message/send", methods=['POST'])
+def message_send():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    message = resp["message"]
+
+    return dumps(msg.message_send(token, channel_id, message))
 
 
 if __name__ == "__main__":
