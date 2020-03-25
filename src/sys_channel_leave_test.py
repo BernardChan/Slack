@@ -21,7 +21,7 @@ def test_channel_leave_simple():
     ch.reset()
 
     # Calling the helper files to get the PARAMETERS needed for channel_leave(token, channel_id)
-    u_id, token = ch.get_channel_owner()
+    token = ch.get_channel_owner()[1]
     channel_id = ch.create_public_channel(token)
 
     # PARAMETER for the function needs to be given as a dictionary
