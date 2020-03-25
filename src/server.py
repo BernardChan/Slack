@@ -72,7 +72,9 @@ def standup_send():
 
     return dumps(su.standup_send(token, channel_id, message))
 
-
+'''
+## USER/PROFILE ##
+'''
 @APP.route("/user/profile", methods=['GET'])
 def user_profile():
     token = request.args.get("token")
@@ -105,6 +107,9 @@ def user_profile_sethandle():
 
     return dumps(user.user_profile_sethandle(token, handle_str))
 
+'''
+## ADMIN ##
+'''
 @APP.route("admin/userpermission/change", methods=['POST'])
 def admin_userpermission_change():
     data = request.get_json()
@@ -113,6 +118,21 @@ def admin_userpermission_change():
     permission_id = data["permission_id"]
 
     return dumps(admin.admin_userpermission_change(token, u_id, permission_id))
+
+'''
+## CHANNELS ##
+'''
+@APP.route("channels/list", methods=['GET'])
+def channels_list():
+    token = request.args.get("token")
+
+    return dumps(channels.channels_list(token))
+
+@APP.route("channels/listall", methods=['GET'])
+def channels_listall():
+    token = request.args.get("token")
+
+    return dumps(channels.channels_listall(token))
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 42069))
