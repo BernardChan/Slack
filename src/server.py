@@ -78,7 +78,7 @@ def standup_send():
 @APP.route("/user/profile", methods=['GET'])
 def user_profile():
     token = request.args.get("token")
-    u_id = request.args.get("u_id")
+    u_id = int(request.args.get("u_id"))
 
     return dumps(user.user_profile(token, u_id))
 
@@ -114,8 +114,8 @@ def user_profile_sethandle():
 def admin_userpermission_change():
     data = request.get_json()
     token = data["token"]
-    u_id = data["u_id"]
-    permission_id = data["permission_id"]
+    u_id = int(data["u_id"])
+    permission_id = int(data["permission_id"])
 
     return dumps(admin.admin_userpermission_change(token, u_id, permission_id))
 
