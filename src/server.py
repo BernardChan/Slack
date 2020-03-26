@@ -5,6 +5,7 @@ from flask_cors import CORS
 from error import InputError
 import interface_functions.other as other
 import interface_functions.standup as su
+import interface_functions.channel as chan
 
 def defaultHandler(err):
     response = err.get_response()
@@ -69,7 +70,50 @@ def standup_send():
 
     return dumps(su.standup_send(token, channel_id, message))
 
+# channel functions
+@APP.route("/channel/invite", methods=['POST'])
+def channel_invite():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    u_id = int(resp["u_id"])
+    
+    return dumps(chan.channel_invite(token, channel_id, u_id))
 
+@APP.route("/channel/leave", methods=['POST'])
+def channel_leave():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+
+    return dumps(chan.channel_leave(token, channel_id)
+
+@APP.route("/channel/join", methods=['POST'])
+def channel_join():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+
+    return dumps(chan.channel_join(token, channel_id)
+
+@APP.route("/channel/addowner", methods=['POST'])
+def channel_addowner():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    u_id = int(resp["u_id"])
+    
+    return dumps(chan.channel_addowner(token, channel_id, u_id))
+
+
+@APP.route("/channel/removeowner", methods=['POST'])
+def channel_removeowner():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    u_id = int(resp["u_id"])
+    
+    return dumps(chan.channel_removeowner(token, channel_id, u_id))
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 42069))
