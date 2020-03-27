@@ -1,7 +1,7 @@
 # Example DATABASE shown at the bottom of the file
 # Gives 2 functions to save and restore the DATABASE from database_files.py
 
-import pickle
+#import pickle
 
 DATABASE = {
     "users": [],
@@ -79,7 +79,7 @@ MOCK_DATA = {
     ],
 }
 
-
+'''
 # Saves the current database_files
 def pickle_database():
     with open("../database_files/database.p", "wb") as FILE:
@@ -94,3 +94,4 @@ def unpickle_database():
 
 # pickle_database()
 unpickle_database()
+'''

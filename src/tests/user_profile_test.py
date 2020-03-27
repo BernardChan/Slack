@@ -43,7 +43,6 @@ def test_profile_separate_user_success():
     # Get member1's profile using member 3's token
     assert_profile_success(member3["token"], member1["u_id"], "fname", "lname", "test.user@test.com", "fnamelname")
     
-
 # Input error if invalid user id
 def test_profile_input_error(get_new_user):
     
@@ -65,5 +64,4 @@ def test_profile_input_and_access_error():
 
     with pytest.raises( (AccessError, InputError) ):
          user = user_profile("INVALIDTOKEN", "INVALIDUID")
-    
 
