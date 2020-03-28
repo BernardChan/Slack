@@ -83,8 +83,11 @@ def standup_send():
 
     return dumps(su.standup_send(token, channel_id, message))
 
+
 '''
-## USER/PROFILE ##
+----------------------------------------------------------------------------------
+USER / PROFILE Routes
+----------------------------------------------------------------------------------
 '''
 @APP.route("/user/profile", methods=['GET'])
 def user_profile():
@@ -130,8 +133,11 @@ def admin_userpermission_change():
 
     return dumps(admin.admin_userpermission_change(token, u_id, permission_id))
 
+
 '''
-## CHANNELS ##
+----------------------------------------------------------------------------------
+Channel Routes
+----------------------------------------------------------------------------------
 '''
 @APP.route("channels/list", methods=['GET'])
 def channels_list():
