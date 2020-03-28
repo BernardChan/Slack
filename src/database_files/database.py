@@ -39,7 +39,7 @@ unpickle = False
 ----------------------------------------------------------------------------------
 Core Database Functions
 ----------------------------------------------------------------------------------
-"""    
+    
 # Saves the current database_files
 def pickle_database(): 
     global DATABASE
@@ -71,3 +71,4 @@ def clear_database():
     pickle_database()
    
 unpickle_database
+"""
