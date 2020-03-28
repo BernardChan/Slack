@@ -68,6 +68,6 @@ def clear_database():
     "messages": [],
     "channels": [],
 }  
-    pickle_database()
+    #pickle_database()
    
 unpickle_database
