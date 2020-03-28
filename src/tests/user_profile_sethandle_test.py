@@ -1,5 +1,6 @@
 # Tests for user_profile_sethandle() function in user.py
 # Dependencies:
+    # workspace_reset()
     # user_profile()
     # auth_register()
 
@@ -8,7 +9,9 @@ import pytest
 from interface_functions.auth import auth_register
 from interface_functions.user import user_profile_sethandle
 from interface_functions.user import user_profile
+from interface_functions.workspace_reset import workspace_reset
 from error import InputError, AccessError
+
 
 # Pytest fixture to regiser test user 1
 @pytest.fixture
@@ -21,7 +24,6 @@ def user1():
 def user2():
     data = auth_register("test.user2@test.com", "123password", "fname2", "lname2")
     return data["token"], data["u_id"]
-
 
 # Helper function to assert that sethandle was successful
 def assert_sethandle_success(user_token, user_id, handle):
@@ -41,6 +43,8 @@ def test_profile_sethandle_success(user1):
     
     user_profile_sethandle(user_token, "red+blue=purple")
     assert_sethandle_success(user_token, user_id, "red+blue=purple")
+
+    workspace_reset()
     
 # Tests sethandle with special characters
 def test_profile_sethandle_special_characters(user1):
@@ -52,6 +56,7 @@ def test_profile_sethandle_special_characters(user1):
     user_profile_sethandle(user_token, "Hi!\t")
     assert_sethandle_success(user_token, user_id, "Hi!\t")
     
+    workspace_reset()
 
 # Input error when handle is not between 3 and 20 characters
 def test_profile_sethandle_input_error(user1):
@@ -61,13 +66,15 @@ def test_profile_sethandle_input_error(user1):
         user_profile_sethandle(user_token, "")
         
     with pytest.raises(InputError) as e:
-        user_profile_sethandle(user_token, "12")
+        user_profile_sethandle(user_token, "1")
         
     with pytest.raises(InputError) as e:
         user_profile_sethandle(user_token, "a" * 21)
         
     with pytest.raises(InputError) as e:
         user_profile_sethandle(user_token, "a" * 50)
+
+    workspace_reset()
 
 # Input error when handle is in use by another user
 def test_profile_sethandle_duplicate_handle(user1, user2):
@@ -86,6 +93,7 @@ def test_profile_sethandle_duplicate_handle(user1, user2):
     with pytest.raises(InputError) as e:
         user_profile_sethandle(token2, "1CoolHandle")
 
+    workspace_reset()
 
 # Access error when used with invalid token
 def test_profile_sethandle_access_error():
@@ -93,3 +101,5 @@ def test_profile_sethandle_access_error():
     # Raise error if invalid token
     with pytest.raises(AccessError) as e:
         user_profile_sethandle("INVALIDTOKEN", "newhandle")
+
+    workspace_reset()
