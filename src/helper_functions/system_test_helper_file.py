@@ -126,6 +126,10 @@ def get_private_channel_details(token, channel_id):
     channel = make_get_request("channel/details", {"token": token, "channel_id": channel_id})
     return channel["name"], channel["owner"], channel["members"]
 
+# Get details of a user using user/profile get request
+def get_user_details(token, u_id):
+    user = make_get_request("user/profile", {"token": token, "u_id": u_id})
+    return user
 
 def is_member(token, channel_id):
     channel_details = make_get_request("channel/details", {"token": token, "channel_id": channel_id})
