@@ -32,8 +32,8 @@ def auth_register(email, password, name_first, name_last):
     ah.validate_name_last(name_last)
     
     # Stage 2 - check database
-    if dr.is_duplicate("email", email):
-        raise InputError(description = 'Email address is already being used by another user')
+    # if dr.is_duplicate("email", email):
+        # raise InputError(description = 'Email address is already being used by another user')
 
     # Stage 4 - Store all user information in the database
     u_id_returned = ah.get_u_id()

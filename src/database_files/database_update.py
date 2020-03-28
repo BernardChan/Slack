@@ -26,8 +26,8 @@ Data Entry Functions
 """    
 # Adding user.
 def add_user_to_database(email, password, name_first, name_last, handle, u_id):
-    db.unpickle_database()
-    global DATABASE
+    # db.unpickle_database()
+
     
     permission_id = 0
     #if u_id == 1:
@@ -50,8 +50,8 @@ def add_user_to_database(email, password, name_first, name_last, handle, u_id):
     }
 
     db.DATABASE['users'].append(new_user)
-    print(db.DATABASE['users'])
-    db.pickle_database()
+    # print(db.DATABASE['users'])
+    # db.pickle_database()
     
     register_dict = {
         'u_id' : u_id,
@@ -61,8 +61,8 @@ def add_user_to_database(email, password, name_first, name_last, handle, u_id):
     
     
 def login_user(email):
-    db.unpickle_database()
-    global DATABASE
+    # db.unpickle_database()
+
     
     for user in db.DATABASE['users']:
         if user["email"] == email:
@@ -70,7 +70,7 @@ def login_user(email):
             db.DATABASE['users'][user['u_id'] - 1]['token'] = token
             u_id = user['u_id']
 
-    db.pickle_database()
+    # db.pickle_database()
     return {
         'u_id': u_id,
         'token': token,
@@ -78,13 +78,13 @@ def login_user(email):
     
     
 def logout_user(token):
-    db.unpickle_database()
-    global DATABASE
+    # db.unpickle_database()
+
 
     is_success = False
     for user in db.DATABASE['users']:
         if user["token"] == token:
             db.DATABASE['users'][user['u_id'] - 1]['token'] = ""
             is_success = True
-    db.pickle_database()
+    # db.pickle_database()
     return is_success

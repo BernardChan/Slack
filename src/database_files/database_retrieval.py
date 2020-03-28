@@ -15,7 +15,7 @@ This file contains functions to query the database, so to avoid directly accessi
     # 21/03/20
     # added is_duplicate moved here from auth file. 
 
-import database_files.database as db
+import database as db
 #from database_files.database import DATABASE
 
 """
@@ -68,7 +68,7 @@ def is_duplicate(key, value):
     if db_user != []:
         return True
     else:
-        return False 
+        return False
 
 
 # returns boolean if a user is part of a channel
@@ -106,4 +106,5 @@ def get_user_channels_by_key(key, value):
     return user_channels
 
 if __name__ == "__main__":
-    pass
+    print(is_duplicate("email", "foobar@gmail.com"))
+
