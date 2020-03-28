@@ -25,6 +25,9 @@
 ## `channel_removeowner()`
 - Assume that not having a channel owner is fine
 
+## `channels_create()`
+- Assume that user joins channel immediately and becomes channel owner and a member
+
 ## `search()`
 - Assume that search() is case sensitive
 - Assume that an empty string will return everything
@@ -49,3 +52,7 @@
 ## `user_profile_setemail()`
 - Assume that emails with the period `.` delimiter will be treated as different emails
 - Assume that a user CANNOT set their email again to their current email - considers it in use by another user
+
+
+## `standup_start`
+- Assume that the combined message can be over 1000 characters (since each individual message can be 1000 characters long)
