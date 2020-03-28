@@ -33,7 +33,7 @@ def assert_setemail_success(user_token, user_id, email):
     
 # Tests successful profile setemail
 def test_profile_setemail_success(user1):
-    workspace_reset()
+    
     user_token, user_id = user1
     user_profile_setemail(user_token, "new.email@test.com")
     assert_setemail_success(user_token, user_id, "new.email@test.com")
@@ -43,10 +43,12 @@ def test_profile_setemail_success(user1):
     
     user_profile_setemail(user_token, "coolemail@notgmail.net")
     assert_setemail_success(user_token, user_id, "coolemail@notgmail.net")
+
+    workspace_reset()
     
 # Tests very similar emails
 def test_profile_setemail_similar(user1, user2):
-    workspace_reset()
+    
     token1, uid1 = user1
     token2, uid2 = user2
     
@@ -55,10 +57,12 @@ def test_profile_setemail_similar(user1, user2):
     # without "." delimiter - treated as different email
     user_profile_setemail(token2, "newemail@test.com")
     assert_setemail_success(token2, uid2, "newemail@test.com")
+
+    workspace_reset()
     
 # Invalid email (not following correct method) results in InputError
 def test_profile_setemail_invalid(user1):
-    workspace_reset()
+
     user_token, user_id = user1
     with pytest.raises(InputError) as e:
         user_profile_setemail(user_token, "invalidemail.com")
@@ -72,9 +76,11 @@ def test_profile_setemail_invalid(user1):
     with pytest.raises(InputError) as e:
         user_profile_setemail(user_token, "hello!")
 
+    workspace_reset()
+
 # Input error if email address is being used by another user
 def test_profile_setemail_duplicate_email(user1, user2):
-    workspace_reset()
+    
     token1, uid1 = user1
     token2, uid2 = user2
     
@@ -93,10 +99,13 @@ def test_profile_setemail_duplicate_email(user1, user2):
     with pytest.raises(InputError) as e:
         user_profile_setemail(token2, "test.user@test.com")
 
+    workspace_reset()
+
 # Access error if token passed is invalid
 def test_profile_setname_access_error():
-    workspace_reset()
+
     # Raise error if user does not exist
     with pytest.raises(AccessError) as e:
         user_profile_setemail("INVALIDTOKEN", "coolemail@test.com")
 
+    workspace_reset()
