@@ -1,5 +1,6 @@
 # Tests for user_profile_setemail() function in user.py
 # Dependencies:
+    # workspace_reset()
     # user_profile()
     # auth_register()
 
@@ -8,7 +9,9 @@ import pytest
 from interface_functions.auth import auth_register
 from interface_functions.user import user_profile
 from interface_functions.user import user_profile_setemail
+from interface_functions.workspace_reset import workspace_reset
 from error import InputError, AccessError
+
 
 # Pytest fixture to regiser test user 1
 @pytest.fixture
@@ -30,7 +33,7 @@ def assert_setemail_success(user_token, user_id, email):
     
 # Tests successful profile setemail
 def test_profile_setemail_success(user1):
-    
+    workspace_reset()
     user_token, user_id = user1
     user_profile_setemail(user_token, "new.email@test.com")
     assert_setemail_success(user_token, user_id, "new.email@test.com")
@@ -43,7 +46,7 @@ def test_profile_setemail_success(user1):
     
 # Tests very similar emails
 def test_profile_setemail_similar(user1, user2):
-
+    workspace_reset()
     token1, uid1 = user1
     token2, uid2 = user2
     
@@ -55,7 +58,7 @@ def test_profile_setemail_similar(user1, user2):
     
 # Invalid email (not following correct method) results in InputError
 def test_profile_setemail_invalid(user1):
-
+    workspace_reset()
     user_token, user_id = user1
     with pytest.raises(InputError) as e:
         user_profile_setemail(user_token, "invalidemail.com")
@@ -71,7 +74,7 @@ def test_profile_setemail_invalid(user1):
 
 # Input error if email address is being used by another user
 def test_profile_setemail_duplicate_email(user1, user2):
-    
+    workspace_reset()
     token1, uid1 = user1
     token2, uid2 = user2
     
@@ -92,7 +95,7 @@ def test_profile_setemail_duplicate_email(user1, user2):
 
 # Access error if token passed is invalid
 def test_profile_setname_access_error():
-
+    workspace_reset()
     # Raise error if user does not exist
     with pytest.raises(AccessError) as e:
         user_profile_setemail("INVALIDTOKEN", "coolemail@test.com")

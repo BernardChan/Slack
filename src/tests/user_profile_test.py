@@ -68,5 +68,4 @@ def test_profile_input_and_access_error():
     workspace_reset()
     with pytest.raises( (AccessError, InputError) ):
          user = user_profile("INVALIDTOKEN", "INVALIDUID")
-    
 
