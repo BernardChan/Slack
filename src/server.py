@@ -17,6 +17,7 @@ def defaultHandler(err):
     response.content_type = 'application/json'
     return response
 
+
 APP = Flask(__name__)
 CORS(APP)
 
@@ -24,14 +25,21 @@ APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
 
 # Example
-@APP.route("/echo", methods=['GET'])
+@APP.route("/echo", methods=['POST'])
 def echo():
-    data = request.args.get('data')
-    if data == 'echo':
-   	    raise InputError(description='Cannot echo "echo"')
-    return dumps({
-        'data': data
-    })
+    return dumps(request.form)
+
+
+# TODO: Remove this. This is purely for debugging. It catches all routes that aren't implemented and echos
+#   what was received instead of throwing a 404 error.
+@APP.route("/<path:dummy>", methods=["GET", "POST", "PUT", "DELETE"])
+def catch_all(dummy):
+    # Ternary is too long for this if else
+    if request.method in ["POST", "PUT", "DELETE"]:
+        return dumps(request.form)
+    else:
+        return dumps(request.args)
+
 
 
 @APP.route("/search", methods=['GET'])
