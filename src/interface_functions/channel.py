@@ -142,13 +142,14 @@ def channel_addowner(token, channel_id, u_id):
     help.is_user_valid_channel_member(token, channel_id)
 
     # checks if authorized user is already an admin
-    for user in DATABASE["users"]:
+    channel = db.get_channels_by_key("channel_id", channel_id)[0]
+    for members in channel["owner_members"]:
         # find the right user
-        if user["u_id"] == u_id:
-            if user["permission_id"] == 1:
-                raise InputError(f"User with user_id {u_id} is already the channel owner")
-            else:
-                user["permission_id"] = 1
+        if members["u_id"] == u_id:
+            raise InputError(f"User with user_id {u_id} is already the channel owner")
+
+    user = db.get_users_by_key("u_id", u_id)[0]
+    channel["owner_members"].append(user)
 
     return {
     }
