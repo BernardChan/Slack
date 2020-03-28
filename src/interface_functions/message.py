@@ -37,9 +37,11 @@ def message_remove(token, message_id):
     return {
     }
 
+
 def message_edit(token, message_id, message):
     return {
     }
+
 
 
 # File for message/sendlater(token, channel_id, message, time_sent)
@@ -111,4 +113,8 @@ if __name__ == "__main__":
     time.sleep(20)
     send_later(0, 0, "yoyoyo", time.time())
     start_thread_helper()  # Should do nothing
+
+
+def message_react(token, message_id, react_id):
+    pass
 
