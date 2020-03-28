@@ -118,3 +118,6 @@ if __name__ == "__main__":
 def message_react(token, message_id, react_id):
     pass
 
+
+def message_unreact(token, message_id, react_id):
+    pass

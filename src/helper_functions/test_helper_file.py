@@ -46,17 +46,17 @@ member_id = chan_owner["u_id"]
 member_token = chan_owner["token"]
 
 # Create public channel with the channel owner as the sole person in it
-channel_id = chs.channels_create(chan_owner_token, "channel1", True)
-private_channel_id = chs.channels_create(chan_owner_token, "channel1", False)
+channel_id = chs.channels_create(chan_owner_token, "channel1", True)["channel_id"]
+private_channel_id = chs.channels_create(chan_owner_token, "channel1", False)["channel_id"]
 
 # Get details of the public channel
-channel = ch.channel_details(chan_owner, channel_id)
+channel = ch.channel_details(chan_owner_token, channel_id)
 channel_name = channel["name"]
 channel_owner = channel["owner_members"]
 channel_members = channel["all_members"]  # array of {u_id, name_first, name_last}
 
 # Get details of the private channel
-private_channel = ch.channel_details(chan_owner, channel_id)
+private_channel = ch.channel_details(chan_owner_token, channel_id)
 private_channel_name = channel["name"]
 private_channel_owner = channel["owner_members"]
 private_channel_members = channel["all_members"]  # array of {u_id, name_first, name_last}
