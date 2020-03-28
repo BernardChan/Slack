@@ -41,7 +41,7 @@ chan_owner_id = chan_owner["u_id"]
 chan_owner_token = chan_owner["token"]
 
 # Create a normal user that is not part of the channel
-member = auth.auth_register("membertest2@test.tst", "password2", "name2", "lastname2")
+member = auth.auth_register("member@test.tst", "password2", "name2", "lastname2")
 member_id = chan_owner["u_id"]
 member_token = chan_owner["token"]
 

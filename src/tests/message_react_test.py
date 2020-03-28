@@ -12,6 +12,7 @@ from interface_functions.message import message_send, message_react
 from interface_functions.channel import channel_messages
 from interface_functions.channels import channels_create
 from error import InputError, AccessError
+from interface_functions.workspace_reset import workspace_reset
 
 # Pytest fixture to register a test user, create a channel and send a message
 @pytest.fixture
@@ -26,7 +27,6 @@ def data():
     # send a message
     message = message_send(token, ch_id, "Hello world!")
     message_id = message["message_id"]
-
     return {
         "u_id": u_id,
         "token": token,
@@ -58,9 +58,11 @@ def test_message_react_success(data):
     message_react(token, message_id, 1)
     # assert message was reacted
     assert_is_reacted(token, u_id, ch_id, message_id)
+    workspace_reset()
 
 # test for input errors
 def test_message_react_input_errors(data):
+
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
     # save required data variables
     token = data["token"]
@@ -81,9 +83,12 @@ def test_message_react_input_errors(data):
     with pytest.raises(InputError):
         message_react(token, message_id, 1)
 
+    workspace_reset()
+
 
 # test for access error from invalid token
 def test_message_react_invalid_token(data):
+
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
     # save required data variables (only needs message id)
     message_id = data["message_id"]
@@ -91,3 +96,5 @@ def test_message_react_invalid_token(data):
     # INVALID TOKEN
     with pytest.raises(AccessError):
         message_react("INVALIDTOKEN", message_id, 1)
+
+    workspace_reset()
