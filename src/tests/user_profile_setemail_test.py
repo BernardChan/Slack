@@ -85,7 +85,7 @@ def test_profile_setemail_duplicate_email(user1, user2):
     token2, uid2 = user2
     
     user_profile_setemail(token1, "test.user@test.com")
-    user_profile_setemail(token1, "test2.user2@yay.com")
+    user_profile_setemail(token2, "test2.user2@yay.com")
 
     # Member 1 tries to set email again to their current email
     with pytest.raises(InputError) as e:
