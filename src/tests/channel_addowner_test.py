@@ -1,14 +1,27 @@
+<<<<<<< HEAD
 from interface_functions.channel import channel_addowner as add_owner
 
 import pytest
 import interface_functions.channel as channel
 from error import InputError, AccessError
 import helper_functions.test_helper_file as ch
+=======
+from channel import channel_addowner as add_owner
+
+import pytest
+import channel
+from error import InputError, AccessError
+import channel_helpers as ch
+>>>>>>> 7116184aaa81b20cc42c1ab44eea4262fe7e03d9
 
 
 # Test that normal member can be added as owner to the public and private channel before being added to the channel
 def test_addowner_member_before_add():
+<<<<<<< HEAD
     print(f"channel id was {ch.channel_id} privateid was {ch.private_channel_id}")
+=======
+
+>>>>>>> 7116184aaa81b20cc42c1ab44eea4262fe7e03d9
     # Set member as owner
     add_owner(ch.chan_owner_token, ch.channel_id, ch.member_id)
     add_owner(ch.chan_owner_token, ch.private_channel_id, ch.member_id)

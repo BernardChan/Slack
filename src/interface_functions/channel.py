@@ -130,6 +130,17 @@ def channel_join(token, channel_id):
     }
 
 
+def is_channel_owner(channel, u_id):
+    # checks if authorized user is already an admin
+
+    for members in channel["owner_members"]:
+        # find the right user
+        if members["u_id"] == u_id:
+            return True
+
+    return False
+
+
 def channel_addowner(token, channel_id, u_id):
     # include valid token function here, stub function atm
     def is_token_valid(token):
@@ -141,14 +152,13 @@ def channel_addowner(token, channel_id, u_id):
     # check if user is a member of the channel
     help.is_user_valid_channel_member(token, channel_id)
 
+    channel = db.get_channels_by_key("channel_id", channel_id)[0]
     # checks if authorized user is already an admin
-    for user in DATABASE["users"]:
-        # find the right user
-        if user["u_id"] == u_id:
-            if user["permission_id"] == 1:
-                raise InputError(f"User with user_id {u_id} is already the channel owner")
-            else:
-                user["permission_id"] = 1
+    if is_channel_owner(channel, u_id):
+        raise InputError(f"User with user_id {u_id} is already the channel owner")
+
+    user = db.get_users_by_key("u_id", u_id)[0]
+    channel["owner_members"].append(user)
 
     return {
     }
@@ -167,13 +177,13 @@ def channel_removeowner(token, channel_id, u_id):
     help.is_user_valid_channel_member(token, channel_id)
 
     # checks if authorized user is already an admin
-    for user in DATABASE["users"]:
-        # find the right user
-        if user["u_id"] == u_id:
-            if user["permission_id"] == 2:
-                raise InputError(f"User with user_id {u_id} is already the channel owner")
-            else:
-                user["permission_id"] = 2
+    channel = db.get_channels_by_key("channel_id", channel_id)[0]
+
+    if not is_channel_owner(channel, u_id):
+        raise InputError(f"User with {u_id} was not a channel owner")
+
+    user = db.get_users_by_key("u_id", u_id)[0]
+    channel["owner_members"].remove(user)
 
     return {
     }
