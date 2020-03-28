@@ -5,6 +5,9 @@ from flask_cors import CORS
 from error import InputError
 import interface_functions.other as other
 import interface_functions.standup as su
+import interface_functions.message as msg
+import interface_functions.channel as ch
+import interface_functions.channels as chs
 import interface_functions.user as user
 import interface_functions.admin_userpermission_change as admin
 import interface_functions.channels as channels
@@ -139,8 +142,69 @@ def channels_list():
 @APP.route("channels/listall", methods=['GET'])
 def channels_listall():
     token = request.args.get("token")
-
+    
     return dumps(channels.channels_listall(token))
+
+
+@APP.route("/message/sendlater", methods=['POST'])
+def message_sendlater():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    message = resp["message"]
+    time_sent = int(resp["time_sent"])
+
+    return dumps(msg.send_later(token, channel_id, message, time_sent))
+
+
+@APP.route("/channel/messages", methods=['GET'])
+def channel_messages():
+    resp = request.args
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    start = int(resp["start"])
+
+    return dumps(ch.channel_messages(token, channel_id, start))
+
+
+@APP.route("/channel/details", methods=['GET'])
+def channel_details():
+    resp = request.args
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+
+    return dumps(ch.channel_details(token, channel_id))
+
+
+@APP.route("/message/send", methods=['POST'])
+def message_send():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    message = resp["message"]
+
+    return dumps(msg.message_send(token, channel_id, message))
+
+
+@APP.route("/channels/create", methods=['POST'])
+def channels_create():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    name = resp["name"]
+    is_public = resp["is_public"]
+
+    return dumps(chs.channels_create(token, name, is_public))
+
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 42069))
