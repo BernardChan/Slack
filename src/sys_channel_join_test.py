@@ -4,7 +4,7 @@ import helper_functions.system_test_helper_file as ch
 def test_channel_join_simple():
     # Reset database and get relevant inputs
     ch.reset()
-    token = ch.get_channel_owner()[0]
+    token = ch.get_channel_owner()[1]
     channel_id = ch.create_public_channel(token)
 
     data = {
