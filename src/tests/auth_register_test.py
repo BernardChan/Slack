@@ -1,10 +1,8 @@
 # Tests for auth_register
 
 # Dependencies:
-    # user_profile()
-    #auth_register()
-    #auth_login()
-    #auth_logout()
+    # workspace_reset()
+    # auth_register()
     
 # Assumptions 
     # Special characters are permitted for first/last names
@@ -33,7 +31,7 @@ import pytest
 from interface_functions.auth import auth_register
 from error import InputError
 
-from database_files.database import clear_database
+from interface_functions.workspace_reset import workspace_reset
 
 import sys
 sys.path.append('../')
@@ -46,50 +44,50 @@ auth_register() elemental validation functions.
 # TODO: fix tests, since assert(auth_register()) will always return True
 #auth_register() Password Validation
 def test_auth_register_short_password():
-    clear_database()
+    workspace_reset()
     with pytest.raises(InputError) as e:
         auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
 
 def test_auth_register_valid_password():
-    clear_database()
+    workspace_reset()
     assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
 def test_auth_register_no_password():
-    clear_database()
+    workspace_reset()
     with pytest.raises(InputError):
         assert auth_register("bill.gates@microsoft.com","a", "Bill", "Gates")
 
 #auth_register() First Name Validation
 def test_auth_register_invalid_first_name():
-    clear_database()
+    workspace_reset()
     with pytest.raises(InputError) as e:
         auth_register("bill.gates@microsoft.com", "123456", "B"*51, "Gates")
 
 def test_auth_register_valid_first_name():
-    clear_database()
+    workspace_reset()
     assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
     
 def test_auth_register_no_first_name():
-    clear_database()
+    workspace_reset()
     assert auth_register("bill.gates@microsoft.com", "123456","b", "Gates")
     
 #auth_register() Last Name Validation
 def test_auth_register_valid_last_name():
-    clear_database()
+    workspace_reset()
     assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
 def test_auth_register_invalid_last_name():
-    clear_database()
+    workspace_reset()
     with pytest.raises(InputError) as e:
         auth_register("bill.gates@microsoft.com", "123456", "Bill", "G"*51)
 
 #auth_register() Email Validation
 def test__auth_register_valid_email():
-    clear_database()
+    workspace_reset()
     assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
 def test_auth_register_invalid_email():
-    clear_database()
+    workspace_reset()
     with pytest.raises(InputError) as e:
         auth_register("bill.microsoft.com", "123456", "Bill", "Gates")
 
@@ -100,12 +98,12 @@ register() interconnected validation functions
     
 # make sure register() returns a uID and token
 def test_auth_register_return():
-    clear_database()
+    workspace_reset()
     register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
  
 # test for duplicate registration attempts with the same user_profile
 def test_auth_register_duplicate_registration():
-    clear_database()
+    workspace_reset()
     register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
  
     with pytest.raises(InputError) as e:
