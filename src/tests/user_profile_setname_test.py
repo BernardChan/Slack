@@ -1,5 +1,6 @@
 # Tests for user_profile_setname() function in user.py
 # Dependencies:
+    # workspace_reset()
     # user_profile()
     # auth_register()
 
@@ -12,6 +13,7 @@ import pytest
 from interface_functions.auth import auth_register
 from interface_functions.user import user_profile_setname
 from interface_functions.user import user_profile
+from interface_functions.workspace_reset import workspace_reset
 from error import InputError, AccessError
 
 # Pytest fixture to regiser a new test user
@@ -43,6 +45,8 @@ def test_profile_setname_success(get_new_user):
     user_profile_setname(user_token, "Red+Blue", "=Purple")
     assert_setname_success(user_token, user_id, "Red+Blue", "=Purple")
 
+    workspace_reset()
+
 # Tests setname with numbers in name strings
 def test_profile_setname_numbers(get_new_user):
 
@@ -57,6 +61,8 @@ def test_profile_setname_numbers(get_new_user):
     user_profile_setname(user_token, "2+2", "=4")
     assert_setname_success(user_token, user_id, "2+2", "=4")
     
+    workspace_reset()
+
 # Tests setname with special characters in name strings
 def test_profile_setname_special_characters(get_new_user):
 
@@ -68,6 +74,8 @@ def test_profile_setname_special_characters(get_new_user):
     user_profile_setname(user_token, "Harry\n", "Potter\t")
     assert_setname_success(user_token, user_id, "Harry\n", "Potter\t")
     
+    workspace_reset()
+
 # Input error if first or last names aren't 0<x<51
 def test_profile_setname_input_error(get_new_user):
 
@@ -93,6 +101,8 @@ def test_profile_setname_input_error(get_new_user):
     with pytest.raises(InputError) as e:
         user_profile_setname(user_token, "a" * 51, "b" * 51)
         
+    workspace_reset()
+
 # Access error if token passed is not a valid token
 def test_profile_setname_access_error():
 
@@ -100,7 +110,7 @@ def test_profile_setname_access_error():
     with pytest.raises(AccessError):
         user_profile_setname("INVALIDTOKEN", "Sigma", "Bolls")
 
-
+    workspace_reset()
    
     
 
