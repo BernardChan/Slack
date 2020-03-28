@@ -16,7 +16,7 @@ BASE_URL = "http://127.0.0.1:42069"
 
 # Usage:
 # make_    _request(route, dict)
-#    Accepts `route` as a string (HTTP route e.g. channel/leave, message/send etc.)
+#    Accepts `route` as a string (HTTP route e.g. channel/leave, message/send etc. remove the leading "/" if it has one)
 #    Accepts a `dict` dictionary, containing the required inputs for the function
 #       e.g. {"token": token, "u_id": id}
 
@@ -126,21 +126,43 @@ def get_private_channel_details(token, channel_id):
     channel = make_get_request("channel/details", {"token": token, "channel_id": channel_id})
     return channel["name"], channel["owner"], channel["members"]
 
+# Get details of a user using user/profile get request
+def get_user_details(token, u_id):
+    user = make_get_request("user/profile", {"token": token, "u_id": u_id})
+    return user
 
-# TODO: update these functions based on whether we can access the database directly or not
-# Returns true if given user ID is part of the channel, else false
-def is_member(user_id, is_public):
-    if is_public:
-        return any([user_id == person["u_id"] for person in channel_members])
-    else:
-        return any([user_id == person["u_id"] for person in private_channel_members])
+def is_member(token, channel_id):
+    channel_details = make_get_request("channel/details", {"token": token, "channel_id": channel_id})
+    members = channel_details["all_members"]
+
+    for member in members:
+        if member["token"] == token:
+            return True
+
+    return False
 
 
-def is_owner(user_id, is_public):
-    if is_public:
-        return any([user_id == owner["u_id"] for owner in channel_owner])
-    else:
-        return any([user_id == owner["u_id"] for owner in private_channel_owner])
+def is_owner(token, channel_id):
+    channel_details = make_get_request("channel/details", {"token": token, "channel_id": channel_id})
+    members = channel_details["owner_members"]
+
+    for member in members:
+        if member["token"] == token:
+            return True
+
+    return False
+
+
+# Send the given message to the given channel_id from authorised user
+def system_send_message(token, channel_id, message):
+    data = {
+        "token": token,
+        "channel_id": channel_id,
+        "message": message
+    }
+
+    # Send a message to the channel
+    make_post_request("message/send", data)
 
 
 if __name__ == "__main__":

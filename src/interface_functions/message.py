@@ -34,6 +34,11 @@ def message_remove(token, message_id):
     return {
     }
 
+
 def message_edit(token, message_id, message):
     return {
     }
+
+
+def message_react(token, message_id, react_id):
+    pass
