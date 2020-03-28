@@ -51,7 +51,8 @@ def test_auth_register_valid_password():
     assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
 def test_auth_register_no_password():
-    assert auth_register("bill.gates@microsoft.com","a", "Bill", "Gates")
+    with pytest.raises(InputError):
+        assert auth_register("bill.gates@microsoft.com","a", "Bill", "Gates")
 
 #auth_register() First Name Validation
 def test_auth_register_invalid_first_name():
