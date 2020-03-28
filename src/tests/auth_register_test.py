@@ -56,25 +56,21 @@ def test_auth_register_no_password():
 #auth_register() First Name Validation
 def test_auth_register_invalid_first_name():
     with pytest.raises(InputError) as e:
-        auth_register("bill.gates@microsoft.com", "123", "B"*51, "Gates")
+        auth_register("bill.gates@microsoft.com", "123456", "B"*51, "Gates")
 
 def test_auth_register_valid_first_name():
-    assert auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
+    assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
     
 def test_auth_register_no_first_name():
-    assert auth_register("bill.gates@microsoft.com", "123","b", "Gates")
+    assert auth_register("bill.gates@microsoft.com", "123456","b", "Gates")
     
 #auth_register() Last Name Validation
 def test_auth_register_valid_last_name():
-    assert auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
+    assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
 
 def test_auth_register_invalid_last_name():
     with pytest.raises(InputError) as e:
-        auth_register("bill.gates@microsoft.com", "123", "Bill", "G"*51)
-
-# TODO: fix this: why is there a duplicate test_auth_register_no_first_name() ???
-def test_auth_register_no_first_name():
-    assert auth_register("bill.gates@microsoft.com", "123", "b", "Bill")
+        auth_register("bill.gates@microsoft.com", "123456", "Bill", "G"*51)
 
 #auth_register() Email Validation
 def test__auth_register_valid_email():
