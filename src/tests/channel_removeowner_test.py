@@ -53,6 +53,8 @@ def test_removeowner_simple():
 
 # Test when slackr owner removes ownership on channel owner and themselves
 def test_removeowner_slackr_owner():
+    if not ch.isFunctionImplemented(channel.channel_invite, -1, -1, -1):
+        return
 
     # Add the slackr owner to the channel
     channel.channel_invite(ch.chan_owner_token, ch.channel_id, ch.slackr_owner_id)
@@ -74,6 +76,8 @@ def test_removeowner_slackr_owner():
 
 # Test when channel owner removes ownership on slackr owner and themselves
 def test_removeowner_channel_owner():
+    if not ch.isFunctionImplemented(channel.channel_invite, -1, -1, -1):
+        return
 
     # Add the slackr owner to the channel
     channel.channel_invite(ch.chan_owner_token, ch.channel_id, ch.slackr_owner_id)

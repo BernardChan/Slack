@@ -21,7 +21,8 @@ from interface_functions import channel, message
 #     assert mess not in new_list
 
  
-"""    
+
+"""    Not sure what this is about. Leaving here until we find out
 def test_message_send_access_error():
     assert(not ch.is_member(ch.member_id, True))
 

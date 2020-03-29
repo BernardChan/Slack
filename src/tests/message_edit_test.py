@@ -3,6 +3,9 @@ from interface_functions import channel, message
 
 
 def test_message_edit():
+    if not ch.isFunctionImplemented(message.message_edit, -1, -1, -1):
+        return
+
     if message == "":
         channel_messages = channel.channel_messages(ch.chan_owner_token, ch.channel_id, 0)
         channel_messages_list = channel_messages["messages"]
