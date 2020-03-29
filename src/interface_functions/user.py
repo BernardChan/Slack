@@ -142,7 +142,7 @@ def user_profile_sethandle(token, handle_str):
 def users_all(token):
 
     # Raise an access error if not a valid token
-    # TODO
+    is_valid_token(token)
 
     # Get the list of all users
     users = get_users()
