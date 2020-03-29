@@ -35,81 +35,95 @@ from interface_functions.auth import auth_register
 from error import InputError
 
 from interface_functions.workspace_reset import workspace_reset
-
+from helper_functions.interface_function_helpers import is_valid_token
+from helper_functions.interface_function_helpers import is_valid_uid
 
 """
+----------------------------------------------------------------------------------
 auth_register() elemental validation functions. 
-# making sure each input to register() is valid
-"""
-# TODO: fix tests, since assert(auth_register()) will always return True
+----------------------------------------------------------------------------------
+"""     
 #auth_register() Password Validation
 def test_auth_register_short_password():
     workspace_reset()
     with pytest.raises(InputError) as e:
         auth_register("bill.gates@microsoft.com", "123", "Bill", "Gates")
 
-def test_auth_register_valid_password():
-    workspace_reset()
-    assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
-
 def test_auth_register_no_password():
     workspace_reset()
     with pytest.raises(InputError):
-        assert auth_register("bill.gates@microsoft.com","a", "Bill", "Gates")
+        auth_register("bill.gates@microsoft.com","", "Bill", "Gates")
 
 #auth_register() First Name Validation
-def test_auth_register_invalid_first_name():
+def test_auth_register_long_first_name():
     workspace_reset()
     with pytest.raises(InputError) as e:
         auth_register("bill.gates@microsoft.com", "123456", "B"*51, "Gates")
 
-def test_auth_register_valid_first_name():
-    workspace_reset()
-    assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
-    
 def test_auth_register_no_first_name():
     workspace_reset()
-    assert auth_register("bill.gates@microsoft.com", "123456","b", "Gates")
-    
-#auth_register() Last Name Validation
-def test_auth_register_valid_last_name():
-    workspace_reset()
-    assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
+    with pytest.raises(InputError) as e:
+        auth_register("bill.gates@microsoft.com", "123456","", "Gates")
+        
 
-def test_auth_register_invalid_last_name():
+#auth_register() Last Name Validation
+def test_auth_register_long_last_name():
     workspace_reset()
     with pytest.raises(InputError) as e:
         auth_register("bill.gates@microsoft.com", "123456", "Bill", "G"*51)
 
-#auth_register() Email Validation
-def test__auth_register_valid_email():
-    workspace_reset()
-    assert auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
-
-def test_auth_register_invalid_email():
+def test_auth_register_no_last_name():
     workspace_reset()
     with pytest.raises(InputError) as e:
-        auth_register("bill.microsoft.com", "123456", "Bill", "Gates")
+        auth_register("bill.gates@microsoft.com", "123456","Bill", "")
+        
+
+#auth_register() Email Validation
+def test_auth_register_no_email():
+    workspace_reset()
+    with pytest.raises(InputError) as e:
+        auth_register("", "123456", "Bill", "Gates")
+
+def test_auth_register_invalid_email_missing_at_symbol():
+    workspace_reset()
+    with pytest.raises(InputError) as e:
+        auth_register("bill.gatesmicrosoft.com", "123456", "Bill", "Gates")
+        
+def test_auth_register_invalid_email_no_top_level_domain():
+    workspace_reset()
+    with pytest.raises(InputError) as e:
+        auth_register("bill.gates@microsoft", "123456", "Bill", "Gates")
+        
+def test_auth_register_invalid_email_misspelt_top_level_domain():
+    workspace_reset()
+    with pytest.raises(InputError) as e:
+        auth_register("bill.gates@microsoft.comk", "123456", "Bill", "Gates")
+
+def test_auth_register_invalid_email_missing_local_segment():
+    workspace_reset()
+    with pytest.raises(InputError) as e:
+        auth_register("@microsoft.com", "123456", "Bill", "Gates")
+
 
 """
+------------------------------------------------------------------------------------------
 register() interconnected validation functions
-# making sure output behavior from register() is correct and valid
-"""
-    
+------------------------------------------------------------------------------------------
+"""     
 # make sure register() returns a uID and token
 def test_auth_register_return():
     workspace_reset()
     register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
+    assert is_valid_uid(reg1['u_id'])
+    assert is_valid_token(reg1['token'])
+    # Function 2 D
  
 # test for duplicate registration attempts with the same user_profile
 def test_auth_register_duplicate_registration():
     workspace_reset()
-    register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
- 
+    register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates") 
     with pytest.raises(InputError) as e:
-        #Email address is already being used by another user
         register2 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
-        # assert (register1 != register2)
     
 #python3 -m pytest auth_register_test.py
 #command for if forgotten or lost
