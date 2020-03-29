@@ -1,7 +1,7 @@
 from error import AccessError, InputError
 from database_files.database_retrieval import get_users_by_key
-from interface_function_helpers import is_valid_uid
-from interface_function_helpers import is_slackr_admin
+from helper_functions.interface_function_helpers import is_valid_uid
+from helper_functions.interface_function_helpers import is_slackr_admin
 import database_files.database as db
 
 # ADMIN/USERPERMISSION/CHANGE
