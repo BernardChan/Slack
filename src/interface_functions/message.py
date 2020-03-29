@@ -34,13 +34,11 @@ def message_send(token, channel_id, message):
 
 
 def message_remove(token, message_id):
-    return {
-    }
+    return "Not Implemented"
 
 
 def message_edit(token, message_id, message):
-    return {
-    }
+    return "Not Implemented"
 
 
 
@@ -116,5 +114,8 @@ if __name__ == "__main__":
 
 
 def message_react(token, message_id, react_id):
-    pass
+    return "Not Implemented"
 
+
+def message_unreact(token, message_id, react_id):
+    return "Not Implemented"

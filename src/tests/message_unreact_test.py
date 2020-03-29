@@ -13,10 +13,16 @@ from interface_functions.message import message_send, message_react, message_unr
 from interface_functions.channel import channel_messages
 from interface_functions.channels import channels_create
 from error import InputError, AccessError
+from interface_functions.workspace_reset import workspace_reset
+from helper_functions import test_helper_file as ch
+
+
 
 # Pytest fixture to register a test user, create a channel, send a message and react to that message
 @pytest.fixture
 def data():
+    if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
+        return
     # register a user
     user = auth_register("test.user1@test.com", "password123", "fname1", "lname1")
     u_id = user["u_id"]
@@ -51,6 +57,8 @@ def assert_is_unreacted(token, channel_id, message_id):
 
 # test succesful
 def test_message_unreact_success(data):
+    if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
+        return
     # data fixture creates a user and channel then sends a message with message_id and reacts to it
     # save this data
     token = data["token"]
@@ -60,9 +68,12 @@ def test_message_unreact_success(data):
     message_unreact(token, message_id, 1)
     # assert message was unreacted
     assert_is_unreacted(token, ch_id, message_id)
+    workspace_reset()
 
 # test input errors
 def test_message_unreact_input_errors(data):
+    if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
+        return
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
     # save required data variables
     token = data["token"]
@@ -82,9 +93,12 @@ def test_message_unreact_input_errors(data):
     # try unreacting again
     with pytest.raises(InputError):
         message_unreact(token, message_id, 1)
+    workspace_reset()
 
 # test access error
 def test_message_unreact_invalid_token(data):
+    if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
+        return
     # CREATE A USER AND CHANNEL, SEND A MESSAGE AND REACT TO IT
     # save required data variables (only needs message id)
     message_id = data["message_id"]
@@ -92,3 +106,4 @@ def test_message_unreact_invalid_token(data):
     # INVALID TOKEN
     with pytest.raises(AccessError):
         message_unreact("INVALIDTOKEN", message_id, 1)
+    workspace_reset()

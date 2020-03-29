@@ -7,6 +7,7 @@ from helper_functions.interface_function_helpers import is_valid_token
 import database_files.database as db
 import re
 
+
 # USER/PROFILE
 # Will use a GET request
 # For a valid user, returns information about their user id, email, first name, last name, and handle
@@ -133,3 +134,4 @@ def user_profile_sethandle(token, handle_str):
             break
 
     return {}
+

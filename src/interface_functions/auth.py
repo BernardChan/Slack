@@ -65,7 +65,7 @@ def auth_login(email, password):
         
 def auth_logout(token):
     is_success = du.logout_user(token)
-    return is_success
+    return {"is_success": is_success}
 
 if __name__ == '__main__':
     pass

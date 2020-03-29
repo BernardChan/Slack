@@ -33,31 +33,31 @@ DATABASE = {
     "channels": [],
 }
 
-unpickle = False
+# unpickle = False
 
 """
 ----------------------------------------------------------------------------------
 Core Database Functions
 ----------------------------------------------------------------------------------
 """    
-# Saves the current database_files
-def pickle_database(): 
-    global DATABASE
-    with open("../database_files/database.p", "wb") as FILE:
-        pickle.dump(DATABASE, FILE)
+# # Saves the current database_files
+# def pickle_database(): 
+#     global DATABASE
+#     with open("../database_files/database.p", "wb") as FILE:
+#         pickle.dump(DATABASE, FILE)
 
 
-# Restores the database_files from last save
-def unpickle_database():
-    global DATABASE
-    if path.exists("../database_files/database.p"):
-        DATABASE = pickle.load(open("../database_files/database.p", "rb"))
-    else:
-        DATABASE = {
-            "users": [],
-            "messages": [],
-            "channels": [],
-        }
+# # Restores the database_files from last save
+# def unpickle_database():
+#     global DATABASE
+#     if path.exists("../database_files/database.p"):
+#         DATABASE = pickle.load(open("../database_files/database.p", "rb"))
+#     else:
+#         DATABASE = {
+#             "users": [],
+#             "messages": [],
+#             "channels": [],
+#         }
     
 
 # Function to clear the database
@@ -67,7 +67,4 @@ def clear_database():
     "users": [],
     "messages": [],
     "channels": [],
-}  
-    #pickle_database()
-   
-unpickle_database
+}

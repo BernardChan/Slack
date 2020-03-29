@@ -15,8 +15,8 @@ This file contains functions to query the database, so to avoid directly accessi
     # 21/03/20
     # added is_duplicate moved here from auth file. 
 
+# import database_files.database as db
 import database_files.database as db
-#from database_files.database import DATABASE
 
 """
 ----------------------------------------------------------------------------------
@@ -37,12 +37,13 @@ def get_users():
     
 # returns all messages from a given channel_id
 def get_channel_messages(channel_id):
-    messages = DATABASE["messages"]
+    messages = db.DATABASE["messages"]
     return [message for message in messages if message["channel_id"] == channel_id]
     
 # gets channels by key
 def get_channels_by_key(key, value):
     channels = get_channels()
+
     return [channel for channel in channels if channel[key] == value]
     
 # gets the standup queue in channel_id
@@ -78,7 +79,7 @@ def is_duplicate(key, value):
 def is_user_in_channel(key, value, channel_id):
     channels = get_channels()
 
-# Go through the list of channels and check only the ones matching channel_id
+    # Go through the list of channels and check only the ones matching channel_id
     for channel in channels:
         if channel["channel_id"] == channel_id:
 
@@ -92,7 +93,7 @@ def is_user_in_channel(key, value, channel_id):
 # Gets all the channels a user is a part of
 def get_user_channels_by_key(key, value):
     channels = get_channels()
-
+    
     user_channels = []
 
     # Find what channels a user is in
