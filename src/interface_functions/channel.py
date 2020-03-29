@@ -5,7 +5,7 @@ from error import InputError
 
 
 def channel_invite(token, channel_id, u_id):
-    pass
+    return "Not Implemented"
 
 
 # This needs to be fixed. members=DATABASE etc. doesn't work.
@@ -75,7 +75,6 @@ def get_finish_and_end(start, messages):
 def channel_messages(token, channel_id, start):
 
     # Check Errors
-    print(f"token in channel_messages was {token}\n\n\n")
     help.check_channel_validity(channel_id)
     
     help.is_user_valid_channel_member(token, channel_id)
@@ -115,6 +114,12 @@ def channel_leave(token, channel_id):
 
 
 def channel_join(token, channel_id):
+    return "Not Implemented"
+
+
+# TODO: Throws access error when the user is not the slackr owner, but the 
+# channel is public. Non-admins should be able to join public channels.
+def WIP_channel_join(token, channel_id):
     # include valid token function here, stub function atm
     def is_token_valid(token):
         pass

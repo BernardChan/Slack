@@ -76,3 +76,20 @@ def is_owner(user_id, is_public):
     else:
         return any([user_id == owner["u_id"] for owner in private_channel_owner])
 
+
+# Checks if a function is implemented or not
+# Accepts (functionName, arg1, arg2, ...)
+# Make sure the args are INCORRECT - e.g. if a function expects a string, give
+# an integer so it doesn't excecute the function and start adding data to database
+# Super crude way of doing this but it's necessary due to how our project is marked.
+def isFunctionImplemented(*args):
+
+    # Exception shouldn't be thrown by the function if it isn't implemented
+    try:
+        functionName, *functionArgs = args
+        if functionName(*functionArgs) == "Not Implemented":
+            return False
+    except:
+        # Exception was thrown due to incorrect input (as desired) meaning the
+        # function is implemented
+        return True
