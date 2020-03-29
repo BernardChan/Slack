@@ -30,7 +30,7 @@ def channels_create(token, name, is_public):
 
     channels = db.get_channels()
     user = db.get_users_by_key("token", token)[0]
-    channel_id = time.time()
+    channel_id = int(time.time()*10000000000)
 
     channels.append(
         {
