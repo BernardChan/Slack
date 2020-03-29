@@ -96,7 +96,7 @@ def user_profile():
 
     return dumps(user.user_profile(token, u_id))
 
-@APP.route("user/profile/setname", methods=['PUT'])
+@APP.route("/user/profile/setname", methods=['PUT'])
 def user_profile_setname():
     data = request.get_json()
     token = data["token"]
@@ -105,7 +105,7 @@ def user_profile_setname():
 
     return dumps(user.user_profile_setname(token, name_first, name_last))
 
-@APP.route("user/profile/setemail", methods=['PUT'])
+@APP.route("/user/profile/setemail", methods=['PUT'])
 def user_profile_setemail():
     data = request.get_json()
     token = data["token"]
@@ -113,7 +113,7 @@ def user_profile_setemail():
 
     return dumps(user.user_profile_setemail(token, email))
 
-@APP.route("user/profile/sethandle", methods=['PUT'])
+@APP.route("/user/profile/sethandle", methods=['PUT'])
 def user_profile_sethandle():
     data = request.get_json()
     token = data["token"]
@@ -124,7 +124,7 @@ def user_profile_sethandle():
 '''
 ## ADMIN ##
 '''
-@APP.route("admin/userpermission/change", methods=['POST'])
+@APP.route("/admin/userpermission/change", methods=['POST'])
 def admin_userpermission_change():
     data = request.get_json()
     token = data["token"]
@@ -139,13 +139,13 @@ def admin_userpermission_change():
 Channel Routes
 ----------------------------------------------------------------------------------
 '''
-@APP.route("channels/list", methods=['GET'])
+@APP.route("/channels/list", methods=['GET'])
 def channels_list():
     token = request.args.get("token")
 
     return dumps(channels.channels_list(token))
 
-@APP.route("channels/listall", methods=['GET'])
+@APP.route("/channels/listall", methods=['GET'])
 def channels_listall():
     token = request.args.get("token")
     
