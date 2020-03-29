@@ -90,8 +90,12 @@ def channel_messages(token, channel_id, start):
         "end": end,
     }
 
-
 def channel_leave(token, channel_id):
+    return "Not Implemented"
+
+
+# TODO: Has problems similar to channel_join and leave
+def WIP_channel_leave(token, channel_id):
     # include valid token function here, stub function atm
     def is_token_valid(token):
         pass
