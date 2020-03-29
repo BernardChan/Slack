@@ -7,6 +7,7 @@ from helper_functions.interface_function_helpers import is_valid_token
 import database_files.database as db
 import re
 
+
 # USER/PROFILE
 # Will use a GET request
 # For a valid user, returns information about their user id, email, first name, last name, and handle
@@ -133,3 +134,17 @@ def user_profile_sethandle(token, handle_str):
             break
 
     return {}
+
+
+# USERS/ALL
+# Provides a list of all users and their respective details
+# Only raises AccessError for invalid token
+def users_all(token):
+
+    # Raise an access error if not a valid token
+    # TODO
+
+    # Get the list of all users
+    users = get_users()
+    # return the list
+    return { "users": users }

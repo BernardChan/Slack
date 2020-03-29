@@ -19,7 +19,7 @@ def users_all(token):
 def sort_messages(messages):
     messages.sort(key=lambda message: message["time_created"])
 
-
+import database_files.database as db
 # Searches by:
 # 1. Getting the user's list of channels
 # 2. Getting the messages that are in those channels
