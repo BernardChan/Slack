@@ -10,6 +10,7 @@ from interface_functions.auth import auth_login
 from interface_functions.auth import auth_logout
 from interface_functions.auth import auth_register
 from error import InputError
+from interface_functions.workspace_reset import workspace_reset
 
 import sys
 sys.path.append('../')
@@ -20,18 +21,15 @@ sys.path.append('../')
     # login with two tokens simultaniously
     
 def test_auth_login_register_then_login_success():
+    workspace_reset()
     register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
     login1 = auth_login("bill.gates@microsoft.com", "123456")
     logout1 = auth_logout(login1["token"])
+    print(f"logout1 was {logout1}")
     assert logout1["is_success"] == True
-    
-def test_auth_login_invalid_token_found():
-    register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
-    login1 = auth_login("bill.gates@microsoft.com", "123456")
-    with pytest.raises(InputError) as e:
-        auth_logout("ABCD")
         
 def test_auth_login_different_tokens():
+    workspace_reset()
     register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
     login1 = auth_login("bill.gates@microsoft.com", "123456")
     register2 = auth_register("andy.gates@microsoft.com", "24681012", "Andy", "Gates")
