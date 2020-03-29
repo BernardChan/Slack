@@ -48,7 +48,7 @@ def auth_login(email, password):
     # Validate Email
     ah.validate_email(email)
     user_rec =  dr.get_users_by_key("email", email)
-    print(user_rec)
+    #print(user_rec)
     if user_rec == []:
         raise InputError(description = 'Email entered does not belong to a user')
     
