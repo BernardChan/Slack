@@ -27,6 +27,7 @@ import pytest
 from interface_functions import channel
 import helper_functions.test_helper_file as ch
 from error import InputError, AccessError
+from interface_functions.workspace_reset import workspace_reset
 
 
 # TODO: go back through the other functions and check what happens when user is not authorised or they choose a
@@ -38,6 +39,7 @@ from error import InputError, AccessError
 
 # Test when channel owner removes another channel owner's ownership
 def test_removeowner_simple():
+    workspace_reset()
     ch.init_helper()
     # Set member as owner
     channel.channel_addowner(ch.chan_owner_token, ch.channel_id, ch.member_id)

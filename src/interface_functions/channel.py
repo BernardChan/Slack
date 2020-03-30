@@ -148,7 +148,7 @@ def WIP_channel_join(token, channel_id):
 
 def is_channel_owner(channel, u_id):
     # checks if authorized user is already an admin
-    print(f"user id was {u_id}")
+
     for members in channel["owner_members"]:
         # find the right user
         if members["u_id"] == u_id:

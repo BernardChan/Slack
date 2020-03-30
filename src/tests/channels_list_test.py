@@ -2,6 +2,7 @@ import pytest
 from error import AccessError
 from interface_functions import channels as c
 import helper_functions.test_helper_file as ch
+from interface_functions.workspace_reset import workspace_reset
 
 """
 def test_channels_list():
@@ -17,6 +18,7 @@ def test_channels_list():
 """
 
 def test_channels_list_success():
+    workspace_reset()
     ch.init_helper()
     chan_list = c.channels_list(ch.chan_owner_token)["channels"]
     assert len(chan_list) == 2

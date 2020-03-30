@@ -31,23 +31,22 @@ def is_correct_message(messages, msg_IDs):
 
 # Search for messages with exactly the string given
 def test_search_exactly_substring():
-    
     ch.init_helper()
     msg_IDs = []
     
     # Send to both private and public and check that both are returned by search()
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "hello")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "hello")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "hello")["message_id"])
     assert(is_correct_message(search(ch.chan_owner_token, "hello"), msg_IDs))
     msg_IDs = []
     # Test with a message with numbers
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "123hi")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "123hi")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "123hi")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, "123hi"), msg_IDs))
     msg_IDs = []
     # Test with a message containing exactly only numbers
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "123454321")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "123454321")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "123454321")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, "123454321"), msg_IDs))
 
 
@@ -59,7 +58,7 @@ def test_search_substring():
 
     # Test searching for a substring of the message
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "helloworld")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "helloworld")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "helloworld")["message_id"])
     
     assert (is_correct_message(search(ch.chan_owner_token, "hello"), msg_IDs))
 
@@ -70,7 +69,7 @@ def test_search_substring():
     workspace_reset_messages()
     # Search for a substring of numbers only
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "123454321")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "123454321")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "123454321")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, "1234"), msg_IDs))
 
     # Search for another part of the substring
@@ -80,7 +79,7 @@ def test_search_substring():
     workspace_reset_messages()
     # Search for a substring of both numbers and letters
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "12hi34")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "12hi34")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "12hi34")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, "12hi"), msg_IDs))
 
     # Search for another part of the substring
@@ -96,7 +95,7 @@ def test_search_cases():
 
     # Test searching for an exact match
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "mY pHoNE dIEd")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "mY pHoNE dIEd")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "mY pHoNE dIEd")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, "mY pHoNE dIEd"), msg_IDs))
 
     # Search for a substring
@@ -114,7 +113,7 @@ def test_search_empty():
 
     # Test searching for an exact match
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "mY pHoNE123 dIEd")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "mY pHoNE123 dIEd")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "mY pHoNE123 dIEd")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, ""), msg_IDs))
 
 
@@ -126,7 +125,7 @@ def test_search_no_matches():
 
     # Test searching for no matches
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "mY pHoNE dIEd")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "mY pHoNE dIEd")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "mY pHoNE dIEd")["message_id"])
     assert (not is_correct_message(search(ch.chan_owner_token, "shoulda died with it"), msg_IDs))
 
     # Search using a superset of the message
@@ -141,7 +140,7 @@ def test_search_symbols():
 
     # Test searching exactly for symbols
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "!@#$%^&*()_+=-':")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "!@#$%^&*()_+=-':")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "!@#$%^&*()_+=-':")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, "!@#$%^&*()_+=-':"), msg_IDs))
 
     # Search using a subset of the message
@@ -158,20 +157,20 @@ def test_search_special_characters():
 
     # Search for a message with single quotes: '
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "'hello''")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "'hello''")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "'hello''")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, "'hello"), msg_IDs))
     msg_IDs = []
     workspace_reset_messages()
     # Search for a message with double quotes: "
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "\"\"hello\"")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "\"\"hello\"")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "\"\"hello\"")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, "\"\"hello\""), msg_IDs))
     assert (is_correct_message(search(ch.chan_owner_token, "\"\"hello\""), msg_IDs))
     msg_IDs = []
     workspace_reset_messages()
     # Search for a message with escaped characters: \n, \b, \
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "hello\\nWo\\brld\\")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "hello\\nWo\\brld\\")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "hello\\nWo\\brld\\")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, "hello\\nWo\\brld\\"), msg_IDs))
     assert (is_correct_message(search(ch.chan_owner_token, "hello\\nWo\\brld\\"), msg_IDs))
     msg_IDs = []
@@ -179,6 +178,6 @@ def test_search_special_characters():
     # Search for a message with emojis: 👉🏻👌🏻
     # Assume that 👌🏻 and 👌 are different
     msg_IDs.append(send(ch.chan_owner_token, ch.channel_id, "👉👌🏻")["message_id"])
-    msg_IDs.append(send(ch.chan_owner_token, ch.private_ch.channel_id, "👉👌🏻")["message_id"])
+    msg_IDs.append(send(ch.chan_owner_token, ch.private_channel_id, "👉👌🏻")["message_id"])
     assert (is_correct_message(search(ch.chan_owner_token, "👉👌🏻"), msg_IDs))
     assert (is_correct_message(search(ch.chan_owner_token, "👉👌🏻"), msg_IDs))
