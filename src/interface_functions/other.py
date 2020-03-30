@@ -1,17 +1,20 @@
 from database_files.database_retrieval import get_user_channels_by_key, get_channel_messages
+from helper_functions.interface_function_helpers import is_valid_token
+from database_files.database_retrieval import get_users
 
+
+# USERS/ALL
+# Provides a list of all users and their respective details
+# Only raises AccessError for invalid token
 def users_all(token):
-    return {
-        'users': [
-            {
-                'u_id': 1,
-                'email': 'cs1531@cse.unsw.edu.au',
-                'name_first': 'Hayden',
-                'name_last': 'Jacobs',
-                'handle_str': 'hjacobs',
-            },
-        ],
-    }
+
+    # Raise an access error if not a valid token
+    is_valid_token(token)
+
+    # Get the list of all users
+    users = get_users()
+    # return the list
+    return {"users": users}
 
 
 # Sorts by time_created

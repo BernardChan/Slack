@@ -50,7 +50,7 @@ def add_user_to_database(email, password, name_first, name_last, handle, u_id):
     }
 
     db.DATABASE['users'].append(new_user)
-    print(db.DATABASE['users'])
+    #print(db.DATABASE['users'])
     #db.pickle_database()
     
     register_dict = {
