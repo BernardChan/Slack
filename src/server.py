@@ -291,15 +291,11 @@ def users_all():
     token = request.args.get("token")
     return dumps(other.users_all(token))
 
-
-@APP.route("/search", methods=['GET'])
-def search():
-    query = request.args.get("query_str")
-    token = request.args.get("token")
-
-    return dumps(other.search(token, query))
-
-
+'''
+----------------------------------------------------------------------------------
+STANDUP Routes
+----------------------------------------------------------------------------------
+'''
 @APP.route("/standup/start", methods=['POST'])
 def standup_start():
     resp = request.get_json()
@@ -326,6 +322,18 @@ def standup_send():
     message = resp["message"]
 
     return dumps(su.standup_send(token, channel_id, message))
+
+
+
+@APP.route("/search", methods=['GET'])
+def search():
+    query = request.args.get("query_str")
+    token = request.args.get("token")
+
+    return dumps(other.search(token, query))
+
+
+
 
 
 '''
