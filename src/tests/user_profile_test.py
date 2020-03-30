@@ -29,7 +29,7 @@ def assert_profile_success(user_token, user_id, fname, lname, email, handle):
 # Test successful call of user_profile by the same user
 def test_profile_success():
     member = auth_register("test.user@test.com", "password123", "fname", "lname")
-    assert_profile_success(member["token"], member["u_id"], "fname", "lname", "test.user@test.com", "fname.lname")
+    assert_profile_success(member["token"], member["u_id"], "fname", "lname", "test.user@test.com", "fnamelname")
     workspace_reset()
 
 # Test successful call of user_profile by a different user
@@ -38,11 +38,11 @@ def test_profile_separate_user_success():
     member2 = auth_register("test2.user2@yer.com", "123password", "Harry", "Potter")
     member3 = auth_register("test3.user3@hi.com", "456password", "Ron", "Weasley")
     # Get member2's profile using member 1's token
-    assert_profile_success(member1["token"], member2["u_id"], "Harry", "Potter", "test2.user2@yer.com", "harry.potter")
+    assert_profile_success(member1["token"], member2["u_id"], "Harry", "Potter", "test2.user2@yer.com", "harrypotter")
     # Get member3's profile using member 1's token
-    assert_profile_success(member1["token"], member3["u_id"], "Ron", "Weasley", "test3.user3@hi.com", "ron.weasley")
+    assert_profile_success(member1["token"], member3["u_id"], "Ron", "Weasley", "test3.user3@hi.com", "ronweasley")
     # Get member1's profile using member 3's token
-    assert_profile_success(member3["token"], member1["u_id"], "fname", "lname", "test.user@test.com", "fname.lname")
+    assert_profile_success(member3["token"], member1["u_id"], "fname", "lname", "test.user@test.com", "fnamelname")
     workspace_reset()
     
 
