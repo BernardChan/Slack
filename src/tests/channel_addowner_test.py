@@ -84,3 +84,4 @@ def test_addowner_input_error():
     # User is slackr owner and part of the channel
     with pytest.raises(InputError):
         add_owner(ch.chan_owner_token, ch.channel_id, ch.chan_owner_id)
+    workspace_reset()

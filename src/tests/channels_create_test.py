@@ -31,6 +31,7 @@ def assert_channels_create_success(token, ch_id, name, is_public):
                 assert user["token"] == token
 
 def test_channels_create_public():
+    ch.init_helper()
     # create public channel
     channel_id = channels.channels_create(ch.chan_owner_token, "NewChannel", True)["channel_id"]
     assert_channels_create_success(ch.chan_owner_token, channel_id, "NewChannel", True)

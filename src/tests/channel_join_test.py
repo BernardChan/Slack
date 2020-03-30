@@ -80,3 +80,4 @@ def test_join_input_error():
     # Channel does not exist, raise InputError
     with pytest.raises(InputError):
         join(ch.member_id, -100000)
+    workspace_reset()

@@ -110,6 +110,7 @@ def test_auth_register_duplicate_registration():
         #Email address is already being used by another user
         register2 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
         # assert (register1 != register2)
+    workspace_reset()
     
 #python3 -m pytest auth_register_test.py
 #command for if forgotten or lost

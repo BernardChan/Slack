@@ -57,6 +57,7 @@ def assert_is_unreacted(token, channel_id, message_id):
 
 # test succesful
 def test_message_unreact_success(data):
+    workspace_reset()
     if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
         return
     # data fixture creates a user and channel then sends a message with message_id and reacts to it
@@ -72,6 +73,7 @@ def test_message_unreact_success(data):
 
 # test input errors
 def test_message_unreact_input_errors(data):
+    workspace_reset()
     if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
         return
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
@@ -97,6 +99,7 @@ def test_message_unreact_input_errors(data):
 
 # test access error
 def test_message_unreact_invalid_token(data):
+    workspace_reset()
     if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
         return
     # CREATE A USER AND CHANNEL, SEND A MESSAGE AND REACT TO IT
@@ -107,3 +110,4 @@ def test_message_unreact_invalid_token(data):
     with pytest.raises(AccessError):
         message_unreact("INVALIDTOKEN", message_id, 1)
     workspace_reset()
+    

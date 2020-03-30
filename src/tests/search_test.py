@@ -18,6 +18,7 @@
 
 from interface_functions.other import search
 from interface_functions.message import message_send as send
+import helper_functions.test_helper_file as ch
 from helper_functions.test_helper_file import chan_owner_token as token
 from helper_functions.test_helper_file import chan_owner_id as id
 from helper_functions.test_helper_file import private_channel_id as private_id
@@ -34,9 +35,10 @@ def is_correct_message(messages, msg_IDs):
 
 # Search for messages with exactly the string given
 def test_search_exactly_substring():
-    workspace_reset_messages()
+    
+    ch.init_helper()
     msg_IDs = []
-
+    
     # Send to both private and public and check that both are returned by search()
     msg_IDs.append(send(token, public_id, "hello")["message_id"])
     msg_IDs.append(send(token, private_id, "hello")["message_id"])

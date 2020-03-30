@@ -17,6 +17,7 @@ def test_channels_list():
 """
 
 def test_channels_list_success():
+    ch.init_helper()
     chan_list = c.channels_list(ch.chan_owner_token)["channels"]
     assert len(chan_list) == 2
     assert chan_list[0]["channel_id"] == ch.channel_id
