@@ -18,5 +18,5 @@ def test_search_simple():
     ch.system_send_message(token, channel_id, "hello world")
 
     # Assert that the return value was correct
-    message = ch.make_get_request("search", data)[0]
+    message = ch.make_get_request("search", data)["messages"][0]
     assert message["message"] == "hello world"
