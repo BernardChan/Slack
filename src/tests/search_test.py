@@ -22,8 +22,7 @@ from helper_functions.test_helper_file import chan_owner_token as token
 from helper_functions.test_helper_file import chan_owner_id as id
 from helper_functions.test_helper_file import private_channel_id as private_id
 from helper_functions.test_helper_file import channel_id as public_id
-from interface_functions.workspace_reset import workspace_reset_messages
-
+from interface_functions.workspace_reset import workspace_reset_messages, workspace_reset
 
 # Returns boolean on whether the messages returned match exactly the given msg_IDs list
 def is_correct_message(messages, msg_IDs):
