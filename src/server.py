@@ -243,43 +243,6 @@ def message_edit():
     message = resp["message"]
     return dumps(msg.message_edit(token, message_id, message))
 
-    
-
-@APP.route("/search", methods=['GET'])
-def search():
-    query = request.args.get("query_str")
-    token = request.args.get("token")
-
-    return dumps(other.search(token, query))
-
-
-@APP.route("/standup/start", methods=['POST'])
-def standup_start():
-    resp = request.get_json()
-    token = resp["token"]
-    channel_id = int(resp["channel_id"])
-    length = int(resp["length"])
-
-    return dumps(su.standup_start(token, int(channel_id), int(length)))
-
-
-@APP.route("/standup/active", methods=['GET'])
-def standup_active():
-    token = request.args.get("token")
-    channel_id = request.args.get("channel_id")
-
-    return dumps(su.standup_active(token, int(channel_id)))
-
-
-@APP.route("/standup/send", methods=['POST'])
-def standup_send():
-    resp = request.get_json()
-    token = resp["token"]
-    channel_id = int(resp["channel_id"])
-    message = resp["message"]
-
-    return dumps(su.standup_send(token, channel_id, message))
-
 
 '''
 ----------------------------------------------------------------------------------
@@ -317,6 +280,44 @@ def user_profile_sethandle():
     handle_str = data["handle_str"]
 
     return dumps(user.user_profile_sethandle(token, handle_str))
+
+
+
+@APP.route("/search", methods=['GET'])
+def search():
+    query = request.args.get("query_str")
+    token = request.args.get("token")
+
+    return dumps(other.search(token, query))
+
+
+@APP.route("/standup/start", methods=['POST'])
+def standup_start():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    length = int(resp["length"])
+
+    return dumps(su.standup_start(token, int(channel_id), int(length)))
+
+
+@APP.route("/standup/active", methods=['GET'])
+def standup_active():
+    token = request.args.get("token")
+    channel_id = request.args.get("channel_id")
+
+    return dumps(su.standup_active(token, int(channel_id)))
+
+
+@APP.route("/standup/send", methods=['POST'])
+def standup_send():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    message = resp["message"]
+
+    return dumps(su.standup_send(token, channel_id, message))
+
 
 '''
 ## ADMIN ##
