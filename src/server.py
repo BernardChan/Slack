@@ -75,6 +75,115 @@ def auth_logout():
     token = resp["token"]
     return dumps(auth.auth_logout(token))
 
+'''
+----------------------------------------------------------------------------------
+Channel Routes
+----------------------------------------------------------------------------------
+'''
+@APP.route("/channel/invite", methods=['POST'])
+def channel_invite():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = resp["channel_id"]
+    u_id = resp["u_id"]
+    return dumps(ch.channel_invite(token, channel_id, u_id))
+
+@APP.route("/channel/details", methods=['GET'])
+def channel_details():
+    resp = request.args
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+
+    return dumps(ch.channel_details(token, channel_id))
+
+@APP.route("/channel/messages", methods=['GET'])
+def channel_messages():
+    resp = request.args
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    start = int(resp["start"])
+
+    return dumps(ch.channel_messages(token, channel_id, start))
+
+@APP.route("/channel/leave", methods=['POST'])
+def channel_leave():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = resp["channel_id"]
+    return dumps(ch.channel_leave(token, channel_id))
+
+@APP.route("/channel/join", methods=['POST'])
+def channel_join():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = resp["channel_id"]
+    return dumps(ch.channel_join(token, channel_id))
+
+@APP.route("/channel/addowner", methods=['POST'])
+def channel_addowner():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = resp["channel_id"]
+    u_id = resp["u_id"]
+    return dumps(ch.channel_addowner(token, channel_id, u_id))
+
+@APP.route("/channel/removeowner", methods=['POST'])
+def channel_removeowner():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = resp["channel_id"]
+    u_id = resp["u_id"]
+    return dumps(ch.channel_removeowner(token, channel_id, u_id))
+
+'''
+----------------------------------------------------------------------------------
+Channels Routes
+----------------------------------------------------------------------------------
+'''
+@APP.route("/channels/list", methods=['GET'])
+def channels_list():
+    token = request.args.get("token")
+
+    return dumps(channels.channels_list(token))
+
+@APP.route("/channels/listall", methods=['GET'])
+def channels_listall():
+    token = request.args.get("token")
+    
+    return dumps(channels.channels_listall(token))
+
+@APP.route("/channels/create", methods=['POST'])
+def channels_create():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    name = resp["name"]
+    is_public = resp["is_public"]
+
+    return dumps(chs.channels_create(token, name, is_public))
+
+
+
+@APP.route("/message/sendlater", methods=['POST'])
+def message_sendlater():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    message = resp["message"]
+    time_sent = int(resp["time_sent"])
+
+    return dumps(msg.send_later(token, channel_id, message, time_sent))
+
+
+
+
 @APP.route("/search", methods=['GET'])
 def search():
     query = request.args.get("query_str")
@@ -161,58 +270,7 @@ def admin_userpermission_change():
     return dumps(admin.admin_userpermission_change(token, u_id, permission_id))
 
 
-'''
-----------------------------------------------------------------------------------
-Channel Routes
-----------------------------------------------------------------------------------
-'''
-@APP.route("/channels/list", methods=['GET'])
-def channels_list():
-    token = request.args.get("token")
 
-    return dumps(channels.channels_list(token))
-
-@APP.route("/channels/listall", methods=['GET'])
-def channels_listall():
-    token = request.args.get("token")
-    
-    return dumps(channels.channels_listall(token))
-
-
-@APP.route("/message/sendlater", methods=['POST'])
-def message_sendlater():
-    resp = request.get_json()
-
-    # Get the relevant data from the response
-    token = resp["token"]
-    channel_id = int(resp["channel_id"])
-    message = resp["message"]
-    time_sent = int(resp["time_sent"])
-
-    return dumps(msg.send_later(token, channel_id, message, time_sent))
-
-
-@APP.route("/channel/messages", methods=['GET'])
-def channel_messages():
-    resp = request.args
-
-    # Get the relevant data from the response
-    token = resp["token"]
-    channel_id = int(resp["channel_id"])
-    start = int(resp["start"])
-
-    return dumps(ch.channel_messages(token, channel_id, start))
-
-
-@APP.route("/channel/details", methods=['GET'])
-def channel_details():
-    resp = request.args
-
-    # Get the relevant data from the response
-    token = resp["token"]
-    channel_id = int(resp["channel_id"])
-
-    return dumps(ch.channel_details(token, channel_id))
 
 
 @APP.route("/message/send", methods=['POST'])
@@ -226,17 +284,6 @@ def message_send():
 
     return dumps(msg.message_send(token, channel_id, message))
 
-
-@APP.route("/channels/create", methods=['POST'])
-def channels_create():
-    resp = request.get_json()
-
-    # Get the relevant data from the response
-    token = resp["token"]
-    name = resp["name"]
-    is_public = resp["is_public"]
-
-    return dumps(chs.channels_create(token, name, is_public))
 
 
 '''
