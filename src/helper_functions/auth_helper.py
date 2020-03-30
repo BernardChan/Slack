@@ -52,7 +52,7 @@ def hash_data(data):
 
 
 def create_handle(name_first, name_last):
-    handle = name_first + "." + name_last
+    handle = name_first + name_last
     handle = handle.lower()
     if len(handle) > 20:
         handle = handle[0:20]
