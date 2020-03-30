@@ -1,0 +1,8 @@
+#!/bin/bash
+
+FILES=./tests/*
+for f in $FILES
+do
+  echo "Running tests in $f..."
+  pytest-3 $f --disable-warnings
+done

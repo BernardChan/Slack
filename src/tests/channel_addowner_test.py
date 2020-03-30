@@ -9,7 +9,10 @@ from interface_functions.workspace_reset import workspace_reset
 
 # Test that normal member can be added as owner to the public and private channel before being added to the channel
 def test_addowner_member_before_add():
+    workspace_reset()
+    ch.init_helper()
     # Set member as owner
+    print(f"member id is {ch.member_id} and chann owner id was {ch.chan_owner_id}")
     add_owner(ch.chan_owner_token, ch.channel_id, ch.member_id)
     add_owner(ch.chan_owner_token, ch.private_channel_id, ch.member_id)
 
@@ -84,3 +87,4 @@ def test_addowner_input_error():
     # User is slackr owner and part of the channel
     with pytest.raises(InputError):
         add_owner(ch.chan_owner_token, ch.channel_id, ch.chan_owner_id)
+    workspace_reset()

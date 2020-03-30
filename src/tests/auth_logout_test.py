@@ -37,5 +37,6 @@ def test_auth_login_different_tokens():
     logout1 = auth_logout(login1["token"]) 
     logout2 = auth_logout(login2["token"]) 
     assert logout1 == logout2
+    workspace_reset()
 
 # python3 -m pytest auth_logout _test.py

@@ -44,6 +44,8 @@ def test_auth_login_invalid_email_format():
     with pytest.raises(InputError) as e:
         login1 = auth_login("bill.gatemicrosoft.com", "123456")
 
+    workspace_reset()
+
 # # TODO: Fix these tests.     
 # with pytest.raises(InputError) as e:
 #         assert login2['u_id'] != login1['u_id']
