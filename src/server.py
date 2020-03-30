@@ -324,7 +324,11 @@ def standup_send():
     return dumps(su.standup_send(token, channel_id, message))
 
 
-
+'''
+----------------------------------------------------------------------------------
+OTHER Routes
+----------------------------------------------------------------------------------
+'''
 @APP.route("/search", methods=['GET'])
 def search():
     query = request.args.get("query_str")
@@ -332,13 +336,6 @@ def search():
 
     return dumps(other.search(token, query))
 
-
-
-
-
-'''
-## ADMIN ##
-'''
 @APP.route("/admin/userpermission/change", methods=['POST'])
 def admin_userpermission_change():
     data = request.get_json()
@@ -348,19 +345,6 @@ def admin_userpermission_change():
 
     return dumps(admin.admin_userpermission_change(token, u_id, permission_id))
 
-
-
-
-
-
-
-
-
-'''
-----------------------------------------------------------------------------------
-Other Routes
-----------------------------------------------------------------------------------
-'''
 @APP.route("/workspace/reset", methods=['POST'])
 def workspace_reset():
     return dumps(wr.workspace_reset())
