@@ -27,14 +27,14 @@
     # duplicate registration requests
     #
 
+import sys
+sys.path.append('../')
+
 import pytest
 from interface_functions.auth import auth_register
 from error import InputError
 
 from interface_functions.workspace_reset import workspace_reset
-
-import sys
-sys.path.append('../')
 
 
 """
