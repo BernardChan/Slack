@@ -12,6 +12,7 @@ import interface_functions.user as user
 import interface_functions.admin_userpermission_change as admin
 import interface_functions.channels as channels
 import interface_functions.auth as auth
+import interface_functions.workspace_reset as wr
 
 def defaultHandler(err):
     response = err.get_response()
@@ -226,6 +227,15 @@ def auth_register():
     name_first = resp["name_first"]
     name_last = resp["name_last"]
     return dumps(auth.auth_register(email, password, name_first, name_last))
+
+'''
+----------------------------------------------------------------------------------
+Other Routes
+----------------------------------------------------------------------------------
+'''
+@APP.route("/workspace/reset", methods=['POST'])
+def workspace_reset():
+    return dumps(wr.workspace_reset())
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 42069))
