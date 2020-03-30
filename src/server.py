@@ -281,6 +281,15 @@ def user_profile_sethandle():
 
     return dumps(user.user_profile_sethandle(token, handle_str))
 
+'''
+----------------------------------------------------------------------------------
+USERS Routes
+----------------------------------------------------------------------------------
+'''
+@APP.route("/users/all", methods=['GET'])
+def users_all():
+    token = request.args.get("token")
+    return dumps(other.users_all(token))
 
 
 @APP.route("/search", methods=['GET'])
