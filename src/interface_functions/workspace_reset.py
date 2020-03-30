@@ -10,7 +10,9 @@ def workspace_reset():
         "messages": [],
         "channels": [],
     }
+    return {}
 
 
 def workspace_reset_messages():
     db.DATABASE["messages"] = []
+    return {}
