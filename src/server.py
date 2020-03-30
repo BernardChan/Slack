@@ -80,6 +80,7 @@ def auth_logout():
 CHANNEL Routes
 ----------------------------------------------------------------------------------
 '''
+"""
 @APP.route("/channel/invite", methods=['POST'])
 def channel_invite():
     resp = request.get_json()
@@ -87,6 +88,7 @@ def channel_invite():
     channel_id = resp["channel_id"]
     u_id = resp["u_id"]
     return dumps(ch.channel_invite(token, channel_id, u_id))
+"""
 
 @APP.route("/channel/details", methods=['GET'])
 def channel_details():
@@ -109,19 +111,23 @@ def channel_messages():
 
     return dumps(ch.channel_messages(token, channel_id, start))
 
+"""
 @APP.route("/channel/leave", methods=['POST'])
 def channel_leave():
     resp = request.get_json()
     token = resp["token"]
     channel_id = resp["channel_id"]
     return dumps(ch.channel_leave(token, channel_id))
+"""
 
+"""
 @APP.route("/channel/join", methods=['POST'])
 def channel_join():
     resp = request.get_json()
     token = resp["token"]
     channel_id = resp["channel_id"]
     return dumps(ch.channel_join(token, channel_id))
+"""
 
 @APP.route("/channel/addowner", methods=['POST'])
 def channel_addowner():
