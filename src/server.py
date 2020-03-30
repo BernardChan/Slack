@@ -48,7 +48,32 @@ def catch_all(dummy):
     else:
         return dumps(request.args)
 
+'''
+----------------------------------------------------------------------------------
+Auth Routes
+----------------------------------------------------------------------------------
+'''
+@APP.route("/auth/register", methods=['POST'])
+def auth_register():
+    resp = request.get_json()
+    email = resp["email"]
+    password = resp["password"]
+    name_first = resp["name_first"]
+    name_last = resp["name_last"]
+    return dumps(auth.auth_register(email, password, name_first, name_last))
 
+@APP.route("/auth/login", methods=['POST'])
+def auth_login():
+    resp = request.get_json()
+    email = resp["email"]
+    password = resp["password"]
+    return dumps(auth.auth_login(email, password))
+
+@APP.route("/auth/logout", methods=['POST'])
+def auth_logout():
+    resp = request.get_json()
+    token = resp["token"]
+    return dumps(auth.auth_logout(token))
 
 @APP.route("/search", methods=['GET'])
 def search():
@@ -213,20 +238,6 @@ def channels_create():
 
     return dumps(chs.channels_create(token, name, is_public))
 
-
-'''
-----------------------------------------------------------------------------------
-Auth Routes
-----------------------------------------------------------------------------------
-'''
-@APP.route("/auth/register", methods=['POST'])
-def auth_register():
-    resp = request.get_json()
-    email = resp["email"]
-    password = resp["password"]
-    name_first = resp["name_first"]
-    name_last = resp["name_last"]
-    return dumps(auth.auth_register(email, password, name_first, name_last))
 
 '''
 ----------------------------------------------------------------------------------
