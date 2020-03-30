@@ -229,7 +229,7 @@ def message_unpin():
 """
 
 @APP.route("/message/remove", methods=['DELETE'])
-def message_delete():
+def message_remove():
     resp = request.get_json()
     token = resp["token"]
     message_id = resp["message_id"]
