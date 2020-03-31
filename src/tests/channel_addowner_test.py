@@ -25,7 +25,8 @@ def test_addowner_member_before_add():
 # Commented out for now due to channel_invite being broken
 # Test that normal member can be added as owner to the public and private channel after being added to the channels
 def test_addowner_member_after_add():
-
+    workspace_reset()
+    ch.init_helper()
     # Tests fail when the function isn't implemented. Putting this here to prevent
     # issues with iteration 2's marking by the tutor. I acknowledge that this is
     # completely stupid and shouldn't have to be needed, but I'm not letting my group
@@ -49,6 +50,8 @@ def test_addowner_member_after_add():
 # Test that adding the slackr owner when they were not part the channel will not throw an error
 #   Note: This is assuming that the user will also be added to the channel if they were not a part of the channel
 def test_addowner_slackr_owner():
+    workspace_reset()
+    ch.init_helper()
     add_owner(ch.chan_owner_token, ch.channel_id, ch.slackr_owner_id)
     add_owner(ch.chan_owner_token, ch.private_channel_id, ch.slackr_owner_id)
 
@@ -60,6 +63,8 @@ def test_addowner_slackr_owner():
 # Assert AccessError occurs when:
 #   authorised user is not the channel owner or slackr owner
 def test_addowner_access_error():
+    workspace_reset()
+    ch.init_helper()
     # Authorised user is not channel owner and attempts to add another user
     with pytest.raises(AccessError):
         add_owner(ch.member_token, ch.channel_id, ch.member_id)
@@ -69,6 +74,8 @@ def test_addowner_access_error():
 #   channel does not exist
 #   when user is already owner of the channel
 def test_addowner_input_error():
+    workspace_reset()
+    ch.init_helper()
     # Channel does not exist, raise InputError
     with pytest.raises(InputError):
         add_owner(ch.chan_owner_token, -100000, ch.member_id)

@@ -1,7 +1,7 @@
 import database_files.database_retrieval as db
 import helper_functions.interface_function_helpers as help
 from database_files.database import DATABASE
-from error import InputError
+from error import InputError, AccessError
 
 
 def channel_invite(token, channel_id, u_id):
@@ -13,8 +13,7 @@ def channel_invite(token, channel_id, u_id):
 # This needs to be fixed
 def WIP_channel_invite(token, channel_id, u_id):
     # include valid token function here, stub function atm
-    def is_token_valid(token):
-        pass
+    help.is_valid_token(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
@@ -39,6 +38,7 @@ def WIP_channel_invite(token, channel_id, u_id):
 
 # Given a Channel with ID channel_id that the authorised user is part of, provide basic details about the channel
 def channel_details(token, channel_id):
+    help.is_valid_token(token)
     help.check_channel_validity(channel_id)
     help.check_member_status_of_channel(token, channel_id)
 
@@ -74,6 +74,7 @@ def get_finish_and_end(start, messages):
 
 def channel_messages(token, channel_id, start):
 
+    help.is_valid_token(token)
     # Check Errors
     help.check_channel_validity(channel_id)
     
@@ -97,8 +98,7 @@ def channel_leave(token, channel_id):
 # TODO: Has problems similar to channel_join and leave
 def WIP_channel_leave(token, channel_id):
     # include valid token function here, stub function atm
-    def is_token_valid(token):
-        pass
+    help.is_valid_token(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
@@ -125,8 +125,7 @@ def channel_join(token, channel_id):
 # channel is public. Non-admins should be able to join public channels.
 def WIP_channel_join(token, channel_id):
     # include valid token function here, stub function atm
-    def is_token_valid(token):
-        pass
+    help.is_valid_token(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
@@ -159,12 +158,15 @@ def is_channel_owner(channel, u_id):
 
 def channel_addowner(token, channel_id, u_id):
     # include valid token function here, stub function atm
-    def is_token_valid(token):
-        pass
+    help.is_valid_token(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
 
+    # check if user is channel owner
+    if not db.is_owner_in_channel("token", token, channel_id):
+        raise AccessError("You are not the channel owner, so don't have permission!")
+    
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
     # checks if authorized user is already an admin
     if is_channel_owner(channel, u_id):
@@ -184,11 +186,14 @@ def channel_addowner(token, channel_id, u_id):
 def channel_removeowner(token, channel_id, u_id):
 
     # include valid token function here, stub function atm
-    def is_token_valid(token):
-        pass
+    help.is_valid_token(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
+
+    # check if user is channel owner
+    if not db.is_owner_in_channel("token", token, channel_id):
+        raise AccessError("You are not the channel owner, so don't have permission!")
 
     # check if user is a member of the channel
     if not db.is_owner_in_channel("u_id", u_id, channel_id):
