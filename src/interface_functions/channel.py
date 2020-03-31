@@ -1,7 +1,7 @@
 import database_files.database_retrieval as db
 import helper_functions.interface_function_helpers as help
 from database_files.database import DATABASE
-from error import InputError
+from error import InputError, AccessError
 
 
 def channel_invite(token, channel_id, u_id):
@@ -163,6 +163,10 @@ def channel_addowner(token, channel_id, u_id):
     # check if channel is valid
     help.check_channel_validity(channel_id)
 
+    # check if user is channel owner or slack owner
+    if not db.is_owner_in_channel("token", token, channel_id):
+        raise AccessError("You are not the channel owner, so don't have permission!")
+    
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
     # checks if authorized user is already an admin
     if is_channel_owner(channel, u_id):
