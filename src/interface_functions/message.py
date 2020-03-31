@@ -148,8 +148,8 @@ if __name__ == "__main__":
 
 
 def message_react(token, message_id, react_id):
-    message = DATABASE['messages'][message_id]['message']
-    channel_id = DATABASE['messages'][message_id]['channel_id']
+    #message = DATABASE['messages'][message_id]['message']
+    #channel_id = DATABASE['messages'][message_id]['channel_id']
     user = db.get_users_by_key("token", token)[0]
     
     # check if message is valid
@@ -170,16 +170,12 @@ def message_react(token, message_id, react_id):
                 DATABASE['messages'][message_id]['reacts']['react_id'] = 1
                 DATABASE['messages'][message_id]['reacts']['u_ids'].append(user)
                 DATABASE['messages'][message_id]['reacts']['is_this_user_reacted'] = True
-                return {
-                    'message_id': message_id,
-                }
+                return {}
             else:
                 raise(InputError)
             
     
     raise(InputError)
-
-    return {}
 
 
 def message_unreact(token, message_id, react_id):
