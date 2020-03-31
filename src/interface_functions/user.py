@@ -3,8 +3,10 @@
 from error import AccessError, InputError
 from database_files.database_retrieval import get_users
 from database_files.database_retrieval import get_users_by_key
+from helper_functions.interface_function_helpers import is_valid_token
 import database_files.database as db
 import re
+
 
 # USER/PROFILE
 # Will use a GET request
@@ -17,7 +19,7 @@ import re
 def user_profile(token, u_id):
 
     # Raise an AccessError if not a valid token
-    #TODO
+    is_valid_token(token)
     
     # Go through all users and collect the correct user dictionary
     # If no users found with u_id, invalid u_id because user does not exist
@@ -38,7 +40,7 @@ def user_profile(token, u_id):
 def user_profile_setname(token, name_first, name_last):
     
     # Raise an AccessError if not a valid token
-    #TODO
+    is_valid_token(token)
 
     # Raise an InputError if either name is out of bounds
     if len(name_first) < 1 or len(name_first) > 50:
@@ -69,7 +71,7 @@ def user_profile_setname(token, name_first, name_last):
 def user_profile_setemail(token, email):
     
     # Raise an AccessError if not a valid token
-    #TODO
+    is_valid_token(token)
 
     # Inner helper function for determining a valid email
     def valid_email(string):
@@ -111,7 +113,7 @@ def user_profile_setemail(token, email):
 def user_profile_sethandle(token, handle_str):
     
     # Raise an AccessError if not a valid token
-    #TODO
+    is_valid_token(token)
 
     # Raise an InputError if either name is out of bounds
     if len(handle_str) < 2 or len(handle_str) > 20:
@@ -132,3 +134,4 @@ def user_profile_sethandle(token, handle_str):
             break
 
     return {}
+

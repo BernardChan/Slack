@@ -18,6 +18,7 @@ from interface_functions.channel import channel_invite
 from interface_functions.channel import channel_leave as leave
 from error import InputError, AccessError
 import helper_functions.test_helper_file as ch
+from interface_functions.workspace_reset import workspace_reset
 
 
 # Helper function that asserts that a member left a channel
@@ -35,9 +36,16 @@ def assert_user_leave(user_token, user_id, is_public):
 #            Tests            #
 ###############################
 
+
 # Check that the slackr owner may leave a channel
 def test_leave_slackr_owner():
-
+    if not ch.isFunctionImplemented(channel_invite, -1, -1, -1):
+        return
+    if not ch.isFunctionImplemented(leave, -1, -1):
+        return
+    workspace_reset()
+    ch.init_helper()
+    
     # Invite the slackr owner to the public and private channel
     channel_invite(ch.chan_owner_token, ch.channel_id, ch.slackr_owner_id)
     channel_invite(ch.chan_owner_token, ch.private_channel_id, ch.slackr_owner_id)
@@ -49,7 +57,8 @@ def test_leave_slackr_owner():
 
 # Check that the channel owner may leave a channel
 def test_leave_channel_owner():
-
+    if not ch.isFunctionImplemented(leave, -1, -1):
+        return
     # Assert channel owner is not a member of the public or private channels
     assert_user_leave(ch.chan_owner_token, ch.chan_owner_id, True)
     assert_user_leave(ch.chan_owner_token, ch.chan_owner_id, False)
@@ -57,7 +66,10 @@ def test_leave_channel_owner():
 
 # Check that a non-owner member may leave
 def test_leave_member():
-
+    if not ch.isFunctionImplemented(channel_invite, -1, -1, -1):
+        return
+    if not ch.isFunctionImplemented(leave, -1, -1):
+        return
     # Invite a normal member to both the public and private channel
     channel_invite(ch.chan_owner_token, ch.channel_id, ch.member_id)
     channel_invite(ch.chan_owner_token, ch.private_channel_id, ch.member_id)
@@ -72,6 +84,10 @@ def test_leave_member():
 #   User is not authorised (token invalid)
 #   Authorised User is not a member of the channel_id (but channel_id exists)
 def test_leave_access_error():
+    if not ch.isFunctionImplemented(leave, -1, -1):
+        return
+    workspace_reset()
+    ch.init_helper()
     assert(not ch.is_member(ch.member_id, True))
 
     # User is not part of the channel, raise AccessError exception
@@ -87,7 +103,10 @@ def test_leave_access_error():
 # Should raise when:
 #   channel_id does not exist
 def test_leave_input_error():
-
+    if not ch.isFunctionImplemented(leave, -1, -1):
+        return
     # Channel does not exist, raise InputError
     with pytest.raises(InputError):
         leave(ch.chan_owner_id, -100000)
+    workspace_reset()
+

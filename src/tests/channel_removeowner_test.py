@@ -27,6 +27,7 @@ import pytest
 from interface_functions import channel
 import helper_functions.test_helper_file as ch
 from error import InputError, AccessError
+from interface_functions.workspace_reset import workspace_reset
 
 
 # TODO: go back through the other functions and check what happens when user is not authorised or they choose a
@@ -38,7 +39,8 @@ from error import InputError, AccessError
 
 # Test when channel owner removes another channel owner's ownership
 def test_removeowner_simple():
-
+    workspace_reset()
+    ch.init_helper()
     # Set member as owner
     channel.channel_addowner(ch.chan_owner_token, ch.channel_id, ch.member_id)
     channel.channel_addowner(ch.chan_owner_token, ch.private_channel_id, ch.member_id)
@@ -53,6 +55,8 @@ def test_removeowner_simple():
 
 # Test when slackr owner removes ownership on channel owner and themselves
 def test_removeowner_slackr_owner():
+    if not ch.isFunctionImplemented(channel.channel_invite, -1, -1, -1):
+        return
 
     # Add the slackr owner to the channel
     channel.channel_invite(ch.chan_owner_token, ch.channel_id, ch.slackr_owner_id)
@@ -74,6 +78,8 @@ def test_removeowner_slackr_owner():
 
 # Test when channel owner removes ownership on slackr owner and themselves
 def test_removeowner_channel_owner():
+    if not ch.isFunctionImplemented(channel.channel_invite, -1, -1, -1):
+        return
 
     # Add the slackr owner to the channel
     channel.channel_invite(ch.chan_owner_token, ch.channel_id, ch.slackr_owner_id)
@@ -113,7 +119,8 @@ def test_removeowner_input_error():
 # Test AccessError when:
 #   Authorised user is not the owner of the channel
 def test_removeowner_access_error():
-
+    
     # Authorised user is not an owner
     with pytest.raises(AccessError):
         remove_owner(ch.member_token, ch.channel_id, ch.member_id)
+    workspace_reset()

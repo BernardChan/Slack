@@ -52,3 +52,7 @@ def is_slackr_admin(token):
     match = db.get_users_by_key("token", token)
     if (match[0]["permission_id"] != 1):
         raise AccessError(description="User is not an admin or owner!")
+
+def is_valid_token(token):
+    if db.get_users_by_key("token", token) == []:
+        raise AccessError(description="The given token was not found!")

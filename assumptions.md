@@ -26,7 +26,7 @@
 - Assume that not having a channel owner is fine
 
 ## `channels_create()`
-- Assume that user joins channel immediately becomes channel owner and a member
+- Assume that user joins channel immediately and becomes channel owner and a member
 
 ## `search()`
 - Assume that search() is case sensitive
