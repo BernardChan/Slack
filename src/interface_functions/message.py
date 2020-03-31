@@ -34,12 +34,46 @@ def message_send(token, channel_id, message):
 
 
 def message_remove(token, message_id):
-    return "Not Implemented"
+    message = DATABASE['messages'][message_id]['message']
+    channel_id = DATABASE['messages'][message_id]['channel_id']
+​
+    if user == DATABASE[messages][message_id]['u_id'] or db.is_owner_in_channel("token", token , channel_id) == True:
+        #removing message
+        for m in DATABASE['messages']:
+            if m['message_id'] == message_id:
+                DATABASE['messages'].remove(m)
+                return {
+                    'message_id': message_id,
+                }
+    else: 
+        raise(AccessError)
+            
+    raise(InputError)
+
+    return {}
 
 
 def message_edit(token, message_id, message):
-    return "Not Implemented"
+    user = db.get_users_by_key("token", token)[0]
+    channel_id = DATABASE['messages'][message_id]['channel_id']
+​
+    
+    if user == DATABASE[messages][message_id]['u_id'] or db.is_owner_in_channel("token", token , channel_id) == True:
+        #removing message
+        if message == '':
+            message_remove(token, message_id)
+        else:
+            for m in DATABASE['messages']:
+                if m['message_id'] == message_id:
+                    m['message'] == message
+        
+        return {
+            'message_id': message_id,
+        }
+    else:
+        raise(AccessError)
 
+    return {}
 
 
 # File for message/sendlater(token, channel_id, message, time_sent)
@@ -114,8 +148,128 @@ if __name__ == "__main__":
 
 
 def message_react(token, message_id, react_id):
-    return "Not Implemented"
+    message = DATABASE['messages'][message_id]['message']
+    channel_id = DATABASE['messages'][message_id]['channel_id']
+    user = db.get_users_by_key("token", token)[0]
+    
+    # check if message is valid
+    help.is_message_valid(token, message, channel_id)
+    
+    #checking if user is a member
+    help.is_user_valid_channel_member(token, channel_id)
+​
+    #checking if react_id is valid
+    if react_id != 1:
+        raise(InputError)
+    
+    # adds user to members list in channel
+    for m in DATABASE['messages']:
+        if m['message_id'] == message_id:
+            #user has not yet reacted
+            if user not in DATABASE['messages'][message_id]['reacts']['u_ids']:
+                DATABASE['messages'][message_id]['reacts']['react_id'] = 1
+                DATABASE['messages'][message_id]['reacts']['u_ids'].append(user)
+                DATABASE['messages'][message_id]['reacts']['is_this_user_reacted'] = True
+                return {
+                    'message_id': message_id,
+                }
+            else:
+                raise(InputError)
+            
+    
+    raise(InputError)
+
+    return {}
 
 
 def message_unreact(token, message_id, react_id):
-    return "Not Implemented"
+    message = DATABASE['messages'][message_id]['message']
+    channel_id = DATABASE['messages'][message_id]['channel_id']
+    user = db.get_users_by_key("token", token)[0]
+    
+    # check if message is valid
+    help.is_message_valid(token, message, channel_id)
+    
+    #checking if user is a member
+    help.is_user_valid_channel_member(token, channel_id)
+​
+    #checking if react_id is valid
+    if react_id != 1:
+        raise(InputError)
+    
+    # adds user to members list in channel
+    for m in DATABASE['messages']:
+        if m['message_id'] == message_id:
+            #user has not yet reacted
+            if user not in DATABASE['messages'][message_id]['reacts']['u_ids']:
+                DATABASE['messages'][message_id]['reacts']['u_ids'].remove(user)
+                if len(DATABASE['messages'][message_id]['reacts']['u_ids']) == 0:
+                    DATABASE['messages'][message_id]['reacts']['is_this_user_reacted'] = False
+                return {
+                    'message_id': message_id,
+                }
+            else:
+                raise(InputError)
+            
+    
+    raise(InputError)
+
+    return {}
+
+def message_pin(token, message_id):
+        
+    message = DATABASE['messages'][message_id]['message']
+    channel_id = DATABASE['messages'][message_id]['channel_id']
+    
+    # check if message is valid
+    help.is_message_valid(token, message, channel_id)
+    
+    #checking if user is a member
+    help.is_user_valid_channel_member(token, channel_id)
+​
+    #checking if user is an admin or owner
+    help.is_slackr_admin(token)
+    
+    # adds user to members list in channel
+    for m in DATABASE['messages']:
+        if m['message_id'] == message_id:
+            if DATABASE['messages'][message_id]['is_pinned'] == False:
+                DATABASE['messages'][message_id]['is_pinned'] = True
+            else:
+                raise(InputError)
+            return {
+                'message_id': message_id,
+            }
+    #if return is not used, message is not found in existing messages
+    raise(InputError)
+
+    return {}
+​
+def message_unpin(token, message_id):
+        
+    message = DATABASE['messages'][message_id]['message']
+    channel_id = DATABASE['messages'][message_id]['channel_id']
+    
+    # check if message is valid
+    help.is_message_valid(token, message, channel_id)
+    
+    #checking if user is a member
+    help.is_user_valid_channel_member(token, channel_id)
+​
+    #checking if user is an admin or owner
+    help.is_slackr_admin(token)
+    
+    # adds user to members list in channel
+    for m in DATABASE['messages']:
+        if m['message_id'] == message_id:
+            if DATABASE['messages'][message_id]['is_pinned'] == True:
+                DATABASE['messages'][message_id]['is_pinned'] = False
+            else:
+                raise(InputError)
+            return {
+                'message_id': message_id,
+            }
+    #if return is not used, message is not found in existing messages
+    raise(InputError)
+
+    return {}
