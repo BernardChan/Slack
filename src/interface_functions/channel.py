@@ -89,7 +89,7 @@ def channel_messages(token, channel_id, start):
 # TODO: Has problems similar to channel_join and leave
 def channel_leave(token, channel_id):
     # include valid token function here, stub function atm
-    help.is_token_valid(token):
+    help.is_token_valid(token)
     
     # check if channel is valid
     help.check_channel_validity(channel_id)
@@ -149,7 +149,7 @@ def is_channel_owner(channel, u_id):
 
 def channel_addowner(token, channel_id, u_id):
     # include valid token function here, stub function atm
-    help.is_token_valid(token):
+    help.is_token_valid(token)
     
     # check if channel is valid
     help.check_channel_validity(channel_id)
@@ -173,7 +173,7 @@ def channel_addowner(token, channel_id, u_id):
 def channel_removeowner(token, channel_id, u_id):
 
     # include valid token function here, stub function atm
-    help.is_token_valid(token):
+    help.is_token_valid(token)
     
     # check if channel is valid
     help.check_channel_validity(channel_id)
