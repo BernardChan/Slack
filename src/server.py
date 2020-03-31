@@ -48,6 +48,13 @@ def catch_all(dummy):
     else:
         return dumps(request.args)
 
+# TODO: delete this as well
+import database_files.database as db
+
+@APP.route("/get/database", methods=["GET"])
+def get_database():
+    return dumps(db.DATABASE)
+
 '''
 ----------------------------------------------------------------------------------
 AUTH Routes
