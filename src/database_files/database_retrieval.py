@@ -90,6 +90,22 @@ def is_user_in_channel(key, value, channel_id):
     return False
 
 
+# returns boolean if a user is owner of a channel
+def is_owner_in_channel(key, value, channel_id):
+    channels = get_channels()
+
+    # Go through the list of channels and check only the ones matching channel_id
+    for channel in channels:
+        if channel["channel_id"] == channel_id:
+
+            # Find the member with the matching key/value pair.
+            for member in channel["owner_members"]:
+                if member[key] == value:
+                    return True
+    return False
+
+
+
 # Gets all the channels a user is a part of
 def get_user_channels_by_key(key, value):
     channels = get_channels()

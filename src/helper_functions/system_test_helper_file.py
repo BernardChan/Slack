@@ -52,7 +52,7 @@ def make_put_request(route, dict):
 
 # Reset the database
 def reset():
-    requests.get(f"{BASE_URL}/workspace/reset")
+    make_post_request("workspace/reset", {})
 
 
 # TODO: move all of these into functions so as not to call all functions whenever this file is called

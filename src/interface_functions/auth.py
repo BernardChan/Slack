@@ -41,6 +41,7 @@ def auth_register(email, password, name_first, name_last):
         name_first, name_last, ah.create_handle(name_first, name_last), \
         u_id_returned \
     )
+    print(f"register dict in auth register was {register_dict}")
     return register_dict 
  
         

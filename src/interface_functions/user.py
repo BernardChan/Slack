@@ -25,8 +25,16 @@ def user_profile(token, u_id):
     # If no users found with u_id, invalid u_id because user does not exist
     if get_users_by_key("u_id", u_id) == []:
         raise InputError(description="Invalid user id!")
-    else:
-        profile = get_users_by_key("u_id", u_id)[0]
+    # full user also contains permission_id, password, token, etc.
+    full_user = get_users_by_key("u_id", u_id)[0]
+
+    profile = {
+        "u_id": full_user["u_id"],
+        "email": full_user["email"],
+        "name_first": full_user["name_first"],
+        "name_last": full_user["name_last"],
+        "handle_str": full_user["handle_str"]
+    }
 
     return profile
 

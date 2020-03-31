@@ -11,6 +11,8 @@ import interface_functions.channels as chs
 import interface_functions.user as user
 import interface_functions.admin_userpermission_change as admin
 import interface_functions.channels as channels
+import interface_functions.auth as auth
+import interface_functions.workspace_reset as wr
 
 def defaultHandler(err):
     response = err.get_response()
@@ -46,43 +48,222 @@ def catch_all(dummy):
     else:
         return dumps(request.args)
 
+# TODO: delete this as well
+import database_files.database as db
 
+@APP.route("/get/database", methods=["GET"])
+def get_database():
+    return dumps(db.DATABASE)
 
-@APP.route("/search", methods=['GET'])
-def search():
-    query = request.args.get("query_str")
-    token = request.args.get("token")
+'''
+----------------------------------------------------------------------------------
+AUTH Routes
+----------------------------------------------------------------------------------
+'''
+@APP.route("/auth/register", methods=['POST'])
+def auth_register():
+    resp = request.get_json()
+    email = resp["email"]
+    password = resp["password"]
+    name_first = resp["name_first"]
+    name_last = resp["name_last"]
+    return dumps(auth.auth_register(email, password, name_first, name_last))
 
-    return dumps(other.search(token, query))
+@APP.route("/auth/login", methods=['POST'])
+def auth_login():
+    resp = request.get_json()
+    email = resp["email"]
+    password = resp["password"]
+    return dumps(auth.auth_login(email, password))
 
-
-@APP.route("/standup/start", methods=['POST'])
-def standup_start():
+@APP.route("/auth/logout", methods=['POST'])
+def auth_logout():
     resp = request.get_json()
     token = resp["token"]
-    channel_id = int(resp["channel_id"])
-    length = int(resp["length"])
+    return dumps(auth.auth_logout(token))
 
-    return dumps(su.standup_start(token, int(channel_id), int(length)))
-
-
-@APP.route("/standup/active", methods=['GET'])
-def standup_active():
-    token = request.args.get("token")
-    channel_id = request.args.get("channel_id")
-
-    return dumps(su.standup_active(token, int(channel_id)))
-
-
-@APP.route("/standup/send", methods=['POST'])
-def standup_send():
+'''
+----------------------------------------------------------------------------------
+CHANNEL Routes
+----------------------------------------------------------------------------------
+'''
+"""
+@APP.route("/channel/invite", methods=['POST'])
+def channel_invite():
     resp = request.get_json()
+    token = resp["token"]
+    channel_id = resp["channel_id"]
+    u_id = resp["u_id"]
+    return dumps(ch.channel_invite(token, channel_id, u_id))
+"""
+
+@APP.route("/channel/details", methods=['GET'])
+def channel_details():
+    resp = request.args
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+
+    return dumps(ch.channel_details(token, channel_id))
+
+@APP.route("/channel/messages", methods=['GET'])
+def channel_messages():
+    resp = request.args
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    start = int(resp["start"])
+
+    return dumps(ch.channel_messages(token, channel_id, start))
+
+"""
+@APP.route("/channel/leave", methods=['POST'])
+def channel_leave():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = resp["channel_id"]
+    return dumps(ch.channel_leave(token, channel_id))
+"""
+
+"""
+@APP.route("/channel/join", methods=['POST'])
+def channel_join():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = resp["channel_id"]
+    return dumps(ch.channel_join(token, channel_id))
+"""
+
+@APP.route("/channel/addowner", methods=['POST'])
+def channel_addowner():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = resp["channel_id"]
+    u_id = resp["u_id"]
+    return dumps(ch.channel_addowner(token, channel_id, u_id))
+
+@APP.route("/channel/removeowner", methods=['POST'])
+def channel_removeowner():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = resp["channel_id"]
+    u_id = resp["u_id"]
+    return dumps(ch.channel_removeowner(token, channel_id, u_id))
+
+'''
+----------------------------------------------------------------------------------
+CHANNELS Routes
+----------------------------------------------------------------------------------
+'''
+@APP.route("/channels/list", methods=['GET'])
+def channels_list():
+    token = request.args.get("token")
+
+    return dumps(channels.channels_list(token))
+
+@APP.route("/channels/listall", methods=['GET'])
+def channels_listall():
+    token = request.args.get("token")
+    
+    return dumps(channels.channels_listall(token))
+
+@APP.route("/channels/create", methods=['POST'])
+def channels_create():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    name = resp["name"]
+    is_public = resp["is_public"]
+
+    return dumps(chs.channels_create(token, name, is_public))
+
+'''
+----------------------------------------------------------------------------------
+MESSAGE Routes
+----------------------------------------------------------------------------------
+'''
+@APP.route("/message/send", methods=['POST'])
+def message_send():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
     token = resp["token"]
     channel_id = int(resp["channel_id"])
     message = resp["message"]
 
-    return dumps(su.standup_send(token, channel_id, message))
+    return dumps(msg.message_send(token, channel_id, message))
 
+@APP.route("/message/sendlater", methods=['POST'])
+def message_sendlater():
+    resp = request.get_json()
+
+    # Get the relevant data from the response
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    message = resp["message"]
+    time_sent = int(resp["time_sent"])
+
+    return dumps(msg.send_later(token, channel_id, message, time_sent))
+
+"""
+@APP.route("/message/react", methods=['POST'])
+def message_react():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    react_id = resp["react_id"]
+    return dumps(msg.message_react(token, message_id, react_id))
+"""
+
+"""
+@APP.route("/message/unreact", methods=['POST'])
+def message_unreact():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    react_id = resp["react_id"]
+    return dumps(msg.message_unreact(token, message_id, react_id))
+"""
+
+"""
+@APP.route("/message/pin", methods=['POST'])
+def message_pin():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    return dumps(msg.message_pin(token, message_id))
+"""
+
+"""
+@APP.route("/message/unpin", methods=['POST'])
+def message_unpin():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    return dumps(msg.message_unpin(token, message_id))
+"""
+
+"""
+@APP.route("/message/remove", methods=['DELETE'])
+def message_remove():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    return dumps(msg.message_remove(token, message_id))
+"""
+
+"""
+@APP.route("/message/edit", methods=['PUT'])
+def message_edit():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    message = resp["message"]
+    return dumps(msg.message_edit(token, message_id, message))
+"""
 
 '''
 ----------------------------------------------------------------------------------
@@ -122,8 +303,60 @@ def user_profile_sethandle():
     return dumps(user.user_profile_sethandle(token, handle_str))
 
 '''
-## ADMIN ##
+----------------------------------------------------------------------------------
+USERS Routes
+----------------------------------------------------------------------------------
 '''
+@APP.route("/users/all", methods=['GET'])
+def users_all():
+    token = request.args.get("token")
+    return dumps(other.users_all(token))
+
+'''
+----------------------------------------------------------------------------------
+STANDUP Routes
+----------------------------------------------------------------------------------
+'''
+@APP.route("/standup/start", methods=['POST'])
+def standup_start():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    length = int(resp["length"])
+
+    return dumps(su.standup_start(token, int(channel_id), int(length)))
+
+
+@APP.route("/standup/active", methods=['GET'])
+def standup_active():
+    token = request.args.get("token")
+    channel_id = request.args.get("channel_id")
+
+    return dumps(su.standup_active(token, int(channel_id)))
+
+
+@APP.route("/standup/send", methods=['POST'])
+def standup_send():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    message = resp["message"]
+
+    return dumps(su.standup_send(token, channel_id, message))
+
+
+'''
+----------------------------------------------------------------------------------
+OTHER Routes
+----------------------------------------------------------------------------------
+'''
+@APP.route("/search", methods=['GET'])
+def search():
+    query = request.args.get("query_str")
+    token = request.args.get("token")
+
+    return dumps(other.search(token, query))
+
 @APP.route("/admin/userpermission/change", methods=['POST'])
 def admin_userpermission_change():
     data = request.get_json()
@@ -133,90 +366,9 @@ def admin_userpermission_change():
 
     return dumps(admin.admin_userpermission_change(token, u_id, permission_id))
 
-
-'''
-----------------------------------------------------------------------------------
-Channel Routes
-----------------------------------------------------------------------------------
-'''
-@APP.route("/channels/list", methods=['GET'])
-def channels_list():
-    token = request.args.get("token")
-
-    return dumps(channels.channels_list(token))
-
-@APP.route("/channels/listall", methods=['GET'])
-def channels_listall():
-    token = request.args.get("token")
-    
-    return dumps(channels.channels_listall(token))
-
-
-@APP.route("/message/sendlater", methods=['POST'])
-def message_sendlater():
-    resp = request.get_json()
-
-    # Get the relevant data from the response
-    token = resp["token"]
-    channel_id = int(resp["channel_id"])
-    message = resp["message"]
-    time_sent = int(resp["time_sent"])
-
-    return dumps(msg.send_later(token, channel_id, message, time_sent))
-
-
-@APP.route("/channel/messages", methods=['GET'])
-def channel_messages():
-    resp = request.args
-
-    # Get the relevant data from the response
-    token = resp["token"]
-    channel_id = int(resp["channel_id"])
-    start = int(resp["start"])
-
-    return dumps(ch.channel_messages(token, channel_id, start))
-
-
-@APP.route("/channel/details", methods=['GET'])
-def channel_details():
-    resp = request.args
-
-    # Get the relevant data from the response
-    token = resp["token"]
-    channel_id = int(resp["channel_id"])
-
-    return dumps(ch.channel_details(token, channel_id))
-
-
-@APP.route("/message/send", methods=['POST'])
-def message_send():
-    resp = request.get_json()
-
-    # Get the relevant data from the response
-    token = resp["token"]
-    channel_id = int(resp["channel_id"])
-    message = resp["message"]
-
-    return dumps(msg.message_send(token, channel_id, message))
-
-
-@APP.route("/channels/create", methods=['POST'])
-def channels_create():
-    resp = request.get_json()
-
-    # Get the relevant data from the response
-    token = resp["token"]
-    name = resp["name"]
-    is_public = resp["is_public"]
-
-    return dumps(chs.channels_create(token, name, is_public))
-
-
-'''
-----------------------------------------------------------------------------------
-Auth Routes
-----------------------------------------------------------------------------------
-'''
+@APP.route("/workspace/reset", methods=['POST'])
+def workspace_reset():
+    return dumps(wr.workspace_reset())
 
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 42069))

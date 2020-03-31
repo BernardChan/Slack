@@ -15,8 +15,9 @@ def test_channel_addowner_simple():
         "u_id": user_u_id
     }
 
+
     # Asert that the return value was correct and
     # that the member was added as a member and owner (under assumptions, this is the case)
-    assert not ch.is_owner(user_token, channel_id)
     assert ch.make_post_request("channel/addowner", data) == {}
+
     assert ch.is_owner(user_token, channel_id)
