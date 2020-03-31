@@ -163,7 +163,7 @@ def channel_addowner(token, channel_id, u_id):
     # check if channel is valid
     help.check_channel_validity(channel_id)
 
-    # check if user is channel owner or slack owner
+    # check if user is channel owner
     if not db.is_owner_in_channel("token", token, channel_id):
         raise AccessError("You are not the channel owner, so don't have permission!")
     
@@ -190,6 +190,10 @@ def channel_removeowner(token, channel_id, u_id):
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
+
+    # check if user is channel owner
+    if not db.is_owner_in_channel("token", token, channel_id):
+        raise AccessError("You are not the channel owner, so don't have permission!")
 
     # check if user is a member of the channel
     if not db.is_owner_in_channel("u_id", u_id, channel_id):
