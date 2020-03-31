@@ -14,7 +14,7 @@ def message_send(token, channel_id, message):
 
     # Get the messages list from the database and append the current message to it
     messages = db.get_messages()
-    message_id = time.time()
+    message_id = int(time.time()*10000000000)
     user = db.get_users_by_key("token", token)[0]
 
     messages.insert(0, {
