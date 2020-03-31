@@ -165,16 +165,16 @@ def channel_addowner(token, channel_id, u_id):
     # check if channel is valid
     help.check_channel_validity(channel_id)
 
-    # check if user is a member of the channel
-    help.is_user_valid_channel_member(token, channel_id)
-
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
-    print(channel)
     # checks if authorized user is already an admin
     if is_channel_owner(channel, u_id):
         raise InputError(f"User with user_id {u_id} is already the channel owner")
 
     user = db.get_users_by_key("u_id", u_id)[0]
+    if not db.is_user_in_channel("u_id", u_id, channel_id):
+        channel["members"].append(user)
+    
+   
     channel["owner_members"].append(user)
 
     return {
@@ -191,7 +191,8 @@ def channel_removeowner(token, channel_id, u_id):
     help.check_channel_validity(channel_id)
 
     # check if user is a member of the channel
-    help.is_user_valid_channel_member(token, channel_id)
+    if not db.is_owner_in_channel("u_id", u_id, channel_id):
+        raise InputError("User is not owner")
 
     # checks if authorized user is already an admin
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
