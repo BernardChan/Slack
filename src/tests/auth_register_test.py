@@ -114,8 +114,8 @@ register() interconnected validation functions
 def test_auth_register_return():
     workspace_reset()
     register1 = auth_register("bill.gates@microsoft.com", "123456", "Bill", "Gates")
-    assert is_valid_uid(reg1['u_id'])
-    assert is_valid_token(reg1['token'])
+    is_valid_uid(reg1['u_id'])
+    is_valid_token(reg1['token'])
     # Function 2 D
  
 # test for duplicate registration attempts with the same user_profile

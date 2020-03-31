@@ -3,21 +3,16 @@ import helper_functions.interface_function_helpers as help
 from database_files.database import DATABASE
 from error import InputError
 
-
-def channel_invite(token, channel_id, u_id):
-    return "Not Implemented"
-
-
 # This needs to be fixed. members=DATABASE etc. doesn't work.
 # Assigning the database to members does nothing. It isn't editing the database
 # This needs to be fixed
-def WIP_channel_invite(token, channel_id, u_id):
-    # include valid token function here, stub function atm
-    def is_token_valid(token):
-        pass
+def channel_invite(token, channel_id, u_id):
+    # include valid token function here, stub function atm (fixed)
+    help.is_token_valid(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
+    
     # check if user is a member of the channel
     help.is_user_valid_channel_member(token, channel_id)
 
@@ -90,16 +85,12 @@ def channel_messages(token, channel_id, start):
         "end": end,
     }
 
-def channel_leave(token, channel_id):
-    return "Not Implemented"
-
 
 # TODO: Has problems similar to channel_join and leave
-def WIP_channel_leave(token, channel_id):
+def channel_leave(token, channel_id):
     # include valid token function here, stub function atm
-    def is_token_valid(token):
-        pass
-
+    help.is_token_valid(token):
+    
     # check if channel is valid
     help.check_channel_validity(channel_id)
 
@@ -125,8 +116,7 @@ def channel_join(token, channel_id):
 # channel is public. Non-admins should be able to join public channels.
 def WIP_channel_join(token, channel_id):
     # include valid token function here, stub function atm
-    def is_token_valid(token):
-        pass
+    help.is_token_valid(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
@@ -159,9 +149,8 @@ def is_channel_owner(channel, u_id):
 
 def channel_addowner(token, channel_id, u_id):
     # include valid token function here, stub function atm
-    def is_token_valid(token):
-        pass
-
+    help.is_token_valid(token):
+    
     # check if channel is valid
     help.check_channel_validity(channel_id)
 
@@ -184,9 +173,8 @@ def channel_addowner(token, channel_id, u_id):
 def channel_removeowner(token, channel_id, u_id):
 
     # include valid token function here, stub function atm
-    def is_token_valid(token):
-        pass
-
+    help.is_token_valid(token):
+    
     # check if channel is valid
     help.check_channel_validity(channel_id)
 
@@ -204,3 +192,6 @@ def channel_removeowner(token, channel_id, u_id):
 
     return {
     }
+    
+if __name__ == '__main__':
+    pass
