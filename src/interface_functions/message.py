@@ -36,7 +36,7 @@ def message_send(token, channel_id, message):
 def message_remove(token, message_id):
     message = DATABASE['messages'][message_id]['message']
     channel_id = DATABASE['messages'][message_id]['channel_id']
-​
+
     if user == DATABASE[messages][message_id]['u_id'] or db.is_owner_in_channel("token", token , channel_id) == True:
         #removing message
         for m in DATABASE['messages']:
@@ -56,7 +56,6 @@ def message_remove(token, message_id):
 def message_edit(token, message_id, message):
     user = db.get_users_by_key("token", token)[0]
     channel_id = DATABASE['messages'][message_id]['channel_id']
-​
     
     if user == DATABASE[messages][message_id]['u_id'] or db.is_owner_in_channel("token", token , channel_id) == True:
         #removing message
@@ -157,7 +156,7 @@ def message_react(token, message_id, react_id):
     
     #checking if user is a member
     help.is_user_valid_channel_member(token, channel_id)
-​
+
     #checking if react_id is valid
     if react_id != 1:
         raise(InputError)
@@ -192,7 +191,7 @@ def message_unreact(token, message_id, react_id):
     
     #checking if user is a member
     help.is_user_valid_channel_member(token, channel_id)
-​
+
     #checking if react_id is valid
     if react_id != 1:
         raise(InputError)
@@ -226,7 +225,7 @@ def message_pin(token, message_id):
     
     #checking if user is a member
     help.is_user_valid_channel_member(token, channel_id)
-​
+
     #checking if user is an admin or owner
     help.is_slackr_admin(token)
     
@@ -244,7 +243,7 @@ def message_pin(token, message_id):
     raise(InputError)
 
     return {}
-​
+
 def message_unpin(token, message_id):
         
     message = DATABASE['messages'][message_id]['message']
@@ -255,7 +254,7 @@ def message_unpin(token, message_id):
     
     #checking if user is a member
     help.is_user_valid_channel_member(token, channel_id)
-​
+
     #checking if user is an admin or owner
     help.is_slackr_admin(token)
     
