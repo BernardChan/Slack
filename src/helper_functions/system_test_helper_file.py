@@ -163,10 +163,3 @@ def system_send_message(token, channel_id, message):
 
     # Send a message to the channel
     make_post_request("message/send", data)
-
-
-if __name__ == "__main__":
-    foo = make_get_request("easdcho", {"token": "asd", "ch_id": 1})
-    print(foo)
-
-    # print(foo["token"])
