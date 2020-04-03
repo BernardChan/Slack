@@ -1,5 +1,5 @@
-import helper_functions.system_test_helper_file as ch
 import requests
+import helper_functions.system_test_helper_file as ch
 
 # Test is very basic since it only needs to test the HTTP request portion of
 # the function, rather than their functionality (which is covered by integration tests)
@@ -78,7 +78,7 @@ def test_channel_addowner_simple():
     # Reset database and get relevant inputs
     # Create the user and owner of the channel, and the channel itself
     ch.reset()
-    owner_u_id, owner_token = ch.get_channel_owner()
+    owner_token = ch.get_channel_owner()[1]
     user_u_id, user_token = ch.get_member()
     channel_id = ch.create_public_channel(owner_token)
 
@@ -99,7 +99,7 @@ def test_channel_removeowner_simple():
     # Reset database and get relevant inputs
     # Create the user and owner of the channel, and the channel itself
     ch.reset()
-    owner_u_id, owner_token = ch.get_channel_owner()
+    owner_token = ch.get_channel_owner()[1]
     user_u_id, user_token = ch.get_member()
     channel_id = ch.create_public_channel(owner_token)
 
@@ -139,17 +139,17 @@ def test_user_profile_setemail_simple():
 
 def test_user_profile_sethandle_simple():
     # reset database
-    helper.reset()
+    ch.reset()
     # make member and inputs dictionary
-    u_id, token = helper.get_member()
+    u_id, token = ch.get_member()
     data = {
         "token": token,
         "handle_str": "newhandle"
     }
     # assert returns correct output
-    assert helper.make_put_request("user/profile/sethandle", data) == {}
+    assert ch.make_put_request("user/profile/sethandle", data) == {}
     # check that handle was changed
-    user = helper.get_user_details(token, u_id)
+    user = ch.get_user_details(token, u_id)
     assert user["handle_str"] == "newhandle"
 
 
@@ -202,7 +202,7 @@ def test_user_profile_simple():
 def test_search_simple():
     # Reset database and get relevant inputs
     ch.reset()
-    u_id, token = ch.get_channel_owner()
+    token = ch.get_channel_owner()[1]
     channel_id = ch.create_public_channel(token)
 
     data = {
