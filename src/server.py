@@ -371,6 +371,12 @@ def admin_userpermission_change():
 
 @APP.route("/admin/user/remove", methods=["DELETE"])
 def admin_user_remove():
+    """
+    Sends the DELETE request to
+    remove the user with the given u_id from the database
+
+    :return: Returns a json object containing the dictionary from user remove
+    """
     data = request.get_json()
     token = data["token"]
     u_id = int(data["u_id"])
