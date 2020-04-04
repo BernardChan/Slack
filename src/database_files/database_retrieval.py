@@ -43,7 +43,6 @@ def get_channel_messages(channel_id):
 # gets channels by key
 def get_channels_by_key(key, value):
     channels = get_channels()
-
     return [channel for channel in channels if channel[key] == value]
     
 # gets the standup queue in channel_id

@@ -16,6 +16,7 @@ from error import AccessError, InputError
 import database_files.database_update as du
 import database_files.database_retrieval as dr
 import helper_functions.auth_helper as ah
+import helper_functions.interface_function_helpers as help
 import pytest
 import time
 
@@ -36,12 +37,12 @@ def auth_register(email, password, name_first, name_last):
         raise InputError(description = 'Email address is already being used by another user')
 
     # Stage 4 - Store all user information in the database
-    u_id_returned = ah.get_u_id()
+    u_id_returned = help.get_unique_id()
     register_dict = du.add_user_to_database(email, ah.hash_data(password),\
         name_first, name_last, ah.create_handle(name_first, name_last), \
         u_id_returned \
     )
-    print(f"register dict in auth register was {register_dict}")
+
     return register_dict 
  
         
@@ -49,7 +50,6 @@ def auth_login(email, password):
     # Validate Email
     ah.validate_email(email)
     user_rec =  dr.get_users_by_key("email", email)
-    #print(user_rec)
     if user_rec == []:
         raise InputError(description = 'Email entered does not belong to a user')
     
