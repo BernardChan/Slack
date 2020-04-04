@@ -67,7 +67,7 @@ def login_user(email):
     for user in db.DATABASE['users']:
         if user["email"] == email:
             token = get_valid_token(email)
-            db.DATABASE['users'][user['u_id'] - 1]['token'] = token
+            user['token'] = token
             u_id = user['u_id']
 
     #db.pickle_database()
@@ -84,7 +84,7 @@ def logout_user(token):
     is_success = False
     for user in db.DATABASE['users']:
         if user["token"] == token:
-            db.DATABASE['users'][user['u_id'] - 1]['token'] = ""
+            user['token'] = ""
             is_success = True
     #db.pickle_database()
     return is_success
