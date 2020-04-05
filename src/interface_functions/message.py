@@ -1,3 +1,4 @@
+# pylint: disable=W0105, W0622, W0603
 import threading
 import time
 import sched
@@ -5,7 +6,7 @@ import database_files.database_retrieval as db
 import helper_functions.interface_function_helpers as help
 from error import InputError
 
-# pylint disable=W0105
+
 """
 File for functions relating to messages in Slackr
 """
@@ -25,15 +26,14 @@ def insert_message(token, channel_id, message, message_id):
     user = db.get_users_by_key("token", token)[0]
 
     messages.insert(0, {
-            "message_id": message_id,
-            "u_id": user["u_id"],
-            "message": message,
-            "time_created": message_id,
-            "reacts": {"react_id": None, "u_ids": [], "is_this_user_reacted": False},
-            "is_pinned": False,
-            "channel_id": channel_id,
-        }
-    )
+        "message_id": message_id,
+        "u_id": user["u_id"],
+        "message": message,
+        "time_created": message_id,
+        "reacts": {"react_id": None, "u_ids": [], "is_this_user_reacted": False},
+        "is_pinned": False,
+        "channel_id": channel_id,
+        })
 
 
 def message_send(token, channel_id, message):
@@ -86,8 +86,8 @@ def message_edit(token, message_id, message):
 # - message_send()
 
 # Message queue for sending a message later
-q = []
-do_work = threading.Event()
+Q = []
+DO_WORK = threading.Event()
 
 
 # Dequeues send_later_queue whenever a new item is added to it
@@ -96,33 +96,33 @@ def set_sched():
     Dequeues the send later message queue containing all the messages to be sent at a later date
     :return: returns nothing
     """
-    global q, do_work
+    global Q, DO_WORK
     while True:
 
         # If there are items to dequeue
-        if q:
+        if Q:
 
             # get the time_sent, message and priority from send_later_queue
-            time_sent = q[0]["time_sent"]
-            message = q[0]["message"]
-            priority = q[0]["priority"]
-            token = q[0]["token"]
-            channel_id = q[0]["channel_id"]
-            message_id = q[0]["message_id"]
+            time_sent = Q[0]["time_sent"]
+            message = Q[0]["message"]
+            priority = Q[0]["priority"]
+            token = Q[0]["token"]
+            channel_id = Q[0]["channel_id"]
+            message_id = Q[0]["message_id"]
 
-            del(q[0])
+            del Q[0]
 
             # Create a schedule object to be run at a later date
-            s = sched.scheduler(time.time, time.sleep)
-            s.enterabs(
+            sch = sched.scheduler(time.time, time.sleep)
+            sch.enterabs(
                 time_sent,
                 priority,
                 insert_message, [token, channel_id, message, message_id]
             )
-            s.run()
+            sch.run()
         else:
-            do_work = threading.Event()
-            do_work.wait()
+            DO_WORK = threading.Event()
+            DO_WORK.wait()
 
 
 # Adds a message to be sent at a later date
@@ -141,8 +141,8 @@ def send_later(token, channel_id, message, time_sent):
     if time_sent - curr < 0:
         raise InputError("Time given was in the past")
 
-    global do_work
-    q.append(
+    global DO_WORK
+    Q.append(
         {"message": message,
          "time_sent": time_sent,
          "priority": time.time(),
@@ -150,7 +150,7 @@ def send_later(token, channel_id, message, time_sent):
          "channel_id": channel_id,
          "message_id": message_id
          })
-    do_work.set()
+    DO_WORK.set()
 
     return {"message_id": message_id}
 

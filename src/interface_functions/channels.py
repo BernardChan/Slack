@@ -1,3 +1,4 @@
+# pylint: disable=W0105, W0622
 from error import InputError
 import database_files.database_retrieval as db
 from database_files.database_retrieval import get_user_channels_by_key
@@ -6,7 +7,6 @@ from helper_functions.interface_function_helpers import is_valid_token
 import helper_functions.interface_function_helpers as help
 
 
-# pylint disable=W0105
 """
 File for functions relating to channels in Slackr
 """
