@@ -1,8 +1,12 @@
 from database_files.database_retrieval import get_user_channels_by_key, get_channel_messages
-from helper_functions.interface_function_helpers import is_valid_token
 from database_files.database_retrieval import get_users
+from helper_functions.interface_function_helpers import is_valid_token
 
+<<<<<<< HEAD
+# pylint: disable=W0105
+=======
 # pylint disable=W0105
+>>>>>>> e8b4bfe1c4c083248d32eb739f0bfd540534f443
 """
 Module containing users/all, and search/ functions. This module is for functions that do not
 fit the description of other modules.
@@ -43,7 +47,7 @@ def search(token, query_str):
     :return: list of messages matching the query string
     """
 
-    
+
     user_channels = get_user_channels_by_key("token", token)
     found_messages = []
 
