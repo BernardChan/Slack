@@ -5,16 +5,23 @@ import database_files.database_retrieval as db
 import helper_functions.interface_function_helpers as help
 from error import InputError
 
+# pylint disable=W0105
+"""
+File for functions relating to messages in Slackr
+"""
 
-def message_send(token, channel_id, message):
 
-    # Error checking
-    help.check_message_length(message)
-    help.check_member_status_of_channel(token, channel_id)
-
+def insert_message(token, channel_id, message, message_id):
+    """
+    Inserts the given message into the database
+    :param token: authorised user's identifier
+    :param channel_id: Integer for a specific channel
+    :param message: string for message to be sent to a channel
+    :param message_id: Integer for a unique identifier of the message
+    :return: returns nothing
+    """
     # Get the messages list from the database and append the current message to it
     messages = db.get_messages()
-    message_id = help.get_unique_id()
     user = db.get_users_by_key("token", token)[0]
 
     messages.insert(0, {
@@ -28,18 +35,48 @@ def message_send(token, channel_id, message):
         }
     )
 
+
+def message_send(token, channel_id, message):
+    """
+    Sends a given message by the token owner to the given channel
+    :param token: authorised user's identifier
+    :param channel_id: Integer for a specific channel
+    :param message: string for message to be sent to a channel
+    :return: returns dictionary with the generated message_id for the message
+    """
+    # Error checking
+    help.check_message_length(message)
+    help.check_member_status_of_channel(token, channel_id)
+
+    # Get the messages list from the database and append the current message to it
+    message_id = help.get_unique_id()
+
+    insert_message(token, channel_id, message, message_id)
+
     return {
         'message_id': message_id,
     }
 
 
 def message_remove(token, message_id):
+    """
+
+    :param token:
+    :param message_id:
+    :return:
+    """
     return "Not Implemented"
 
 
 def message_edit(token, message_id, message):
-    return "Not Implemented"
+    """
 
+    :param token:
+    :param message_id:
+    :param message:
+    :return:
+    """
+    return "Not Implemented"
 
 
 # File for message/sendlater(token, channel_id, message, time_sent)
@@ -51,12 +88,14 @@ def message_edit(token, message_id, message):
 # Message queue for sending a message later
 q = []
 do_work = threading.Event()
-is_thread_running_flag = False
 
 
-# TODO: import the real message_send function
 # Dequeues send_later_queue whenever a new item is added to it
 def set_sched():
+    """
+    Dequeues the send later message queue containing all the messages to be sent at a later date
+    :return: returns nothing
+    """
     global q, do_work
     while True:
 
@@ -64,53 +103,56 @@ def set_sched():
         if q:
 
             # get the time_sent, message and priority from send_later_queue
-            time_sent, message, priority, token, channel_id = q[0]["time_sent"], q[0]["message"], q[0]["priority"], q[0]["token"], q[0]["channel_id"]
+            time_sent = q[0]["time_sent"]
+            message = q[0]["message"]
+            priority = q[0]["priority"]
+            token = q[0]["token"]
+            channel_id = q[0]["channel_id"]
+            message_id = q[0]["message_id"]
+
             del(q[0])
 
             # Create a schedule object to be run at a later date
             s = sched.scheduler(time.time, time.sleep)
-            s.enterabs(time_sent, priority, message_send, [token, channel_id, message])
+            s.enterabs(
+                time_sent,
+                priority,
+                insert_message, [token, channel_id, message, message_id]
+            )
             s.run()
         else:
             do_work = threading.Event()
             do_work.wait()
 
 
-# TODO: move this to server.py
-# Creates a thread for setting a schedule
-def start_thread_helper():
-    global is_thread_running_flag
-    if is_thread_running_flag:
-        return
-
-    else:
-        is_thread_running_flag = True
-        t = threading.Thread(target=set_sched)
-        t.start()
-
-
 # Adds a message to be sent at a later date
 def send_later(token, channel_id, message, time_sent):
+    """
+    Sends a message at the designated time
+    :param token: authorised user's identifier
+    :param channel_id: Integer for a specific channel
+    :param message: String for the message to be sent
+    :param time_sent: unix time for when the message should be sent
+    :return: returns dictionary with the message_id
+    """
     help.is_message_valid(token, message, channel_id)
+    message_id = help.get_unique_id()
     curr = time.time()
     if time_sent - curr < 0:
         raise InputError("Time given was in the past")
 
     global do_work
-    q.append({"message": message, "time_sent": time_sent, "priority": time.time(), "token": token, "channel_id": channel_id})
+    q.append(
+        {"message": message,
+         "time_sent": time_sent,
+         "priority": time.time(),
+         "token": token,
+         "channel_id": channel_id,
+         "message_id": message_id
+         })
     do_work.set()
 
-
-if __name__ == "__main__":
-    start_thread_helper()  # Should only be called once
-    curr = time.time()
-
-    for i in range(100):
-        send_later(0, 0, str(i), curr + 5)
-
-    time.sleep(20)
-    send_later(0, 0, "yoyoyo", time.time())
-    start_thread_helper()  # Should do nothing
+    return {"message_id": message_id}
 
 
 def message_react(token, message_id, react_id):

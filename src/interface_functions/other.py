@@ -2,7 +2,7 @@ from database_files.database_retrieval import get_user_channels_by_key, get_chan
 from helper_functions.interface_function_helpers import is_valid_token
 from database_files.database_retrieval import get_users
 
-
+# pylint disable=W0105
 """
 Module containing users/all, and search/ functions. This module is for functions that do not
 fit the description of other modules.

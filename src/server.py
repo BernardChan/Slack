@@ -1,4 +1,5 @@
 import sys
+import threading
 from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
@@ -370,5 +371,17 @@ def admin_userpermission_change():
 def workspace_reset():
     return dumps(wr.workspace_reset())
 
+
+# Creates a thread for setting a schedule
+def start_thread_helper():
+    """
+    Creates a thread to constantly check if a message needs to be sent from the message queue
+    :return: returns nothing
+    """
+    t = threading.Thread(target=msg.set_sched)
+    t.start()
+
+
 if __name__ == "__main__":
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 42069))
+    start_thread_helper()
