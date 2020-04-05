@@ -1,18 +1,15 @@
-import helper_functions.interface_function_helpers as help
-import database_files.database_retrieval as db
-from interface_functions.message import message_send
-from helper_functions.interface_function_helpers import check_channel_validity
-from error import InputError
+# pylint: disable=W0105, W0622, C0103
 import time
 import threading
+import helper_functions.interface_function_helpers as help
+from helper_functions.interface_function_helpers import check_channel_validity
+import database_files.database_retrieval as db
+from error import InputError
 
-# pylint disable=W0105
+
 """
 Module that contains functions for a standup in a given channel
 """
-
-
-# TODO: Add AccessErrors
 
 
 # Sets the standup tag on the given channel_id to True/False (is_active)
@@ -56,15 +53,14 @@ def end_standup(token, channel_id):
 
     # Can't reuse message send due to error checking and this function behaving slightly differently
     messages.insert(0, {
-            "message_id": message_id,
-            "u_id": user["u_id"],
-            "message": standup_message["msg_queue"],
-            "time_created": message_id,
-            "reacts": {"react_id": None, "u_ids": [], "is_this_user_reacted": False},
-            "is_pinned": False,
-            "channel_id": channel_id,
-        }
-    )
+        "message_id": message_id,
+        "u_id": user["u_id"],
+        "message": standup_message["msg_queue"],
+        "time_created": message_id,
+        "reacts": {"react_id": None, "u_ids": [], "is_this_user_reacted": False},
+        "is_pinned": False,
+        "channel_id": channel_id,
+        })
 
 
 # Works by:
