@@ -1,11 +1,13 @@
 # user/... functions for slackr app
 
+import re
+import urllib.request
+from PIL import Image
 from error import AccessError, InputError
 from database_files.database_retrieval import get_users
 from database_files.database_retrieval import get_users_by_key
 from helper_functions.interface_function_helpers import is_valid_token
 import database_files.database as db
-import re
 
 
 # USER/PROFILE
@@ -143,3 +145,37 @@ def user_profile_sethandle(token, handle_str):
 
     return {}
 
+def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
+    """
+    Given a URL of an image on the internet, crops the image within bounds
+    (x_start, y_start) and (x_end, y_end). Position (0,0) is the top left.
+    URL must have http prefix thing
+    """
+    # Raise AccessError for invalid token
+    is_valid_token(token)
+    
+    # Raise InputError for img_url returning a HTTP status other than 200
+    if urllib.request.urlopen(img_url).getcode() != 200:
+        raise InputError(description="Image URL returns a HTTP status other than 200!")
+
+    # Raise InputError if image isn't a jpg
+    if not img_url.endswith(".jpg"):
+        raise InputError(description="Image uploaded is not a JPG!")
+
+    # Raise InputError if x_start, y_start, x_end, or y_end aren't in the dimensions of the url
+    # Open the image in RGB mode
+    img = Image.open(urllib.request.urlopen(img_url))
+    width, height = img.size
+    if x_start < 0 or x_start > width or \
+        x_end < 0 or x_end > width or \
+        y_start < 0 or y_start > height or \
+        y_end < 0 or y_end > height or \
+        x_start > x_end or y_start > y_end:
+        raise InputError(description="Coordinates not within dimensions of image!")
+    
+    # Crop the image
+    img = img.crop((x_start, y_start, x_end, y_end))
+    # saving for debugging purposes
+    img = img.save("image.jpg")
+
+    return {}
