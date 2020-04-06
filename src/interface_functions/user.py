@@ -1,4 +1,6 @@
-# user/... functions for slackr app
+"""
+user/profile/... functions for slackr app
+"""
 
 import re
 import urllib.request
@@ -12,7 +14,8 @@ import database_files.database as db
 
 def user_profile(token, u_id):
     """
-    For a valid user, returns information about their user id, email, first name, last name, and handle
+    For a valid user, returns information about their user id, email, first name,
+        last name, and handle
     Error Checks: invalid token (AccessError), invalid u_id (InputError)
     Input: token, u_id
     Output: {u_id, email, name_first, name_last, handle_str}
@@ -20,7 +23,7 @@ def user_profile(token, u_id):
 
     # Raise an AccessError if not a valid token
     is_valid_token(token)
-    
+
     # Go through all users and collect the correct user dictionary
     # If no users found with u_id, invalid u_id because user does not exist
     if get_users_by_key("u_id", u_id) == []:
@@ -55,7 +58,7 @@ def user_profile_setname(token, name_first, name_last):
         raise InputError(description="First name is not between 1 and 50 characters!")
     if len(name_last) < 1 or len(name_last) > 50:
         raise InputError(description="Last name is not between 1 and 50 characters!")
-    
+
     # Get the user with the matching u_id by token
     match = get_users_by_key("token", token)
     u_id = match[0]["u_id"]
@@ -85,16 +88,13 @@ def user_profile_setemail(token, email):
         # Make a regular expression for validating email
         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$' # pylint: disable=anomalous-backslash-in-string
         # Pass the regular expression and the string using search() to check if valid
-        if (re.search(regex, string)):
-            return True
-        else:
-            return False
+        return re.search(regex, string)
     # Raise an InputError if not a valid email
     if not valid_email(email):
         raise InputError(description="Invalid email!")
 
     # Raise an InputError if email is being used by another user
-    # if get_users_by_key doesn't return an empty list (if users with profile["email"] = email are found)
+    # if get_users_by_key doesn't return an empty list
     if get_users_by_key("email", email) != []:
         raise InputError(description="Email address in use by another user!")
 
@@ -106,14 +106,15 @@ def user_profile_setemail(token, email):
         if profile["u_id"] == u_id:
             profile["email"] = email
             break
-    
+
     return {}
 
 
 def user_profile_sethandle(token, handle_str):
     """
     Update the authorised user's handle (display name)
-    Error checks: handle not between 2-20 chars or handle is in use (InputError), invalid token (AccessError)
+    Error checks: handle not between 2-20 chars or handle is in use (InputError),
+        invalid token (AccessError)
     Input: token, handle_str
     Output: {}
     """
@@ -126,7 +127,7 @@ def user_profile_sethandle(token, handle_str):
         raise InputError(description="Handle (display name) is not between 2 and 20 characters!")
 
     # Raise an input error if handle is being used by another user
-    # if get_users_by_key doesn't return an empty list (if users with profile["handle_str"] = handle are found)
+    # if get_users_by_key doesn't return an empty list
     if get_users_by_key("handle_str", handle_str) != []:
         raise InputError(description="Handle (display name) in use by another user!")
 
@@ -141,7 +142,7 @@ def user_profile_sethandle(token, handle_str):
 
     return {}
 
-def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
+def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # pylint: disable=too-many-arguments
     """
     Given a URL of an image on the internet, crops the image within bounds
         (x_start, y_start) and (x_end, y_end). Position (0,0) is the top left. Then
@@ -155,7 +156,7 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     """
     # Raise AccessError for invalid token
     is_valid_token(token)
-    
+
     # Raise InputError for img_url returning a HTTP status other than 200
     if urllib.request.urlopen(img_url).getcode() != 200:
         raise InputError(description="Image URL returns a HTTP status other than 200!")
@@ -168,13 +169,14 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     # Open the image in RGB mode
     img = Image.open(urllib.request.urlopen(img_url))
     width, height = img.size
+    # pylint: disable=too-many-boolean-expressions
     if x_start < 0 or x_start > width or \
         x_end < 0 or x_end > width or \
         y_start < 0 or y_start > height or \
         y_end < 0 or y_end > height or \
         x_start > x_end or y_start > y_end:
         raise InputError(description="Coordinates not within dimensions of image!")
-    
+
     # Crop the image
     img = img.crop((x_start, y_start, x_end, y_end))
     # saving for debugging purposes
