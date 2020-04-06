@@ -3,22 +3,20 @@
 import re
 import urllib.request
 from PIL import Image
-from error import AccessError, InputError
-from database_files.database_retrieval import get_users
+from error import InputError
+#from database_files.database_retrieval import get_users
 from database_files.database_retrieval import get_users_by_key
 from helper_functions.interface_function_helpers import is_valid_token
 import database_files.database as db
 
 
-# USER/PROFILE
-# Will use a GET request
-# For a valid user, returns information about their user id, email, first name, last name, and handle
-# Returns a profile dictionary
-# Input Error for:
-    # User with u_id is not a valid user
-# Access Error for:
-    # Token is not valid
 def user_profile(token, u_id):
+    """
+    For a valid user, returns information about their user id, email, first name, last name, and handle
+    Error Checks: invalid token (AccessError), invalid u_id (InputError)
+    Input: token, u_id
+    Output: {u_id, email, name_first, name_last, handle_str}
+    """
 
     # Raise an AccessError if not a valid token
     is_valid_token(token)
@@ -40,15 +38,15 @@ def user_profile(token, u_id):
 
     return profile
 
-# USER/PROFILE/SETNAME
-# Will use a PUT request
-# Update the authorised user's first and last name, returns an empty dictionary
-# Input Error for:
-    # First or last name is not between 1 and 50 characters inclusive
-# Access Error for:
-    # Token is not valid
+
 def user_profile_setname(token, name_first, name_last):
-    
+    """
+    Update the authorised user's first and last name
+    Error Checks: invalid token (AccessError), name(s) not within 1-50 ch (InputError)
+    Input: token, name_first, name_last
+    Output: {}
+    """
+
     # Raise an AccessError if not a valid token
     is_valid_token(token)
 
@@ -70,23 +68,22 @@ def user_profile_setname(token, name_first, name_last):
 
     return {}
 
-# USER/PROFILE/SETEMAIL
-# Will use a PUT request
-# Update the authorised user's email address, returns an empty dictionary
-# Input Error for:
-    # Email entered is not a valid email
-    # Email address is being used by another user
-# Acces Error for:
-    # Invalid token
+
 def user_profile_setemail(token, email):
-    
+    """
+    Updates the authorised user's email address
+    Error Checks: email is not valid or email is in use (InputError), invalid token (AccessError)
+    Input: token, email
+    Output: {}
+    """
+
     # Raise an AccessError if not a valid token
     is_valid_token(token)
 
     # Inner helper function for determining a valid email
     def valid_email(string):
         # Make a regular expression for validating email
-        regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$' # pylint: disable=anomalous-backslash-in-string
         # Pass the regular expression and the string using search() to check if valid
         if (re.search(regex, string)):
             return True
@@ -112,16 +109,15 @@ def user_profile_setemail(token, email):
     
     return {}
 
-# USER/PROFILE/SETHANDLE
-# Will use PUT request
-# Update the authorised user's handle (display name), returns an empty dict
-# Input Error for:
-    # Handle not between 2 and 20 characters inclusive
-    # Handle is in use by another user
-# Access Error for:
-    # Invalid token
+
 def user_profile_sethandle(token, handle_str):
-    
+    """
+    Update the authorised user's handle (display name)
+    Error checks: handle not between 2-20 chars or handle is in use (InputError), invalid token (AccessError)
+    Input: token, handle_str
+    Output: {}
+    """
+
     # Raise an AccessError if not a valid token
     is_valid_token(token)
 
@@ -148,8 +144,14 @@ def user_profile_sethandle(token, handle_str):
 def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     """
     Given a URL of an image on the internet, crops the image within bounds
-    (x_start, y_start) and (x_end, y_end). Position (0,0) is the top left.
-    URL must have http prefix thing
+        (x_start, y_start) and (x_end, y_end). Position (0,0) is the top left. Then
+        generates a unique local server url and stores the image there. Updates
+        user profile profile_img_url to match.
+    Error Checks: img_url returns HTTP status other than 200 or coords aren't
+        in img dimensions or img not jpeg (InputError)
+        invalid token (AccessError)
+    Input: token, img_url, x_start, y_start, x_end, y_end
+    Output: {}
     """
     # Raise AccessError for invalid token
     is_valid_token(token)
@@ -176,6 +178,15 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end):
     # Crop the image
     img = img.crop((x_start, y_start, x_end, y_end))
     # saving for debugging purposes
-    img = img.save("image.jpg")
+    #img = img.save("image.jpg")
+
+    """
+    TODO:
+    -   Generate a unique url in the server and store the image there (so that the server
+        has a local copy of this cropped image)
+    -   Set the profile_img_url (in database of users) for the user with token to the
+        generated url
+        -   e.g. profile_img_url = http://localholst:5001/imgurl/jfkl1235321n.jpg (string)
+    """
 
     return {}
