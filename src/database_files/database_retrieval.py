@@ -104,7 +104,6 @@ def is_owner_in_channel(key, value, channel_id):
     return False
 
 
-
 # Gets all the channels a user is a part of
 def get_user_channels_by_key(key, value):
     channels = get_channels()
@@ -121,5 +120,3 @@ def get_user_channels_by_key(key, value):
 
     return user_channels
 
-if __name__ == "__main__":
-    pass
