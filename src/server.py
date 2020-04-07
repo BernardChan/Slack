@@ -3,6 +3,7 @@ from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
 from error import InputError
+import database_files.database as db
 import interface_functions.other as other
 import interface_functions.standup as su
 import interface_functions.message as msg
@@ -38,7 +39,8 @@ def echo():
     return dumps(request.form)
 
 
-# TODO: Remove this. This is purely for debugging. It catches all routes that aren't implemented and echos
+# Remove this. This is purely for debugging. 
+# It catches all routes that aren't implemented and echos
 #   what was received instead of throwing a 404 error.
 @APP.route("/<path:dummy>", methods=["GET", "POST", "PUT", "DELETE"])
 def catch_all(dummy):
@@ -48,18 +50,16 @@ def catch_all(dummy):
     else:
         return dumps(request.args)
 
-# TODO: delete this as well
-import database_files.database as db
 
 @APP.route("/get/database", methods=["GET"])
 def get_database():
     return dumps(db.DATABASE)
 
-'''
-----------------------------------------------------------------------------------
-AUTH Routes
-----------------------------------------------------------------------------------
-'''
+
+# ----------------------------------------------------------------------------------
+# AUTH Routes
+# ----------------------------------------------------------------------------------
+
 @APP.route("/auth/register", methods=['POST'])
 def auth_register():
     resp = request.get_json()
@@ -82,20 +82,19 @@ def auth_logout():
     token = resp["token"]
     return dumps(auth.auth_logout(token))
 
-'''
-----------------------------------------------------------------------------------
-CHANNEL Routes
-----------------------------------------------------------------------------------
-'''
-"""
-@APP.route("/channel/invite", methods=['POST'])
-def channel_invite():
-    resp = request.get_json()
-    token = resp["token"]
-    channel_id = resp["channel_id"]
-    u_id = resp["u_id"]
-    return dumps(ch.channel_invite(token, channel_id, u_id))
-"""
+
+# ----------------------------------------------------------------------------------
+# CHANNEL Routes
+# ----------------------------------------------------------------------------------
+
+# @APP.route("/channel/invite", methods=['POST'])
+# def channel_invite():
+#     resp = request.get_json()
+#     token = resp["token"]
+#     channel_id = resp["channel_id"]
+#     u_id = resp["u_id"]
+#     return dumps(ch.channel_invite(token, channel_id, u_id))
+
 
 @APP.route("/channel/details", methods=['GET'])
 def channel_details():
@@ -118,23 +117,23 @@ def channel_messages():
 
     return dumps(ch.channel_messages(token, channel_id, start))
 
-"""
-@APP.route("/channel/leave", methods=['POST'])
-def channel_leave():
-    resp = request.get_json()
-    token = resp["token"]
-    channel_id = resp["channel_id"]
-    return dumps(ch.channel_leave(token, channel_id))
-"""
+# """
+# @APP.route("/channel/leave", methods=['POST'])
+# def channel_leave():
+#     resp = request.get_json()
+#     token = resp["token"]
+#     channel_id = resp["channel_id"]
+#     return dumps(ch.channel_leave(token, channel_id))
+# """
 
-"""
-@APP.route("/channel/join", methods=['POST'])
-def channel_join():
-    resp = request.get_json()
-    token = resp["token"]
-    channel_id = resp["channel_id"]
-    return dumps(ch.channel_join(token, channel_id))
-"""
+# """
+# @APP.route("/channel/join", methods=['POST'])
+# def channel_join():
+#     resp = request.get_json()
+#     token = resp["token"]
+#     channel_id = resp["channel_id"]
+#     return dumps(ch.channel_join(token, channel_id))
+# """
 
 @APP.route("/channel/addowner", methods=['POST'])
 def channel_addowner():
@@ -152,11 +151,11 @@ def channel_removeowner():
     u_id = resp["u_id"]
     return dumps(ch.channel_removeowner(token, channel_id, u_id))
 
-'''
-----------------------------------------------------------------------------------
-CHANNELS Routes
-----------------------------------------------------------------------------------
-'''
+# '''
+# ----------------------------------------------------------------------------------
+# CHANNELS Routes
+# ----------------------------------------------------------------------------------
+# '''
 @APP.route("/channels/list", methods=['GET'])
 def channels_list():
     token = request.args.get("token")
@@ -178,13 +177,14 @@ def channels_create():
     name = resp["name"]
     is_public = resp["is_public"]
 
-    return dumps(chs.channels_create(token, name, is_public))
+    data = chs.channels_create(token, name, is_public)
+    return dumps(data)
 
-'''
-----------------------------------------------------------------------------------
-MESSAGE Routes
-----------------------------------------------------------------------------------
-'''
+# '''
+# ----------------------------------------------------------------------------------
+# MESSAGE Routes
+# ----------------------------------------------------------------------------------
+# '''
 @APP.route("/message/send", methods=['POST'])
 def message_send():
     resp = request.get_json()
@@ -208,68 +208,68 @@ def message_sendlater():
 
     return dumps(msg.send_later(token, channel_id, message, time_sent))
 
-"""
-@APP.route("/message/react", methods=['POST'])
-def message_react():
-    resp = request.get_json()
-    token = resp["token"]
-    message_id = resp["message_id"]
-    react_id = resp["react_id"]
-    return dumps(msg.message_react(token, message_id, react_id))
-"""
+# """
+# @APP.route("/message/react", methods=['POST'])
+# def message_react():
+#     resp = request.get_json()
+#     token = resp["token"]
+#     message_id = resp["message_id"]
+#     react_id = resp["react_id"]
+#     return dumps(msg.message_react(token, message_id, react_id))
+# """
 
-"""
-@APP.route("/message/unreact", methods=['POST'])
-def message_unreact():
-    resp = request.get_json()
-    token = resp["token"]
-    message_id = resp["message_id"]
-    react_id = resp["react_id"]
-    return dumps(msg.message_unreact(token, message_id, react_id))
-"""
+# """
+# @APP.route("/message/unreact", methods=['POST'])
+# def message_unreact():
+#     resp = request.get_json()
+#     token = resp["token"]
+#     message_id = resp["message_id"]
+#     react_id = resp["react_id"]
+#     return dumps(msg.message_unreact(token, message_id, react_id))
+# """
 
-"""
-@APP.route("/message/pin", methods=['POST'])
-def message_pin():
-    resp = request.get_json()
-    token = resp["token"]
-    message_id = resp["message_id"]
-    return dumps(msg.message_pin(token, message_id))
-"""
+# """
+# @APP.route("/message/pin", methods=['POST'])
+# def message_pin():
+#     resp = request.get_json()
+#     token = resp["token"]
+#     message_id = resp["message_id"]
+#     return dumps(msg.message_pin(token, message_id))
+# """
 
-"""
-@APP.route("/message/unpin", methods=['POST'])
-def message_unpin():
-    resp = request.get_json()
-    token = resp["token"]
-    message_id = resp["message_id"]
-    return dumps(msg.message_unpin(token, message_id))
-"""
+# """
+# @APP.route("/message/unpin", methods=['POST'])
+# def message_unpin():
+#     resp = request.get_json()
+#     token = resp["token"]
+#     message_id = resp["message_id"]
+#     return dumps(msg.message_unpin(token, message_id))
+# """
 
-"""
-@APP.route("/message/remove", methods=['DELETE'])
-def message_remove():
-    resp = request.get_json()
-    token = resp["token"]
-    message_id = resp["message_id"]
-    return dumps(msg.message_remove(token, message_id))
-"""
+# """
+# @APP.route("/message/remove", methods=['DELETE'])
+# def message_remove():
+#     resp = request.get_json()
+#     token = resp["token"]
+#     message_id = resp["message_id"]
+#     return dumps(msg.message_remove(token, message_id))
+# """
 
-"""
-@APP.route("/message/edit", methods=['PUT'])
-def message_edit():
-    resp = request.get_json()
-    token = resp["token"]
-    message_id = resp["message_id"]
-    message = resp["message"]
-    return dumps(msg.message_edit(token, message_id, message))
-"""
+# """
+# @APP.route("/message/edit", methods=['PUT'])
+# def message_edit():
+#     resp = request.get_json()
+#     token = resp["token"]
+#     message_id = resp["message_id"]
+#     message = resp["message"]
+#     return dumps(msg.message_edit(token, message_id, message))
+# """
 
-'''
-----------------------------------------------------------------------------------
-USER / PROFILE Routes
-----------------------------------------------------------------------------------
-'''
+# '''
+# ----------------------------------------------------------------------------------
+# USER / PROFILE Routes
+# ----------------------------------------------------------------------------------
+# '''
 @APP.route("/user/profile", methods=['GET'])
 def user_profile():
     token = request.args.get("token")
@@ -302,21 +302,21 @@ def user_profile_sethandle():
 
     return dumps(user.user_profile_sethandle(token, handle_str))
 
-'''
-----------------------------------------------------------------------------------
-USERS Routes
-----------------------------------------------------------------------------------
-'''
+# '''
+# ----------------------------------------------------------------------------------
+# USERS Routes
+# ----------------------------------------------------------------------------------
+# '''
 @APP.route("/users/all", methods=['GET'])
 def users_all():
     token = request.args.get("token")
     return dumps(other.users_all(token))
 
-'''
-----------------------------------------------------------------------------------
-STANDUP Routes
-----------------------------------------------------------------------------------
-'''
+# '''
+# ----------------------------------------------------------------------------------
+# STANDUP Routes
+# ----------------------------------------------------------------------------------
+# '''
 @APP.route("/standup/start", methods=['POST'])
 def standup_start():
     resp = request.get_json()
@@ -345,11 +345,11 @@ def standup_send():
     return dumps(su.standup_send(token, channel_id, message))
 
 
-'''
-----------------------------------------------------------------------------------
-OTHER Routes
-----------------------------------------------------------------------------------
-'''
+# '''
+# ----------------------------------------------------------------------------------
+# OTHER Routes
+# ----------------------------------------------------------------------------------
+# '''
 @APP.route("/search", methods=['GET'])
 def search():
     query = request.args.get("query_str")
