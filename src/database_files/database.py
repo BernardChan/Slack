@@ -1,70 +1,55 @@
-"""
- database.py
-# This function stores database files. Preserving the state by pickling the results and unpickling it when data needs to be added. 
-
-"""
-# Usage
-
-# Example of what the database will look like:
-# Available in database_plan.md
-# If you have additions, add them, make a merge request, and post it on slack.
-# Make sure all the keys are there when you're adding to this
-
-# Additions:
-# - "token" key added to "user" dictionary
-# - "channel_id" key added to "message" dictionary
-# - "members" key added to "channels" dictionary
-# - "standup" key added to "channels" dictionary - is a boolean for whether a standup is active
-# 21/03/20 Additions
-    # - "permission_id added to user. 1 for owner and 2 for everyone else
-# 23/03/20 Additions
-    # Login and logout working
-
-
 import pickle
-from os import path
-import os
-# from database_files.database_retrieval import get_users
+import time
+from pathlib import Path
 
+# pylint: disable=W0105
+"""
+This module contains the database for the Slackr server and functions to pickle and unpickle it
+"""
 
+# Dictionary for all data to be contained within the server
 DATABASE = {
     "users": [],
     "messages": [],
     "channels": [],
 }
 
-# unpickle = False
-
-"""
-----------------------------------------------------------------------------------
-Core Database Functions
-----------------------------------------------------------------------------------
-"""    
-# # Saves the current database_files
-# def pickle_database(): 
-#     global DATABASE
-#     with open("../database_files/database.p", "wb") as FILE:
-#         pickle.dump(DATABASE, FILE)
+# File path for the pickled file
+PICKLED_FILE = Path(__file__).parent/'database.p'
 
 
-# # Restores the database_files from last save
-# def unpickle_database():
-#     global DATABASE
-#     if path.exists("../database_files/database.p"):
-#         DATABASE = pickle.load(open("../database_files/database.p", "rb"))
-#     else:
-#         DATABASE = {
-#             "users": [],
-#             "messages": [],
-#             "channels": [],
-#         }
-    
-
-# Function to clear the database
-def clear_database():
+# Saves the current database_files
+def pickle_database():
+    """
+    Saves the database in a pickled file
+    :return: returns nothing
+    """
     global DATABASE
-    DATABASE = {
-    "users": [],
-    "messages": [],
-    "channels": [],
-}
+    with open(PICKLED_FILE, "wb+") as FILE:
+        pickle.dump(DATABASE, FILE)
+
+
+# Restores the database_files from last save
+def unpickle_database():
+    """
+    Retrieves the database from the pickled file
+    :return: returns nothing
+    """
+    global DATABASE
+    try:
+        with open(PICKLED_FILE, "rb") as FILE:
+            DATABASE = pickle.load(FILE)
+    except FileNotFoundError:
+        pickle_database()
+
+
+def pickle_database_routinely(length):
+    """
+    Pickles the database every length seconds
+    :param length: integer for number of seconds between file pickling
+    :return: returns nothing
+    """
+    while True:
+        pickle_database()
+        print("pickling database")
+        time.sleep(length)
