@@ -1,6 +1,12 @@
 from database_files.database_retrieval import get_user_channels_by_key, get_channel_messages
-from helper_functions.interface_function_helpers import is_valid_token
 from database_files.database_retrieval import get_users
+from helper_functions.interface_function_helpers import is_valid_token
+
+# pylint: disable=W0105
+"""
+Module containing users/all, and search/ functions. This module is for functions that do not
+fit the description of other modules.
+"""
 
 
 # USERS/ALL
@@ -22,12 +28,20 @@ def users_all(token):
 def sort_messages(messages):
     messages.sort(key=lambda message: message["time_created"])
 
-import database_files.database as db
+
 # Searches by:
 # 1. Getting the user's list of channels
 # 2. Getting the messages that are in those channels
 # 3. Returning only the ones with the query_str in it
 def search(token, query_str):
+    """
+    Searches all messages the user can see and returns messages matching
+    the query_str provided
+
+    :param token: authorised user's identifier
+    :param query_str: string to be matched with messages in the database
+    :return: list of messages matching the query string
+    """
 
     user_channels = get_user_channels_by_key("token", token)
     found_messages = []

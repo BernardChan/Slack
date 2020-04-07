@@ -7,6 +7,7 @@
 # - "permission_id" key added to "user" dictionary (1 = owner/admin, 2 = member)
 # - "members" key added to "channels" dictionary
 # - "standup" key added to "channels" dictionary - is a boolean for whether a standup is active
+
 ```python
 MOCK_DATA = {
     "users": [
