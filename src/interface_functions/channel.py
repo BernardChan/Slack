@@ -38,6 +38,7 @@ def WIP_channel_invite(token, channel_id, u_id):
 
 # Given a Channel with ID channel_id that the authorised user is part of, provide basic details about the channel
 def channel_details(token, channel_id):
+    print(f"token and channel id was {token}, {channel_id}")
     help.is_valid_token(token)
     help.check_channel_validity(channel_id)
     help.check_member_status_of_channel(token, channel_id)
