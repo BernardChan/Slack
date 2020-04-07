@@ -11,6 +11,7 @@ import interface_functions.channel as ch
 import interface_functions.channels as chs
 import interface_functions.user as user
 import interface_functions.admin_userpermission_change as admin
+import interface_functions.user_remove as rmv
 import interface_functions.channels as channels
 import interface_functions.auth as auth
 import interface_functions.workspace_reset as wr
@@ -378,6 +379,21 @@ def admin_userpermission_change():
     permission_id = int(data["permission_id"])
 
     return dumps(admin.admin_userpermission_change(token, u_id, permission_id))
+
+
+@APP.route("/admin/user/remove", methods=["DELETE"])
+def admin_user_remove():
+    """
+    Sends the DELETE request to
+    remove the user with the given u_id from the database
+
+    :return: Returns a json object containing the dictionary from user remove
+    """
+    data = request.get_json()
+    token = data["token"]
+    u_id = int(data["u_id"])
+
+    return dumps(rmv.admin_user_remove(token, u_id))
 
 
 @APP.route("/workspace/reset", methods=['POST'])
