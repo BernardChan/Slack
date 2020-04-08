@@ -59,7 +59,7 @@ channel_members = channel["all_members"]  # array of {u_id, name_first, name_las
 
 # Get details of the private channel
 private_channel = ch.channel_details(chan_owner, channel_id)
-private_channel_name = channel["name"]
+private_channel_name = channel["name"] 
 private_channel_owner = channel["owner_members"]
 private_channel_members = channel["all_members"]  # array of {u_id, name_first, name_last}
 
