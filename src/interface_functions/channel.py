@@ -144,7 +144,6 @@ def channel_join(token, channel_id):
     help.is_user_valid_channel_member(token, channel_id)
 
 
-
     # If the channel is private, check if the user is authorised to join
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
     if not channel["is_public"]:
@@ -155,11 +154,6 @@ def channel_join(token, channel_id):
     channel["members"].append(user)
 
     return {}
-
-
-# TODO: Throws access error when the user is not the slackr owner, but the
-# channel is public. Non-admins should be able to join public channels.
-def WIP_channel_join(token, channel_id):
 
 
 def is_channel_owner(channel, u_id):
