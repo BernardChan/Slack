@@ -27,7 +27,6 @@ def channel_invite(token, channel_id, u_id):
 
     # adds user to members list in channel
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
-
     channel["members"].append(user)
 
     return {}
@@ -135,12 +134,6 @@ def WIP_channel_leave(token, channel_id):
 
 
 def channel_join(token, channel_id):
-    return "Not Implemented"
-
-
-# TODO: Throws access error when the user is not the slackr owner, but the
-# channel is public. Non-admins should be able to join public channels.
-def WIP_channel_join(token, channel_id):
     # include valid token function here, stub function atm
     help.is_valid_token(token)
 
@@ -149,17 +142,24 @@ def WIP_channel_join(token, channel_id):
 
     # check if user is a member of the channel
     help.is_user_valid_channel_member(token, channel_id)
-    member_join = db.get_users_by_key('token', token)
 
-    # checks if authorized user is admin, if not channel is private
-    help.is_slackr_admin(token)
+
+
+    # If the channel is private, check if the user is authorised to join
+    channel = db.get_channels_by_key("channel_id", channel_id)[0]
+    if not channel["is_public"]:
+        help.is_slackr_admin(token)
 
     # adds user to members list in channel
-    members = DATABASE['channels'][channel_id]['members']
-    members.append(dict(member_join))
+    user = db.get_users_by_key('token', token)[0]
+    channel["members"].append(user)
 
-    return {
-    }
+    return {}
+
+
+# TODO: Throws access error when the user is not the slackr owner, but the
+# channel is public. Non-admins should be able to join public channels.
+def WIP_channel_join(token, channel_id):
 
 
 def is_channel_owner(channel, u_id):
