@@ -11,13 +11,6 @@ File for functions relating to a Slackr channel
 
 
 def channel_invite(token, channel_id, u_id):
-    return "Not Implemented"
-
-
-# This needs to be fixed. members=DATABASE etc. doesn't work.
-# Assigning the database to members does nothing. It isn't editing the database
-# This needs to be fixed
-def WIP_channel_invite(token, channel_id, u_id):
     # include valid token function here, stub function atm
     help.is_valid_token(token)
 
@@ -30,16 +23,14 @@ def WIP_channel_invite(token, channel_id, u_id):
     help.is_valid_uid(u_id)
 
     # finds the user dictionary with user id and assigns it to user_invite
-    for user in DATABASE["users"]:
-        if user["u_id"] == u_id:
-            user_invite = user
+    user = db.get_users_by_key("token", token)[0]
 
     # adds user to members list in channel
-    members = DATABASE['channels'][channel_id]['members']
-    members.append(dict(user_invite))
+    channel = db.get_channels_by_key("channel_id", channel_id)[0]
 
-    return {
-    }
+    channel["members"].append(user)
+
+    return {}
 
 
 # Given a Channel with ID channel_id that the authorised user is part of,
@@ -255,3 +246,4 @@ def channel_removeowner(token, channel_id, u_id):
 
     return {
     }
+
