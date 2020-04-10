@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../')
+
 
 from interface_functions.channel import channel_addowner as add_owner
 
