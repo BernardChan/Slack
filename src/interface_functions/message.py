@@ -217,9 +217,61 @@ def message_unpin(token, message_id):
     return {}
 
 
+def is_valid_react(react_id):
+    if react_id != 1:
+        raise InputError
+
+
+def get_react_by_key(key, value, message):
+    reacts = message["reacts"]
+    for react in reacts:
+        if react[key] == value:
+            return react
+
+
+def is_already_reacted(message, react_id, user_id):
+    react = get_react_by_key("react_id", react_id, message)
+    if react["react_id"] == react_id and user_id in react["user_ids"]:
+        return True
+
+    return False
+
+
 def message_react(token, message_id, react_id):
-    return "Not Implemented"
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Error checking
+    is_valid_message_id(message)
+    message = message[0]
+    channel_id = message["channel_id"]
+    help.is_user_valid_channel_member(token, channel_id)
+    is_valid_react(react_id)
+    user = db.get_users_by_key("token", token)[0]
+
+    if is_already_reacted(message, react_id, user["u_id"]):
+        raise InputError("You have already reacted to this")
+
+    react = get_react_by_key("react_id", react_id, message)
+    react["u_ids"].append(user["u_id"])
+    react["is_this_user_reacted"] = True
 
 
 def message_unreact(token, message_id, react_id):
-    return "Not Implemented"
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Error checking
+    is_valid_message_id(message)
+    message = message[0]
+    channel_id = message["channel_id"]
+    help.is_user_valid_channel_member(token, channel_id)
+    is_valid_react(react_id)
+    user = db.get_users_by_key("token", token)[0]
+
+    if not is_already_reacted(message, react_id, user["u_id"]):
+        raise InputError("You have not reacted to this")
+
+    react = get_react_by_key("react_id", react_id, message)
+    react["u_ids"].remove(user["u_id"])
+
+    # If there are no u_id in u_ids, then nobody has reacted
+    react["is_this_user_reacted"] = len(react["u_ids"]) != 0
