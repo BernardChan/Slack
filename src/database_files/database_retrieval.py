@@ -34,7 +34,19 @@ def get_channels():
 # Returns users list
 def get_users():
     return db.DATABASE["users"]
-    
+
+
+def get_messages_by_key(key, value):
+    messages = get_messages()
+    return_messages = []
+
+    # Find what channels a user is in
+    for message in messages:
+        if message[key] == value:
+            return_messages.append(message)
+
+    return return_messages
+
 # returns all messages from a given channel_id
 def get_channel_messages(channel_id):
     messages = db.DATABASE["messages"]

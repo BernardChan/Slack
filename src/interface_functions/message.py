@@ -4,7 +4,7 @@ import time
 import sched
 import database_files.database_retrieval as db
 import helper_functions.interface_function_helpers as help
-from error import InputError
+from error import InputError, AccessError
 
 
 """
@@ -59,24 +59,28 @@ def message_send(token, channel_id, message):
 
 
 def message_remove(token, message_id):
-    """
 
-    :param token:
-    :param message_id:
-    :return:
-    """
-    return "Not Implemented"
+    message = db.get_messages_by_key("message_id", message_id)
+
+    if len(message) == 0:
+        raise InputError("Message Not found")
+
+    help.is_valid_token(token)
+    user = db.get_users_by_key("token", token)[0]
+
+    message = message[0]
+    # Authorised user did not make the message and is not the owner
+    if user["u_id"] != message["u_id"] and user["permission_id"] != 1:
+        raise AccessError("You are not authorised to delete this message")
+
+    messages = db.get_messages()
+    messages.remove(message)
+
+    return {}
 
 
 def message_edit(token, message_id, message):
-    """
-
-    :param token:
-    :param message_id:
-    :param message:
-    :return:
-    """
-    return "Not Implemented"
+    pass
 
 
 # File for message/sendlater(token, channel_id, message, time_sent)
