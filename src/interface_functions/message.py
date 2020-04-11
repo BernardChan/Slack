@@ -58,29 +58,51 @@ def message_send(token, channel_id, message):
     }
 
 
-def message_remove(token, message_id):
-
-    message = db.get_messages_by_key("message_id", message_id)
-
-    if len(message) == 0:
-        raise InputError("Message Not found")
-
-    help.is_valid_token(token)
-    user = db.get_users_by_key("token", token)[0]
-
-    message = message[0]
+def is_valid_message_change(user, message):
     # Authorised user did not make the message and is not the owner
     if user["u_id"] != message["u_id"] and user["permission_id"] != 1:
         raise AccessError("You are not authorised to delete this message")
 
+
+def is_valid_message_id(message):
+    if len(message) == 0:
+        raise InputError("Message Not found")
+
+
+def message_remove(token, message_id):
+
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Raise errors
+    is_valid_message_id(message)
+    help.is_valid_token(token)
+    user = db.get_users_by_key("token", token)[0]
+    message = message[0]
+    is_valid_message_change(user, message)
+
+    # Remove the message
     messages = db.get_messages()
     messages.remove(message)
 
     return {}
 
 
+# Assumption - input error raised if message not found
 def message_edit(token, message_id, message):
-    pass
+    message_string = message
+
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Raise errors
+    is_valid_message_id(message)
+    help.is_valid_token(token)
+    user = db.get_users_by_key("token", token)[0]
+    message = message[0]
+    is_valid_message_change(user, message)
+
+    message["message"] = message_string  # TODO: verify this works
+
+    return {}
 
 
 # File for message/sendlater(token, channel_id, message, time_sent)
