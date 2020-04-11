@@ -109,6 +109,7 @@ def channel_messages(token, channel_id, start):
         "end": end,
     }
 
+
 # Note: this assumes that the user dictionary is identical to the members dictionary
 #   this should be the case if we are inviting users correctly
 def channel_leave(token, channel_id):
@@ -133,7 +134,6 @@ def channel_leave(token, channel_id):
     print(f"user was {user}")
     
     channel["members"].remove(user)
-
 
     return {}
 
@@ -235,9 +235,7 @@ def channel_removeowner(token, channel_id, u_id):
     if not is_channel_owner(channel, u_id):
         raise InputError(f"User with {u_id} was not a channel owner")
 
-    
     user = db.get_users_by_key("u_id", u_id)[0]
-    print(f"removing owner {user}")
     channel["owner_members"].remove(user)
 
     return {
