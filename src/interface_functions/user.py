@@ -4,13 +4,13 @@ user/profile/... functions for slackr app
 
 import re
 import urllib.request
+import os.path
 from PIL import Image
 from error import InputError
 #from database_files.database_retrieval import get_users
 from database_files.database_retrieval import get_users_by_key
 from helper_functions.interface_function_helpers import is_valid_token
 import database_files.database as db
-
 
 def user_profile(token, u_id):
     """
@@ -146,8 +146,8 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
     """
     Given a URL of an image on the internet, crops the image within bounds
         (x_start, y_start) and (x_end, y_end). Position (0,0) is the top left. Then
-        generates a unique local server url and stores the image there. Updates
-        user profile profile_img_url to match.
+        generates a unique local server url using the user's u_id and stores the
+        image there. Updates user profile profile_img_url to match.
     Error Checks: img_url returns HTTP status other than 200 or coords aren't
         in img dimensions or img not jpeg (InputError)
         invalid token (AccessError)
@@ -179,8 +179,6 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
 
     # Crop the image
     img = img.crop((x_start, y_start, x_end, y_end))
-    # saving for debugging purposes
-    #img = img.save("image.jpg")
 
     """
     TODO:
@@ -190,5 +188,11 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
         generated url
         -   e.g. profile_img_url = http://localholst:5001/imgurl/jfkl1235321n.jpg (string)
     """
+
+    # save the image
+    dirname = os.path.dirname(__file__)
+    # replace image.png with the u_id.jpg
+    img = img.save(os.path.join(dirname, "database_files/user_images/", "image.png"))
+
 
     return {}
