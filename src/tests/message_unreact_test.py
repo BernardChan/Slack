@@ -71,7 +71,6 @@ def test_message_unreact_success(data):
 # test input errors
 def test_message_unreact_input_errors(data):
 
-
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
     # save required data variables
     token = data["token"]

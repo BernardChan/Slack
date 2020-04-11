@@ -30,7 +30,7 @@ def insert_message(token, channel_id, message, message_id):
         "u_id": user["u_id"],
         "message": message,
         "time_created": message_id,
-        "reacts": [{"react_id": 1, "u_ids": [], "is_this_user_reacted": False}],
+        "reacts": [],
         "is_pinned": False,
         "channel_id": channel_id,
         })
@@ -223,16 +223,18 @@ def is_valid_react(react_id):
 
 
 def get_react_by_key(key, value, message):
-    print(message)
     reacts = message["reacts"]
     for react in reacts:
         if react[key] == value:
             return react
-
+    return None
 
 def is_already_reacted(message, react_id, user_id):
     react = get_react_by_key("react_id", react_id, message)
-    print(f"react was {react}")
+
+    # No reacts exist yet
+    if len(react) == 0:
+        return False
     if react["react_id"] == react_id and user_id in react["u_ids"]:
         return True
 
@@ -254,8 +256,16 @@ def message_react(token, message_id, react_id):
         raise InputError("You have already reacted to this")
 
     react = get_react_by_key("react_id", react_id, message)
-    react["u_ids"].append(user["u_id"])
-    react["is_this_user_reacted"] = True
+    if react is None:
+        message["reacts"].append(
+            {"react_id": react_id,
+             "u_ids": [user["u_id"]],
+             "is_this_user_reacted": True})
+    else:
+        react["u_ids"].append(user["u_id"])
+        react["is_this_user_reacted"] = True
+
+    return {}
 
 
 def message_unreact(token, message_id, react_id):
@@ -275,6 +285,7 @@ def message_unreact(token, message_id, react_id):
 
     react = get_react_by_key("react_id", react_id, message)
     react["u_ids"].remove(user["u_id"])
+    if len(react["u_ids"]) == 0:
+        message["reacts"].remove(react)
 
-    # If there are no u_id in u_ids, then nobody has reacted
-    react["is_this_user_reacted"] = len(react["u_ids"]) != 0
+    return {}
