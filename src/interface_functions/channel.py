@@ -107,30 +107,34 @@ def channel_messages(token, channel_id, start):
         "end": end,
     }
 
+# Note: this assumes that the user dictionary is identical to the members dictionary
+#   this should be the case if we are inviting users correctly
 def channel_leave(token, channel_id):
-    return "Not Implemented"
-
-
-# TODO: Has problems similar to channel_join and leave
-def WIP_channel_leave(token, channel_id):
-    # include valid token function here, stub function atm
-    help.is_valid_token(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
 
     # check if user is a member of the channel
     help.is_user_valid_channel_member(token, channel_id)
+    help.is_valid_token(token)
 
     # remove the authorised user from the channel
-    mem = DATABASE['channels'][channel_id]['members']
-    for i in range(len(mem)):
-        if mem[i]['token'] == token:
-            del mem[i]
-            break
+    channel = db.get_channels_by_key("channel_id", channel_id)[0]
 
-    return {
-    }
+    user = db.get_users_by_key("token", token)
+    try:
+        channel["owner_members"].remove(user)
+    except ValueError:
+        pass  # ignore if the user wasn't also an owner
+
+    channel["members"].remove(user)
+
+
+    return {}
+
+
+# TODO: Has problems similar to channel_join and leave
+def WIP_channel_leave(token, channel_id):
 
 
 def channel_join(token, channel_id):
