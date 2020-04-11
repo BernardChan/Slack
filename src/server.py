@@ -412,7 +412,7 @@ def start_thread_helper():
 
 
 def start_pickling_thread(length):
-    t = threading.Thread(target=db.pickle_database_routinely(length))
+    t = threading.Thread(target=db.pickle_database_routinely, args=[length])
     t.start()
 
 
