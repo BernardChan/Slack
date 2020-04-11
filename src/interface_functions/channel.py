@@ -78,7 +78,7 @@ def get_finish_and_end(start, messages):
     end = start + 50
     finish = end
     num_messages = len(messages)
-    if start >= num_messages:
+    if start > num_messages:
         raise InputError("Start given was greater than the number of messages in the channel")
 
     # set finish to -1 if we don't have 50 messages to send back

@@ -218,62 +218,57 @@ def message_sendlater():
 
     return dumps(msg.send_later(token, channel_id, message, time_sent))
 
-# """
-# @APP.route("/message/react", methods=['POST'])
-# def message_react():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     react_id = resp["react_id"]
-#     return dumps(msg.message_react(token, message_id, react_id))
-# """
 
-# """
-# @APP.route("/message/unreact", methods=['POST'])
-# def message_unreact():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     react_id = resp["react_id"]
-#     return dumps(msg.message_unreact(token, message_id, react_id))
-# """
+@APP.route("/message/react", methods=['POST'])
+def message_react():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    react_id = resp["react_id"]
+    return dumps(msg.message_react(token, message_id, react_id))
 
-# """
-# @APP.route("/message/pin", methods=['POST'])
-# def message_pin():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     return dumps(msg.message_pin(token, message_id))
-# """
 
-# """
-# @APP.route("/message/unpin", methods=['POST'])
-# def message_unpin():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     return dumps(msg.message_unpin(token, message_id))
-# """
+@APP.route("/message/unreact", methods=['POST'])
+def message_unreact():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    react_id = resp["react_id"]
+    return dumps(msg.message_unreact(token, message_id, react_id))
 
-# """
-# @APP.route("/message/remove", methods=['DELETE'])
-# def message_remove():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     return dumps(msg.message_remove(token, message_id))
-# """
 
-# """
-# @APP.route("/message/edit", methods=['PUT'])
-# def message_edit():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     message = resp["message"]
-#     return dumps(msg.message_edit(token, message_id, message))
-# """
+@APP.route("/message/pin", methods=['POST'])
+def message_pin():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    return dumps(msg.message_pin(token, message_id))
+
+
+@APP.route("/message/unpin", methods=['POST'])
+def message_unpin():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    return dumps(msg.message_unpin(token, message_id))
+
+
+@APP.route("/message/remove", methods=['DELETE'])
+def message_remove():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    return dumps(msg.message_remove(token, message_id))
+
+
+@APP.route("/message/edit", methods=['PUT'])
+def message_edit():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    message = resp["message"]
+    return dumps(msg.message_edit(token, message_id, message))
+
 
 # '''
 # ----------------------------------------------------------------------------------
