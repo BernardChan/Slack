@@ -30,7 +30,7 @@ def insert_message(token, channel_id, message, message_id):
         "u_id": user["u_id"],
         "message": message,
         "time_created": message_id,
-        "reacts": {"react_id": None, "u_ids": [], "is_this_user_reacted": False},
+        "reacts": [{"react_id": 1, "u_ids": [], "is_this_user_reacted": False}],
         "is_pinned": False,
         "channel_id": channel_id,
         })
@@ -223,6 +223,7 @@ def is_valid_react(react_id):
 
 
 def get_react_by_key(key, value, message):
+    print(message)
     reacts = message["reacts"]
     for react in reacts:
         if react[key] == value:
@@ -231,7 +232,8 @@ def get_react_by_key(key, value, message):
 
 def is_already_reacted(message, react_id, user_id):
     react = get_react_by_key("react_id", react_id, message)
-    if react["react_id"] == react_id and user_id in react["user_ids"]:
+    print(f"react was {react}")
+    if react["react_id"] == react_id and user_id in react["u_ids"]:
         return True
 
     return False
@@ -257,8 +259,9 @@ def message_react(token, message_id, react_id):
 
 
 def message_unreact(token, message_id, react_id):
+    print(f"message id was {message_id}")
     message = db.get_messages_by_key("message_id", message_id)
-
+    print(f"message returned was {message}")
     # Error checking
     is_valid_message_id(message)
     message = message[0]

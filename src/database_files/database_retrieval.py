@@ -42,9 +42,12 @@ def get_messages_by_key(key, value):
 
     # Find what channels a user is in
     for message in messages:
+        print("searching")
         if message[key] == value:
+            print(f"message was {message}\n message_id was {value}\n\n")
             return_messages.append(message)
 
+    print(f"returning messages: {return_messages}")
     return return_messages
 
 # returns all messages from a given channel_id

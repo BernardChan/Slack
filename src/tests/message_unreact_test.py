@@ -21,8 +21,7 @@ from helper_functions import test_helper_file as ch
 # Pytest fixture to register a test user, create a channel, send a message and react to that message
 @pytest.fixture
 def data():
-    if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
-        return
+
     # register a user
     user = auth_register("test.user1@test.com", "password123", "fname1", "lname1")
     u_id = user["u_id"]
@@ -57,9 +56,7 @@ def assert_is_unreacted(token, channel_id, message_id):
 
 # test succesful
 def test_message_unreact_success(data):
-    workspace_reset()
-    if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
-        return
+
     # data fixture creates a user and channel then sends a message with message_id and reacts to it
     # save this data
     token = data["token"]
@@ -73,9 +70,8 @@ def test_message_unreact_success(data):
 
 # test input errors
 def test_message_unreact_input_errors(data):
-    workspace_reset()
-    if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
-        return
+
+
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
     # save required data variables
     token = data["token"]
@@ -99,9 +95,8 @@ def test_message_unreact_input_errors(data):
 
 # test access error
 def test_message_unreact_invalid_token(data):
-    workspace_reset()
-    if not ch.isFunctionImplemented(message_unreact, -1, -1, -1):
-        return
+
+
     # CREATE A USER AND CHANNEL, SEND A MESSAGE AND REACT TO IT
     # save required data variables (only needs message id)
     message_id = data["message_id"]
