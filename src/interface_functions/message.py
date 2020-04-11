@@ -181,6 +181,42 @@ def send_later(token, channel_id, message, time_sent):
     return {"message_id": message_id}
 
 
+def message_pin(token, message_id):
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Error Checking
+    is_valid_message_id(message)
+    help.is_slackr_admin(token)
+    message = message[0]
+    if message["is_pinned"]:
+        raise InputError("Message already pinned")
+
+    channel_id = message["channel_id"]
+    help.is_user_valid_channel_member(token, channel_id)
+
+    # Pin the message
+    message["is_pinned"] = True
+    return {}
+
+
+def message_unpin(token, message_id):
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Error Checking
+    is_valid_message_id(message)
+    help.is_slackr_admin(token)
+    message = message[0]
+    if not message["is_pinned"]:
+        raise InputError("Message already pinned")
+
+    channel_id = message["channel_id"]
+    help.is_user_valid_channel_member(token, channel_id)
+
+    # Pin the message
+    message["is_pinned"] = False
+    return {}
+
+
 def message_react(token, message_id, react_id):
     return "Not Implemented"
 
