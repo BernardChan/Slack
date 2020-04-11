@@ -134,15 +134,10 @@ def WIP_channel_leave(token, channel_id):
 
 
 def channel_join(token, channel_id):
-    # include valid token function here, stub function atm
-    help.is_valid_token(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
-
-    # check if user is a member of the channel
-    help.is_user_valid_channel_member(token, channel_id)
-
+    help.is_valid_token(token)
 
     # If the channel is private, check if the user is authorised to join
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
@@ -151,6 +146,7 @@ def channel_join(token, channel_id):
 
     # adds user to members list in channel
     user = db.get_users_by_key('token', token)[0]
+    print(f"user was {user}")
     channel["members"].append(user)
 
     return {}

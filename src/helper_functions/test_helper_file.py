@@ -76,9 +76,16 @@ def init_helper():
     private_channel_members = channel["all_members"]  # array of {u_id, name_first, name_last}
 
 
+import database_files.database as db
+
 # Returns true if given user ID is part of the channel, else false
 def is_member(user_id, is_public):
     global channel_members, private_channel_members
+    print(db.DATABASE)
+
+    print(channel_members)
+
+    print(f"was this user_id {user_id} in the public channel?")
     if is_public:
         return any([user_id == person["u_id"] for person in channel_members])
     else:
