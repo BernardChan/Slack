@@ -19,7 +19,7 @@ from helper_functions import test_helper_file as ch
 # Pytest fixture to register a test user, create a channel and send a message
 @pytest.fixture
 def data():
-
+    workspace_reset()
     # register a user
     user = auth_register("test.user1@test.com", "password123", "fname1", "lname1")
     u_id = user["u_id"]
@@ -48,7 +48,7 @@ def assert_is_reacted(token, user_id, channel_id, message_id):
             # reacts is a list of dictionaries where each dictionary contains react_id, u_id, is_this_user_reacted
             
             assert(message["reacts"][0]["react_id"] == 1)
-            assert(message["reacts"][0]["u_id"] == user_id)
+            assert(user_id in message["reacts"][0]["u_ids"])
 
 # test succesful
 def test_message_react_success(data):
