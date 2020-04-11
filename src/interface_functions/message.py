@@ -233,7 +233,7 @@ def is_already_reacted(message, react_id, user_id):
     react = get_react_by_key("react_id", react_id, message)
 
     # No reacts exist yet
-    if len(react) == 0:
+    if react is None:
         return False
     if react["react_id"] == react_id and user_id in react["u_ids"]:
         return True
