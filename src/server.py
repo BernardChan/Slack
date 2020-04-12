@@ -15,7 +15,7 @@ import interface_functions.user_remove as rmv
 import interface_functions.channels as channels
 import interface_functions.auth as auth
 import interface_functions.workspace_reset as wr
-
+import interface_functions.hangman as hang
 
 def defaultHandler(err):
     response = err.get_response()
@@ -41,16 +41,16 @@ def echo():
     return dumps(request.form)
 
 
-# Remove this. This is purely for debugging. 
-# It catches all routes that aren't implemented and echos
-#   what was received instead of throwing a 404 error.
-@APP.route("/<path:dummy>", methods=["GET", "POST", "PUT", "DELETE"])
-def catch_all(dummy):
-    # Ternary is too long for this if else
-    if request.method in ["POST", "PUT", "DELETE"]:
-        return dumps(request.form)
-    else:
-        return dumps(request.args)
+# # Remove this. This is purely for debugging.
+# # It catches all routes that aren't implemented and echos
+# #   what was received instead of throwing a 404 error.
+# @APP.route("/<path:dummy>", methods=["GET", "POST", "PUT", "DELETE"])
+# def catch_all(dummy):
+#     # Ternary is too long for this if else
+#     if request.method in ["POST", "PUT", "DELETE"]:
+#         return dumps({"foobar": "testing"})
+#     else:
+#         return dumps(request.args)
 
 
 @APP.route("/get/database", methods=["GET"])
@@ -389,6 +389,32 @@ def admin_user_remove():
     u_id = int(data["u_id"])
 
     return dumps(rmv.admin_user_remove(token, u_id))
+
+
+@APP.route("/hangman/start", methods=["GET"])
+def hangman_start():
+    # data = request.get_json()
+    token = request.args.get("token")
+    channel_id = int(request.args.get("channel_id"))
+
+    return dumps(hang.hangman_start(token, channel_id))
+
+
+@APP.route("/hangman/guess", methods=["GET"])
+def hangman_guess():
+    token = request.args.get("token")
+    channel_id = int(request.args.get("channel_id"))
+    guess_letter = request.args.get("guess_letter")
+
+    return dumps(hang.hangman_guess(token, channel_id, guess_letter))
+
+
+@APP.route("/hangman/details", methods=["GET"])
+def hangman_details():
+    token = request.args.get("token")
+    channel_id = int(request.args.get("channel_id"))
+
+    return dumps(hang.hangman_details(token, channel_id))
 
 
 @APP.route("/workspace/reset", methods=['POST'])
