@@ -35,7 +35,8 @@ def user_profile(token, u_id):
         "email": full_user["email"],
         "name_first": full_user["name_first"],
         "name_last": full_user["name_last"],
-        "handle_str": full_user["handle_str"]
+        "handle_str": full_user["handle_str"],
+        "profile_img_url": full_user["profile_img_url"]
     }
 
     return profile
