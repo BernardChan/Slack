@@ -180,15 +180,6 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
     # Crop the image
     img = img.crop((x_start, y_start, x_end, y_end))
 
-    """
-    TODO:
-    -   Generate a unique url in the server and store the image there (so that the server
-        has a local copy of this cropped image)
-    -   Set the profile_img_url (in database of users) for the user with token to the
-        generated url
-        -   e.g. profile_img_url = http://localholst:5001/imgurl/jfkl1235321n.jpg (string)
-    """
-
     # get the u_id of the user by token
     u_id = get_users_by_key("token", token)[0]["u_id"]
     # save the image to database_files/user_images/{u_id}.jpg
