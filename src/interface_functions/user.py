@@ -16,7 +16,6 @@ def user_profile(token, u_id):
     """
     For a valid user, returns information about their user id, email, first name,
         last name, and handle
-    Error Checks: invalid token (AccessError), invalid u_id (InputError)
     Input: token, u_id
     Output: {u_id, email, name_first, name_last, handle_str}
     """
@@ -45,7 +44,6 @@ def user_profile(token, u_id):
 def user_profile_setname(token, name_first, name_last):
     """
     Update the authorised user's first and last name
-    Error Checks: invalid token (AccessError), name(s) not within 1-50 ch (InputError)
     Input: token, name_first, name_last
     Output: {}
     """
@@ -75,7 +73,6 @@ def user_profile_setname(token, name_first, name_last):
 def user_profile_setemail(token, email):
     """
     Updates the authorised user's email address
-    Error Checks: email is not valid or email is in use (InputError), invalid token (AccessError)
     Input: token, email
     Output: {}
     """
@@ -113,8 +110,6 @@ def user_profile_setemail(token, email):
 def user_profile_sethandle(token, handle_str):
     """
     Update the authorised user's handle (display name)
-    Error checks: handle not between 2-20 chars or handle is in use (InputError),
-        invalid token (AccessError)
     Input: token, handle_str
     Output: {}
     """
@@ -148,9 +143,6 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
         (x_start, y_start) and (x_end, y_end). Position (0,0) is the top left. Then
         generates a unique local server url using the user's u_id and stores the
         image there. Updates user profile profile_img_url to match.
-    Error Checks: img_url returns HTTP status other than 200 or coords aren't
-        in img dimensions or img not jpeg (InputError)
-        invalid token (AccessError)
     Input: token, img_url, x_start, y_start, x_end, y_end
     Output: {}
     """
