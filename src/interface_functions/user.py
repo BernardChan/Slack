@@ -140,9 +140,8 @@ def user_profile_sethandle(token, handle_str):
 def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # pylint: disable=too-many-arguments
     """
     Given a URL of an image on the internet, crops the image within bounds
-        (x_start, y_start) and (x_end, y_end). Position (0,0) is the top left. Then
-        generates a unique local server url using the user's u_id and stores the
-        image there. Updates user profile profile_img_url to match.
+        (x_start, y_start) and (x_end, y_end). Then stores the image in
+        database_files/user_images/<u_id>.jpg
     Input: token, img_url, x_start, y_start, x_end, y_end
     Output: {}
     """
