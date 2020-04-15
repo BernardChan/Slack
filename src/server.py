@@ -1,7 +1,8 @@
 import sys
+import os.path
 import threading
 from json import dumps
-from flask import Flask, request
+from flask import Flask, request, redirect, url_for, send_from_directory
 from flask_cors import CORS
 import database_files.database as db
 import interface_functions.other as other
@@ -325,7 +326,13 @@ def user_profile_uploadphoto():
     x_end = data["x_end"]
     y_end = data["y_end"]
 
-    return dumps(user.user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
+    # saves the cropped image in database_files/user_images/<u_id>.jpg
+    return dumps(user.user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end))
+
+@APP.route("/userimages/<img_name>")
+def get_profile_image(img_name):
+    dirname = os.path.dirname(__file__)
+    return send_from_directory(f"{dirname}/database_files/user_images/", img_name)
 
 # '''
 # ----------------------------------------------------------------------------------
