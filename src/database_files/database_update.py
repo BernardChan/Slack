@@ -46,7 +46,8 @@ def add_user_to_database(email, password, name_first, name_last, handle, u_id):
         "name_last": name_last, 
         "handle_str": handle, 
         "token": token,
-        "permission_id": permission_id
+        "permission_id": permission_id,
+        "profile_img_url": ""
     }
 
     db.DATABASE['users'].append(new_user)
