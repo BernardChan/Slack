@@ -193,7 +193,6 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
     u_id = get_users_by_key("token", token)[0]["u_id"]
     # save the image to database_files/user_images/{u_id}.jpg
     dirname = os.path.dirname(__file__)
-    img = img.save(os.path.join(dirname, "database_files/user_images/", f"{u_id}.jpg"))
-
+    img.save(os.path.join(dirname, "database_files/user_images/", f"{u_id}"), "JPEG")
 
     return {}
