@@ -1,10 +1,16 @@
+# pylint: disable=W0105, W0622
 from error import InputError
 import database_files.database_retrieval as db
 from database_files.database_retrieval import get_user_channels_by_key
 from database_files.database_retrieval import get_channels
 from helper_functions.interface_function_helpers import is_valid_token
 import helper_functions.interface_function_helpers as help
-import uuid
+
+
+"""
+File for functions relating to channels in Slackr
+"""
+
 
 def channels_list(token):
     # Raise an access error if not a valid token
@@ -26,6 +32,13 @@ def channels_listall(token):
 
 
 def channels_create(token, name, is_public):
+    """
+    :param token: authorised user's identifier
+    :param name: string for the name of a channel
+    :param is_public: boolean for whether the channel is public or not
+    :return: returns a dictionary with the created channel's id
+    """
+
     is_valid_token(token)
     if len(name) > 20:
         raise InputError("Channel name cannot be more than 20 characters long")
@@ -33,7 +46,6 @@ def channels_create(token, name, is_public):
     channels = db.get_channels()
     user = db.get_users_by_key("token", token)[0]
     channel_id = help.get_unique_id()
-    
 
     channels.append(
         {

@@ -1,3 +1,4 @@
+# pylint disable=W0105
 """
 Resets the workspace state by resetting the database to blank
 """

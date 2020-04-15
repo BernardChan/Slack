@@ -1,7 +1,13 @@
+# pylint: disable=W0105, W0622, C0200
 import database_files.database_retrieval as db
-import helper_functions.interface_function_helpers as help
 from database_files.database import DATABASE
+import helper_functions.interface_function_helpers as help
 from error import InputError, AccessError
+
+
+"""
+File for functions relating to a Slackr channel
+"""
 
 
 def channel_invite(token, channel_id, u_id):
@@ -36,9 +42,16 @@ def WIP_channel_invite(token, channel_id, u_id):
     }
 
 
-# Given a Channel with ID channel_id that the authorised user is part of, provide basic details about the channel
+# Given a Channel with ID channel_id that the authorised user is part of,
+# provide basic details about the channel
 def channel_details(token, channel_id):
-    print(f"token and channel id was {token}, {channel_id}")
+    """
+    Given a Channel with ID channel_id that the authorised user is part of,
+    provide basic details about the channel
+    :param token: authorised user's identifier
+    :param channel_id: Integer for a specific channel
+    :return: returns a dictionary with the channel name, owners, and members
+    """
     help.is_valid_token(token)
     help.check_channel_validity(channel_id)
     help.check_member_status_of_channel(token, channel_id)
@@ -56,6 +69,12 @@ def channel_details(token, channel_id):
 # end is the ending NUMBER to be returned by messages
 # can't use -1 for slice notation since that return (n-1)th place
 def get_finish_and_end(start, messages):
+    """
+    Get the starting and ending index of the given messages and start index
+    :param start: integer for the first message
+    :param messages: list of messages
+    :return: returns a valid index range for the given list of messages
+    """
     end = start + 50
     finish = end
     num_messages = len(messages)
@@ -74,11 +93,17 @@ def get_finish_and_end(start, messages):
 
 
 def channel_messages(token, channel_id, start):
-
+    """
+    Returns a list of messages that have been paginated for 50 messages
+    :param token: authorised user's identifier
+    :param channel_id: Integer for a specific channel
+    :param start: integer for the starting index of a list of messages
+    :return: returns the messages within the start and end indices
+    """
     help.is_valid_token(token)
     # Check Errors
     help.check_channel_validity(channel_id)
-    
+
     help.is_user_valid_channel_member(token, channel_id)
 
     messages = db.get_channel_messages(channel_id)
@@ -122,7 +147,7 @@ def channel_join(token, channel_id):
     return "Not Implemented"
 
 
-# TODO: Throws access error when the user is not the slackr owner, but the 
+# TODO: Throws access error when the user is not the slackr owner, but the
 # channel is public. Non-admins should be able to join public channels.
 def WIP_channel_join(token, channel_id):
     # include valid token function here, stub function atm
@@ -147,6 +172,12 @@ def WIP_channel_join(token, channel_id):
 
 
 def is_channel_owner(channel, u_id):
+    """
+    Returns boolean if the user is an owner of the channel
+    :param channel: dictionary for a specific channel
+    :param u_id: integer for a specific user
+    :return: returns boolean
+    """
     # checks if authorized user is already an admin
 
     for members in channel["owner_members"]:
@@ -158,6 +189,13 @@ def is_channel_owner(channel, u_id):
 
 
 def channel_addowner(token, channel_id, u_id):
+    """
+    Adds the user with the given u_id as an owner
+    :param token: authorised user's identifier
+    :param channel_id: Integer for a specific channel
+    :param u_id: integer for a specific user
+    :return: returns an empty dictionary
+    """
     # include valid token function here, stub function atm
     help.is_valid_token(token)
 
@@ -167,7 +205,7 @@ def channel_addowner(token, channel_id, u_id):
     # check if user is channel owner
     if not db.is_owner_in_channel("token", token, channel_id):
         raise AccessError("You are not the channel owner, so don't have permission!")
-    
+
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
     # checks if authorized user is already an admin
     if is_channel_owner(channel, u_id):
@@ -176,8 +214,8 @@ def channel_addowner(token, channel_id, u_id):
     user = db.get_users_by_key("u_id", u_id)[0]
     if not db.is_user_in_channel("u_id", u_id, channel_id):
         channel["members"].append(user)
-    
-   
+
+
     channel["owner_members"].append(user)
 
     return {
@@ -185,7 +223,13 @@ def channel_addowner(token, channel_id, u_id):
 
 
 def channel_removeowner(token, channel_id, u_id):
-
+    """
+    Removes the user with u_id from being an owner
+    :param token: authorised user's identifier
+    :param channel_id: Integer for a specific channel
+    :param u_id: integer for a specific user
+    :return: returns an empty dictionary
+    """
     # include valid token function here, stub function atm
     help.is_valid_token(token)
 

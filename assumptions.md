@@ -56,3 +56,7 @@
 
 ## `standup_start`
 - Assume that the combined message can be over 1000 characters (since each individual message can be 1000 characters long)
+
+
+## `admin/user/remove`
+- if slackr owner removes themselves, there is no slackr owner anymore

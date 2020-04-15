@@ -1,8 +1,8 @@
 import sys
+import threading
 from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
-from error import InputError
 import database_files.database as db
 import interface_functions.other as other
 import interface_functions.standup as su
@@ -11,9 +11,11 @@ import interface_functions.channel as ch
 import interface_functions.channels as chs
 import interface_functions.user as user
 import interface_functions.admin_userpermission_change as admin
+import interface_functions.user_remove as rmv
 import interface_functions.channels as channels
 import interface_functions.auth as auth
 import interface_functions.workspace_reset as wr
+
 
 def defaultHandler(err):
     response = err.get_response()
@@ -69,12 +71,14 @@ def auth_register():
     name_last = resp["name_last"]
     return dumps(auth.auth_register(email, password, name_first, name_last))
 
+
 @APP.route("/auth/login", methods=['POST'])
 def auth_login():
     resp = request.get_json()
     email = resp["email"]
     password = resp["password"]
     return dumps(auth.auth_login(email, password))
+
 
 @APP.route("/auth/logout", methods=['POST'])
 def auth_logout():
@@ -106,6 +110,7 @@ def channel_details():
 
     return dumps(ch.channel_details(token, channel_id))
 
+
 @APP.route("/channel/messages", methods=['GET'])
 def channel_messages():
     resp = request.args
@@ -135,6 +140,7 @@ def channel_messages():
 #     return dumps(ch.channel_join(token, channel_id))
 # """
 
+
 @APP.route("/channel/addowner", methods=['POST'])
 def channel_addowner():
     resp = request.get_json()
@@ -142,6 +148,7 @@ def channel_addowner():
     channel_id = resp["channel_id"]
     u_id = resp["u_id"]
     return dumps(ch.channel_addowner(token, channel_id, u_id))
+
 
 @APP.route("/channel/removeowner", methods=['POST'])
 def channel_removeowner():
@@ -162,11 +169,13 @@ def channels_list():
 
     return dumps(channels.channels_list(token))
 
+
 @APP.route("/channels/listall", methods=['GET'])
 def channels_listall():
     token = request.args.get("token")
     
     return dumps(channels.channels_listall(token))
+
 
 @APP.route("/channels/create", methods=['POST'])
 def channels_create():
@@ -195,6 +204,7 @@ def message_send():
     message = resp["message"]
 
     return dumps(msg.message_send(token, channel_id, message))
+
 
 @APP.route("/message/sendlater", methods=['POST'])
 def message_sendlater():
@@ -277,6 +287,7 @@ def user_profile():
 
     return dumps(user.user_profile(token, u_id))
 
+
 @APP.route("/user/profile/setname", methods=['PUT'])
 def user_profile_setname():
     data = request.get_json()
@@ -286,6 +297,7 @@ def user_profile_setname():
 
     return dumps(user.user_profile_setname(token, name_first, name_last))
 
+
 @APP.route("/user/profile/setemail", methods=['PUT'])
 def user_profile_setemail():
     data = request.get_json()
@@ -293,6 +305,7 @@ def user_profile_setemail():
     email = data["email"]
 
     return dumps(user.user_profile_setemail(token, email))
+
 
 @APP.route("/user/profile/sethandle", methods=['PUT'])
 def user_profile_sethandle():
@@ -369,6 +382,7 @@ def search():
 
     return dumps(other.search(token, query))
 
+
 @APP.route("/admin/userpermission/change", methods=['POST'])
 def admin_userpermission_change():
     data = request.get_json()
@@ -378,9 +392,53 @@ def admin_userpermission_change():
 
     return dumps(admin.admin_userpermission_change(token, u_id, permission_id))
 
+
+@APP.route("/admin/user/remove", methods=["DELETE"])
+def admin_user_remove():
+    """
+    Sends the DELETE request to
+    remove the user with the given u_id from the database
+
+    :return: Returns a json object containing the dictionary from user remove
+    """
+    data = request.get_json()
+    token = data["token"]
+    u_id = int(data["u_id"])
+
+    return dumps(rmv.admin_user_remove(token, u_id))
+
+
 @APP.route("/workspace/reset", methods=['POST'])
 def workspace_reset():
     return dumps(wr.workspace_reset())
 
+
+# Creates a thread for setting a schedule
+def start_thread_helper():
+    """
+    Creates a thread to constantly check if a message needs to be sent from the message queue
+    :return: returns nothing
+    """
+    t = threading.Thread(target=msg.set_sched)
+    t.start()
+
+
+def start_pickling_thread(length):
+    t = threading.Thread(target=db.pickle_database_routinely(length))
+    t.start()
+
+
 if __name__ == "__main__":
+    # Create a thread for message_send_later()
+    start_thread_helper()
+
+    # Start pickling the database routinely
+    db.unpickle_database()
+    start_pickling_thread(length=10)
+
+    # Start the server
     APP.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 42069))
+
+
+
+
