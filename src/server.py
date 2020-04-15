@@ -331,7 +331,7 @@ def user_profile_uploadphoto():
 
 @APP.route("/userimages/<img_name>")
 def get_profile_image(img_name):
-    dirname = os.path.dirname(__file__)
+    dirname = os.path.realpath(os.getcwd())
     return send_from_directory(f"{dirname}/database_files/user_images/", img_name)
 
 # '''
