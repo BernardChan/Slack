@@ -189,10 +189,11 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
         -   e.g. profile_img_url = http://localholst:5001/imgurl/jfkl1235321n.jpg (string)
     """
 
-    # save the image
+    # get the u_id of the user by token
+    u_id = get_users_by_key("token", token)[0]["u_id"]
+    # save the image to database_files/user_images/{u_id}.jpg
     dirname = os.path.dirname(__file__)
-    # replace image.png with the u_id.jpg
-    img = img.save(os.path.join(dirname, "database_files/user_images/", "image.png"))
+    img = img.save(os.path.join(dirname, "database_files/user_images/", f"{u_id}.jpg"))
 
 
     return {}
