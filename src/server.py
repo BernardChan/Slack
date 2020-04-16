@@ -15,7 +15,7 @@ import interface_functions.user_remove as rmv
 import interface_functions.channels as channels
 import interface_functions.auth as auth
 import interface_functions.workspace_reset as wr
-
+import interface_functions.hangman as hang
 
 def defaultHandler(err):
     response = err.get_response()
@@ -41,16 +41,16 @@ def echo():
     return dumps(request.form)
 
 
-# Remove this. This is purely for debugging. 
-# It catches all routes that aren't implemented and echos
-#   what was received instead of throwing a 404 error.
-@APP.route("/<path:dummy>", methods=["GET", "POST", "PUT", "DELETE"])
-def catch_all(dummy):
-    # Ternary is too long for this if else
-    if request.method in ["POST", "PUT", "DELETE"]:
-        return dumps(request.form)
-    else:
-        return dumps(request.args)
+# # Remove this. This is purely for debugging.
+# # It catches all routes that aren't implemented and echos
+# #   what was received instead of throwing a 404 error.
+# @APP.route("/<path:dummy>", methods=["GET", "POST", "PUT", "DELETE"])
+# def catch_all(dummy):
+#     # Ternary is too long for this if else
+#     if request.method in ["POST", "PUT", "DELETE"]:
+#         return dumps({"foobar": "testing"})
+#     else:
+#         return dumps(request.args)
 
 
 @APP.route("/get/database", methods=["GET"])
@@ -218,62 +218,57 @@ def message_sendlater():
 
     return dumps(msg.send_later(token, channel_id, message, time_sent))
 
-# """
-# @APP.route("/message/react", methods=['POST'])
-# def message_react():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     react_id = resp["react_id"]
-#     return dumps(msg.message_react(token, message_id, react_id))
-# """
 
-# """
-# @APP.route("/message/unreact", methods=['POST'])
-# def message_unreact():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     react_id = resp["react_id"]
-#     return dumps(msg.message_unreact(token, message_id, react_id))
-# """
+@APP.route("/message/react", methods=['POST'])
+def message_react():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    react_id = resp["react_id"]
+    return dumps(msg.message_react(token, message_id, react_id))
 
-# """
-# @APP.route("/message/pin", methods=['POST'])
-# def message_pin():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     return dumps(msg.message_pin(token, message_id))
-# """
 
-# """
-# @APP.route("/message/unpin", methods=['POST'])
-# def message_unpin():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     return dumps(msg.message_unpin(token, message_id))
-# """
+@APP.route("/message/unreact", methods=['POST'])
+def message_unreact():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    react_id = resp["react_id"]
+    return dumps(msg.message_unreact(token, message_id, react_id))
 
-# """
-# @APP.route("/message/remove", methods=['DELETE'])
-# def message_remove():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     return dumps(msg.message_remove(token, message_id))
-# """
 
-# """
-# @APP.route("/message/edit", methods=['PUT'])
-# def message_edit():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     message_id = resp["message_id"]
-#     message = resp["message"]
-#     return dumps(msg.message_edit(token, message_id, message))
-# """
+@APP.route("/message/pin", methods=['POST'])
+def message_pin():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    return dumps(msg.message_pin(token, message_id))
+
+
+@APP.route("/message/unpin", methods=['POST'])
+def message_unpin():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    return dumps(msg.message_unpin(token, message_id))
+
+
+@APP.route("/message/remove", methods=['DELETE'])
+def message_remove():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    return dumps(msg.message_remove(token, message_id))
+
+
+@APP.route("/message/edit", methods=['PUT'])
+def message_edit():
+    resp = request.get_json()
+    token = resp["token"]
+    message_id = resp["message_id"]
+    message = resp["message"]
+    return dumps(msg.message_edit(token, message_id, message))
+
 
 # '''
 # ----------------------------------------------------------------------------------
@@ -394,6 +389,32 @@ def admin_user_remove():
     u_id = int(data["u_id"])
 
     return dumps(rmv.admin_user_remove(token, u_id))
+
+
+@APP.route("/hangman/start", methods=["GET"])
+def hangman_start():
+    # data = request.get_json()
+    token = request.args.get("token")
+    channel_id = int(request.args.get("channel_id"))
+
+    return dumps(hang.hangman_start(token, channel_id))
+
+
+@APP.route("/hangman/guess", methods=["GET"])
+def hangman_guess():
+    token = request.args.get("token")
+    channel_id = int(request.args.get("channel_id"))
+    guess_letter = request.args.get("guess_letter")
+
+    return dumps(hang.hangman_guess(token, channel_id, guess_letter))
+
+
+@APP.route("/hangman/details", methods=["GET"])
+def hangman_details():
+    token = request.args.get("token")
+    channel_id = int(request.args.get("channel_id"))
+
+    return dumps(hang.hangman_details(token, channel_id))
 
 
 @APP.route("/workspace/reset", methods=['POST'])

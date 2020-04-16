@@ -6,7 +6,6 @@ from database_files.database_retrieval import get_channels
 from helper_functions.interface_function_helpers import is_valid_token
 import helper_functions.interface_function_helpers as help
 
-
 """
 File for functions relating to channels in Slackr
 """
@@ -54,7 +53,14 @@ def channels_create(token, name, is_public):
             "owner_members": [user],
             "members": [user],
             "standup": {"active": False, "msg_queue": "", "time_finish": None},
-            "is_public": is_public
+            "is_public": is_public,
+            "hangman": {
+                "mistake": 0,
+                "guessed": [" "],
+                "hangmanWord": "word",
+                "guess": "",
+                "active": False
+            }
         }
     )
 

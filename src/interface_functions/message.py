@@ -4,7 +4,7 @@ import time
 import sched
 import database_files.database_retrieval as db
 import helper_functions.interface_function_helpers as help
-from error import InputError
+from error import InputError, AccessError
 
 
 """
@@ -30,7 +30,7 @@ def insert_message(token, channel_id, message, message_id):
         "u_id": user["u_id"],
         "message": message,
         "time_created": message_id,
-        "reacts": {"react_id": None, "u_ids": [], "is_this_user_reacted": False},
+        "reacts": [],
         "is_pinned": False,
         "channel_id": channel_id,
         })
@@ -58,20 +58,51 @@ def message_send(token, channel_id, message):
     }
 
 
+def is_valid_message_change(user, message):
+    # Authorised user did not make the message and is not the owner
+    if user["u_id"] != message["u_id"] and user["permission_id"] != 1:
+        raise AccessError("You are not authorised to delete this message")
+
+
+def is_valid_message_id(message):
+    if len(message) == 0:
+        raise InputError("Message Not found")
+
+
 def message_remove(token, message_id):
 
-    return "Not Implemented"
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Raise errors
+    is_valid_message_id(message)
+    help.is_valid_token(token)
+    user = db.get_users_by_key("token", token)[0]
+    message = message[0]
+    is_valid_message_change(user, message)
+
+    # Remove the message
+    messages = db.get_messages()
+    messages.remove(message)
+
+    return {}
 
 
+# Assumption - input error raised if message not found
 def message_edit(token, message_id, message):
-    """
+    message_string = message
 
-    :param token:
-    :param message_id:
-    :param message:
-    :return:
-    """
-    return "Not Implemented"
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Raise errors
+    is_valid_message_id(message)
+    help.is_valid_token(token)
+    user = db.get_users_by_key("token", token)[0]
+    message = message[0]
+    is_valid_message_change(user, message)
+
+    message["message"] = message_string  # TODO: verify this works
+
+    return {}
 
 
 # File for message/sendlater(token, channel_id, message, time_sent)
@@ -150,9 +181,111 @@ def send_later(token, channel_id, message, time_sent):
     return {"message_id": message_id}
 
 
+def message_pin(token, message_id):
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Error Checking
+    is_valid_message_id(message)
+    help.is_slackr_admin(token)
+    message = message[0]
+    if message["is_pinned"]:
+        raise InputError("Message already pinned")
+
+    channel_id = message["channel_id"]
+    help.is_user_valid_channel_member(token, channel_id)
+
+    # Pin the message
+    message["is_pinned"] = True
+    return {}
+
+
+def message_unpin(token, message_id):
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Error Checking
+    is_valid_message_id(message)
+    help.is_slackr_admin(token)
+    message = message[0]
+    if not message["is_pinned"]:
+        raise InputError("Message already pinned")
+
+    channel_id = message["channel_id"]
+    help.is_user_valid_channel_member(token, channel_id)
+
+    # Pin the message
+    message["is_pinned"] = False
+    return {}
+
+
+def is_valid_react(react_id):
+    if react_id != 1:
+        raise InputError
+
+
+def get_react_by_key(key, value, message):
+    reacts = message["reacts"]
+    for react in reacts:
+        if react[key] == value:
+            return react
+    return None
+
+def is_already_reacted(message, react_id, user_id):
+    react = get_react_by_key("react_id", react_id, message)
+
+    # No reacts exist yet
+    if react is None:
+        return False
+    if react["react_id"] == react_id and user_id in react["u_ids"]:
+        return True
+
+    return False
+
+
 def message_react(token, message_id, react_id):
-    return "Not Implemented"
+    message = db.get_messages_by_key("message_id", message_id)
+
+    # Error checking
+    is_valid_message_id(message)
+    message = message[0]
+    channel_id = message["channel_id"]
+    help.is_user_valid_channel_member(token, channel_id)
+    is_valid_react(react_id)
+    user = db.get_users_by_key("token", token)[0]
+
+    if is_already_reacted(message, react_id, user["u_id"]):
+        raise InputError("You have already reacted to this")
+
+    react = get_react_by_key("react_id", react_id, message)
+    if react is None:
+        message["reacts"].append(
+            {"react_id": react_id,
+             "u_ids": [user["u_id"]],
+             "is_this_user_reacted": True})
+    else:
+        react["u_ids"].append(user["u_id"])
+        react["is_this_user_reacted"] = True
+
+    return {}
 
 
 def message_unreact(token, message_id, react_id):
-    return "Not Implemented"
+    print(f"message id was {message_id}")
+    message = db.get_messages_by_key("message_id", message_id)
+    print(f"message returned was {message}")
+    # Error checking
+    is_valid_message_id(message)
+    message = message[0]
+    channel_id = message["channel_id"]
+    help.is_user_valid_channel_member(token, channel_id)
+    is_valid_react(react_id)
+    user = db.get_users_by_key("token", token)[0]
+
+    if not is_already_reacted(message, react_id, user["u_id"]):
+        raise InputError("You have not reacted to this")
+
+    react = get_react_by_key("react_id", react_id, message)
+    react["u_ids"].remove(user["u_id"])
+    if len(react["u_ids"]) == 0:
+        message["reacts"].remove(react)
+
+    return {}

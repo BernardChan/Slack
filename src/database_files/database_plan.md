@@ -22,7 +22,7 @@ MOCK_DATA = {
             "u_id": 0,
             "message": "str",
             "time_created": 0,
-            "reacts": {"react_id": 0, "u_ids": [0, 1, 2], "is_this_user_reacted": False},
+            "reacts": [{"react_id": 0, "u_ids": [0, 1, 2], "is_this_user_reacted": False}],
             "is_pinned": False,
             "channel_id": 0,
         },
@@ -31,7 +31,7 @@ MOCK_DATA = {
             "u_id": 1,
             "message": "1str",
             "time_created": 1,
-            "reacts": {"react_id": 1, "u_ids": [0, 1, 2], "is_this_user_reacted": False},
+            "reacts": [{"react_id": 1, "u_ids": [0, 1, 2], "is_this_user_reacted": False}],
             "is_pinned": False,
             "channel_id": 1},
 
@@ -40,7 +40,7 @@ MOCK_DATA = {
             "u_id": 2,
             "message": "2str",
             "time_created": 2,
-            "reacts": {"react_id": 1, "u_ids": [0, 1, 2], "is_this_user_reacted": False},
+            "reacts": [{"react_id": 1, "u_ids": [0, 1, 2], "is_this_user_reacted": False}],
             "is_pinned": False,
             "channel_id": 2
         }
