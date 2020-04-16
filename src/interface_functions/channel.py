@@ -130,9 +130,6 @@ def channel_leave(token, channel_id):
     except ValueError:
         pass  # ignore if the user wasn't also an owner
 
-    print(f"members were {channel['members']}")
-    print(f"user was {user}")
-    
     channel["members"].remove(user)
 
     return {}
@@ -151,7 +148,6 @@ def channel_join(token, channel_id):
 
     # adds user to members list in channel
     user = db.get_users_by_key('token', token)[0]
-    print(f"user was {user}")
     channel["members"].append(user)
 
     return {}
