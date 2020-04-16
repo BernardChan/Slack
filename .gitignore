@@ -128,4 +128,6 @@ dmypy.json
 .idea/
 testing.py
 src/database_files/database.p
+src/database_files/user_images/
+
 

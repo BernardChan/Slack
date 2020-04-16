@@ -7,13 +7,14 @@
 # - "permission_id" key added to "user" dictionary (1 = owner/admin, 2 = member)
 # - "members" key added to "channels" dictionary
 # - "standup" key added to "channels" dictionary - is a boolean for whether a standup is active
+# - "profile_img_url" key added to "user" dictionary
 
 ```python
 MOCK_DATA = {
     "users": [
-        {"u_id": 0, "email": "asd@asd.com", "name_first": "first0", "name_last": "last0", "handle_str": "handle0", "token": "0", "permission_id": 1},
-        {"u_id": 1, "email": "asd1@asd.com", "name_first": "first1", "name_last": "last1", "handle_str": "handle1", "token": "1", "permission_id": 2},
-        {"u_id": 2, "email": "asd2@asd.com", "name_first": "first2", "name_last": "last2", "handle_str": "handle2", "token": "2", "permission_id": 2}
+        {"u_id": 0, "email": "asd@asd.com", "name_first": "first0", "name_last": "last0", "handle_str": "handle0", "token": "0", "permission_id": 1, "profile_img_url": "http://localhost:42069/userimages/1.jpg"},
+        {"u_id": 1, "email": "asd1@asd.com", "name_first": "first1", "name_last": "last1", "handle_str": "handle1", "token": "1", "permission_id": 2, "profile_img_url": "http://localhost:42069/userimages/2.jpg"},
+        {"u_id": 2, "email": "asd2@asd.com", "name_first": "first2", "name_last": "last2", "handle_str": "handle2", "token": "2", "permission_id": 2, "profile_img_url": "http://localhost:42069/userimages/3.jpg"}
     ],
 
     "messages": [
