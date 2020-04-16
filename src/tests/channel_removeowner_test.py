@@ -55,12 +55,11 @@ def test_removeowner_simple():
 
 # Test when slackr owner removes ownership on channel owner and themselves
 def test_removeowner_slackr_owner():
-    if not ch.isFunctionImplemented(channel.channel_invite, -1, -1, -1):
-        return
-
+    workspace_reset()
+    ch.init_helper()
     # Add the slackr owner to the channel
-    channel.channel_invite(ch.chan_owner_token, ch.channel_id, ch.slackr_owner_id)
-    channel.channel_invite(ch.chan_owner_token, ch.private_channel_id, ch.slackr_owner_id)
+    channel.channel_invite(ch.slackr_owner_token, ch.channel_id, ch.slackr_owner_id)
+    channel.channel_invite(ch.slackr_owner_token, ch.private_channel_id, ch.slackr_owner_id)
 
     # Remove channel owner's owner status by the slackr owner
     remove_owner(ch.slackr_owner_token, ch.channel_id, ch.chan_owner_id)
@@ -78,12 +77,12 @@ def test_removeowner_slackr_owner():
 
 # Test when channel owner removes ownership on slackr owner and themselves
 def test_removeowner_channel_owner():
-    if not ch.isFunctionImplemented(channel.channel_invite, -1, -1, -1):
-        return
+    workspace_reset()
+    ch.init_helper()
 
     # Add the slackr owner to the channel
-    channel.channel_invite(ch.chan_owner_token, ch.channel_id, ch.slackr_owner_id)
-    channel.channel_invite(ch.chan_owner_token, ch.private_channel_id, ch.slackr_owner_id)
+    channel.channel_invite(ch.slackr_owner_token, ch.channel_id, ch.slackr_owner_id)
+    channel.channel_invite(ch.slackr_owner_token, ch.private_channel_id, ch.slackr_owner_id)
 
     # Remove slackr owner's owner status
     remove_owner(ch.chan_owner_token, ch.channel_id, ch.slackr_owner_id)
@@ -102,6 +101,8 @@ def test_removeowner_channel_owner():
 #   user_id is not an owner of the channel
 #   user_id does not exist
 def test_removeowner_input_error():
+    workspace_reset()
+    ch.init_helper()
 
     # Channel does not exist
     with pytest.raises(InputError):

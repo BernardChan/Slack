@@ -11,35 +11,27 @@ File for functions relating to a Slackr channel
 
 
 def channel_invite(token, channel_id, u_id):
-    return "Not Implemented"
-
-
-# This needs to be fixed. members=DATABASE etc. doesn't work.
-# Assigning the database to members does nothing. It isn't editing the database
-# This needs to be fixed
-def WIP_channel_invite(token, channel_id, u_id):
     # include valid token function here, stub function atm
     help.is_valid_token(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
-    # check if user is a member of the channel
-    help.is_user_valid_channel_member(token, channel_id)
 
     # check if user is valid
     help.is_valid_uid(u_id)
 
     # finds the user dictionary with user id and assigns it to user_invite
-    for user in DATABASE["users"]:
-        if user["u_id"] == u_id:
-            user_invite = user
+    user = db.get_users_by_key("token", token)[0]
 
     # adds user to members list in channel
-    members = DATABASE['channels'][channel_id]['members']
-    members.append(dict(user_invite))
+    channel = db.get_channels_by_key("channel_id", channel_id)[0]
+    channel["members"].append(user)
 
-    return {
-    }
+    if user["permission_id"] == 1:
+        channel["owner_members"].append(user)
+
+
+    return {}
 
 
 # Given a Channel with ID channel_id that the authorised user is part of,
@@ -117,58 +109,48 @@ def channel_messages(token, channel_id, start):
         "end": end,
     }
 
+
+# Note: this assumes that the user dictionary is identical to the members dictionary
+#   this should be the case if we are inviting users correctly
 def channel_leave(token, channel_id):
-    return "Not Implemented"
-
-
-# TODO: Has problems similar to channel_join and leave
-def WIP_channel_leave(token, channel_id):
-    # include valid token function here, stub function atm
-    help.is_valid_token(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
 
     # check if user is a member of the channel
     help.is_user_valid_channel_member(token, channel_id)
+    help.is_valid_token(token)
 
     # remove the authorised user from the channel
-    mem = DATABASE['channels'][channel_id]['members']
-    for i in range(len(mem)):
-        if mem[i]['token'] == token:
-            del mem[i]
-            break
+    channel = db.get_channels_by_key("channel_id", channel_id)[0]
 
-    return {
-    }
+    user = db.get_users_by_key("token", token)[0]
+    try:
+        channel["owner_members"].remove(user)
+    except ValueError:
+        pass  # ignore if the user wasn't also an owner
+
+    channel["members"].remove(user)
+
+    return {}
 
 
 def channel_join(token, channel_id):
-    return "Not Implemented"
-
-
-# TODO: Throws access error when the user is not the slackr owner, but the
-# channel is public. Non-admins should be able to join public channels.
-def WIP_channel_join(token, channel_id):
-    # include valid token function here, stub function atm
-    help.is_valid_token(token)
 
     # check if channel is valid
     help.check_channel_validity(channel_id)
+    help.is_valid_token(token)
 
-    # check if user is a member of the channel
-    help.is_user_valid_channel_member(token, channel_id)
-    member_join = db.get_users_by_key('token', token)
-
-    # checks if authorized user is admin, if not channel is private
-    help.is_slackr_admin(token)
+    # If the channel is private, check if the user is authorised to join
+    channel = db.get_channels_by_key("channel_id", channel_id)[0]
+    if not channel["is_public"]:
+        help.is_slackr_admin(token)
 
     # adds user to members list in channel
-    members = DATABASE['channels'][channel_id]['members']
-    members.append(dict(member_join))
+    user = db.get_users_by_key('token', token)[0]
+    channel["members"].append(user)
 
-    return {
-    }
+    return {}
 
 
 def is_channel_owner(channel, u_id):
@@ -246,7 +228,6 @@ def channel_removeowner(token, channel_id, u_id):
 
     # checks if authorized user is already an admin
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
-
     if not is_channel_owner(channel, u_id):
         raise InputError(f"User with {u_id} was not a channel owner")
 
@@ -255,3 +236,4 @@ def channel_removeowner(token, channel_id, u_id):
 
     return {
     }
+

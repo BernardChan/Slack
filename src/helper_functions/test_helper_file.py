@@ -75,22 +75,32 @@ def init_helper():
     private_channel_owner = channel["owner_members"]
     private_channel_members = channel["all_members"]  # array of {u_id, name_first, name_last}
 
+# TODO: remove this
+import database_files.database_retrieval as db
 
 # Returns true if given user ID is part of the channel, else false
 def is_member(user_id, is_public):
-    global channel_members, private_channel_members
+    global channel_id, private_channel_id
+
+   
     if is_public:
+        channel_members = db.get_channels_by_key('channel_id', channel_id)[0]["members"]
+
         return any([user_id == person["u_id"] for person in channel_members])
     else:
+        private_channel_members = db.get_channels_by_key('channel_id', private_channel_id)[0]["members"]
         return any([user_id == person["u_id"] for person in private_channel_members])
 
 
 def is_owner(user_id, is_public):
     global channel_owner, private_channel_owner
     if is_public:
-        return any([user_id == owner["u_id"] for owner in channel_owner])
+        channel_members = db.get_channels_by_key('channel_id', channel_id)[0]["owner_members"]
+
+        return any([user_id == person["u_id"] for person in channel_members])
     else:
-        return any([user_id == owner["u_id"] for owner in private_channel_owner])
+        private_channel_members = db.get_channels_by_key('channel_id', private_channel_id)[0]["owner_members"]
+        return any([user_id == person["u_id"] for person in private_channel_members])
 
 
 # Checks if a function is implemented or not
