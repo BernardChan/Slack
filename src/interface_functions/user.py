@@ -152,10 +152,10 @@ def is_crop_within_boundaries(x_start, y_start, x_end, y_end, width, height): # 
         raise InputError(description="y_start is not within dimensions of the image!")
     elif y_end < 0 or y_end > height:
         raise InputError(description="y_end is not within dimensions of the image!")
-    elif x_start > x_end:
-        raise InputError(description="x_start cannot be greater than x_end!")
-    elif y_start > y_end:
-        raise InputError(description="y_start cannot be greater than y_end!")
+    elif x_start >= x_end:
+        raise InputError(description="x_start cannot be greater than or equal to x_end!")
+    elif y_start >= y_end:
+        raise InputError(description="y_start cannot be greater than or equal to y_end!")
 
 def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # pylint: disable=too-many-arguments
     """
