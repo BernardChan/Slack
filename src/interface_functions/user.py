@@ -30,7 +30,7 @@ def user_profile(token, u_id):
     # full user also contains permission_id, password, token, etc.
     full_user = get_users_by_key("u_id", u_id)[0]
 
-    profile = {
+    user = {
         "u_id": full_user["u_id"],
         "email": full_user["email"],
         "name_first": full_user["name_first"],
@@ -39,7 +39,7 @@ def user_profile(token, u_id):
         "profile_img_url": full_user["profile_img_url"]
     }
 
-    return { profile }
+    return {user}
 
 
 def user_profile_setname(token, name_first, name_last):
