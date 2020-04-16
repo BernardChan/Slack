@@ -39,7 +39,7 @@ def user_profile(token, u_id):
         "profile_img_url": full_user["profile_img_url"]
     }
 
-    return {user}
+    return {"user": user}
 
 
 def user_profile_setname(token, name_first, name_last):
