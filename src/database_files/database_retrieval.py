@@ -34,7 +34,22 @@ def get_channels():
 # Returns users list
 def get_users():
     return db.DATABASE["users"]
-    
+
+
+def get_messages_by_key(key, value):
+    messages = get_messages()
+    return_messages = []
+
+    # Find what channels a user is in
+    for message in messages:
+        print("searching")
+        if message[key] == value:
+            print(f"message was {message}\n message_id was {value}\n\n")
+            return_messages.append(message)
+
+    print(f"returning messages: {return_messages}")
+    return return_messages
+
 # returns all messages from a given channel_id
 def get_channel_messages(channel_id):
     messages = db.DATABASE["messages"]
@@ -77,14 +92,16 @@ def is_duplicate(key, value):
 # e.g. is_user_in_channel("u_id", 6, 3) # Check if a user is in channel 3 by their u_id (u_id = 6 here)
 def is_user_in_channel(key, value, channel_id):
     channels = get_channels()
-
+    print(f"matching value {value}")
     # Go through the list of channels and check only the ones matching channel_id
     for channel in channels:
         if channel["channel_id"] == channel_id:
-
+            print(f"found channel {channel_id}")
             # Find the member with the matching key/value pair.
             for member in channel["members"]:
+                print(f"members were {member[key]}")
                 if member[key] == value:
+                    print("returning true")
                     return True
     return False
 
@@ -104,7 +121,6 @@ def is_owner_in_channel(key, value, channel_id):
     return False
 
 
-
 # Gets all the channels a user is a part of
 def get_user_channels_by_key(key, value):
     channels = get_channels()
@@ -121,5 +137,3 @@ def get_user_channels_by_key(key, value):
 
     return user_channels
 
-if __name__ == "__main__":
-    pass

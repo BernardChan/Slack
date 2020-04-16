@@ -19,8 +19,7 @@ from helper_functions import test_helper_file as ch
 # Pytest fixture to register a test user, create a channel and send a message
 @pytest.fixture
 def data():
-    if not ch.isFunctionImplemented(message_react, -1, -1, -1):
-        return
+    workspace_reset()
     # register a user
     user = auth_register("test.user1@test.com", "password123", "fname1", "lname1")
     u_id = user["u_id"]
@@ -49,12 +48,11 @@ def assert_is_reacted(token, user_id, channel_id, message_id):
             # reacts is a list of dictionaries where each dictionary contains react_id, u_id, is_this_user_reacted
             
             assert(message["reacts"][0]["react_id"] == 1)
-            assert(message["reacts"][0]["u_id"] == user_id)
+            assert(user_id in message["reacts"][0]["u_ids"])
 
 # test succesful
 def test_message_react_success(data):
-    if not ch.isFunctionImplemented(message_react, -1, -1, -1):
-        return
+
     # data fixture creates a user and channel then sends a message with message_id
     # save this data
     u_id = data["u_id"]
@@ -69,8 +67,7 @@ def test_message_react_success(data):
 
 # test for input errors
 def test_message_react_input_errors(data):
-    if not ch.isFunctionImplemented(message_react, -1, -1, -1):
-        return
+
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
     # save required data variables
     token = data["token"]
@@ -96,8 +93,7 @@ def test_message_react_input_errors(data):
 
 # test for access error from invalid token
 def test_message_react_invalid_token(data):
-    if not ch.isFunctionImplemented(message_react, -1, -1, -1):
-        return
+
     # CREATE A USER AND CHANNEL, SEND A MESSAGE
     # save required data variables (only needs message id)
     message_id = data["message_id"]
