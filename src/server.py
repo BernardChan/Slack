@@ -316,10 +316,10 @@ def user_profile_uploadphoto():
     data = request.get_json()
     token = data["token"]
     img_url = data["img_url"]
-    x_start = data["x_start"]
-    y_start = data["y_start"]
-    x_end = data["x_end"]
-    y_end = data["y_end"]
+    x_start = int(data["x_start"])
+    y_start = int(data["y_start"])
+    x_end = int(data["x_end"])
+    y_end = int(data["y_end"])
 
     # saves the cropped image in database_files/user_images/<u_id>.jpg
     return dumps(user.user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end))
