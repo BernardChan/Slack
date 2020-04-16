@@ -59,12 +59,7 @@ def message_send(token, channel_id, message):
 
 
 def message_remove(token, message_id):
-    """
 
-    :param token:
-    :param message_id:
-    :return:
-    """
     return "Not Implemented"
 
 
