@@ -138,6 +138,25 @@ def user_profile_sethandle(token, handle_str):
 
     return {}
 
+def is_crop_within_boundaries(x_start, y_start, x_end, y_end, width, height): # pylint: disable=too-many-arguments
+    """
+    Helper function to raise InputError if x_start, y_start, x_end, or y_end
+    aren't in the dimensions of the image in the url. Also if x_start or y_start
+    are > then x_end or y_end respectively.
+    """
+    if x_start < 0 or x_start > width:
+        raise InputError(description="x_start is not within dimensions of the image!")
+    elif x_end < 0 or x_end > width:
+        raise InputError(description="x_end is not within dimensions of the image!")
+    elif y_start < 0 or y_start > height:
+        raise InputError(description="y_start is not within dimensions of the image!")
+    elif y_end < 0 or y_end > height:
+        raise InputError(description="y_end is not within dimensions of the image!")
+    elif x_start > x_end:
+        raise InputError(description="x_start cannot be greater than x_end!")
+    elif y_start > y_end:
+        raise InputError(description="y_start cannot be greater than y_end!")
+
 def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # pylint: disable=too-many-arguments
     """
     Given a URL of an image on the internet, crops the image within bounds
@@ -157,17 +176,10 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
     if not img_url.endswith(".jpg"):
         raise InputError(description="Image uploaded is not a JPG!")
 
-    # Raise InputError if x_start, y_start, x_end, or y_end aren't in the dimensions of the url
     # Open the image in RGB mode
     img = Image.open(urllib.request.urlopen(img_url))
     width, height = img.size
-    # pylint: disable=too-many-boolean-expressions
-    if x_start < 0 or x_start > width or \
-        x_end < 0 or x_end > width or \
-        y_start < 0 or y_start > height or \
-        y_end < 0 or y_end > height or \
-        x_start > x_end or y_start > y_end:
-        raise InputError(description="Coordinates not within dimensions of image!")
+    is_crop_within_boundaries(x_start, y_start, x_end, y_end, width, height)
 
     # Crop the image
     img = img.crop((x_start, y_start, x_end, y_end))
