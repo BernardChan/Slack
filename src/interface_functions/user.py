@@ -7,19 +7,17 @@ import urllib.request
 import os.path
 from PIL import Image
 from error import InputError
-#from database_files.database_retrieval import get_users
 from database_files.database_retrieval import get_users_by_key
-from helper_functions.interface_function_helpers import is_valid_token
 import database_files.database as db
+from helper_functions.interface_function_helpers import is_valid_token
 
 def user_profile(token, u_id):
     """
-    For a valid user, returns information about their user id, email, first name,
-        last name, and handle
-    Input: token, u_id
-    Output: {u_id, email, name_first, name_last, handle_str}
+    For a valid user returns information about them
+    :param token: authorised user's identifier
+    :param u_id: user id for which info is returned
+    :return: returns dictionary containing u_id, email, name_first, name_last, handle_str
     """
-
     # Raise an AccessError if not a valid token
     is_valid_token(token)
 
@@ -44,11 +42,12 @@ def user_profile(token, u_id):
 
 def user_profile_setname(token, name_first, name_last):
     """
-    Update the authorised user's first and last name
-    Input: token, name_first, name_last
-    Output: {}
+    Update a user's first and last name
+    :param token: authorised user's identifier
+    :param name_first: new first name to update with
+    :param name_last: new last name to update with
+    :return: returns nothing
     """
-
     # Raise an AccessError if not a valid token
     is_valid_token(token)
 
@@ -73,16 +72,18 @@ def user_profile_setname(token, name_first, name_last):
 
 def user_profile_setemail(token, email):
     """
-    Updates the authorised user's email address
-    Input: token, email
-    Output: {}
+    Updates the a user's email address
+    :param token: authorised user's identifier
+    :param email: new email to update with
+    :return: returns nothing
     """
-
     # Raise an AccessError if not a valid token
     is_valid_token(token)
 
-    # Inner helper function for determining a valid email
     def valid_email(string):
+        """
+        Helper function to determine if an email is valid
+        """
         # Make a regular expression for validating email
         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$' # pylint: disable=anomalous-backslash-in-string
         # Pass the regular expression and the string using search() to check if valid
@@ -110,11 +111,11 @@ def user_profile_setemail(token, email):
 
 def user_profile_sethandle(token, handle_str):
     """
-    Update the authorised user's handle (display name)
-    Input: token, handle_str
-    Output: {}
+    Update a user's handle (display name)
+    :param token: authorised user's identifier
+    :param handle_str: new handle string
+    :return: returns nothing
     """
-
     # Raise an AccessError if not a valid token
     is_valid_token(token)
 
@@ -140,9 +141,7 @@ def user_profile_sethandle(token, handle_str):
 
 def is_crop_within_boundaries(x_start, y_start, x_end, y_end, width, height): # pylint: disable=too-many-arguments
     """
-    Helper function to raise InputError if x_start, y_start, x_end, or y_end
-    aren't in the dimensions of the image in the url. Also if x_start or y_start
-    are > then x_end or y_end respectively.
+    Helper function checking if crop values are within image dimensions
     """
     if x_start < 0 or x_start > width:
         raise InputError(description="x_start is not within dimensions of the image!")
@@ -159,11 +158,14 @@ def is_crop_within_boundaries(x_start, y_start, x_end, y_end, width, height): # 
 
 def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # pylint: disable=too-many-arguments
     """
-    Given a URL of an image on the internet, crops the image within bounds
-        (x_start, y_start) and (x_end, y_end). Then stores the image in
-        database_files/user_images/<u_id>.jpg
-    Input: token, img_url, x_start, y_start, x_end, y_end
-    Output: {}
+    Given a jpeg image URL, crop the image and store it locally.
+    :param token: authorised user's identifier
+    :param img_url: URL for a jpeg image
+    :param x_start: x coordinate start of crop
+    :param y_start: y coordinate start of crop
+    :param x_end: x coordinate end of crop
+    :param y_end: y coordinate end of crop
+    :return: returns nothing
     """
     # Raise AccessError for invalid token
     is_valid_token(token)
