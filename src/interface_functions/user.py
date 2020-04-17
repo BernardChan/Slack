@@ -1,5 +1,5 @@
 """
-user/profile/... functions for slackr app
+File for functions relating to user profiles in the slackr app
 """
 
 import re
