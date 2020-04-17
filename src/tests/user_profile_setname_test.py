@@ -25,7 +25,7 @@ def get_new_user():
 # Helper function to assert that setname was successful
 def assert_setname_success(user_token, user_id, fname, lname):
     # Call the profile to be tested and assert that names are correct
-    user = user_profile(user_token, user_id)
+    user = user_profile(user_token, user_id)["user"]
     assert(user["name_first"] == fname)
     assert(user["name_last"] == lname)
 
