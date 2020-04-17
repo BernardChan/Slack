@@ -30,7 +30,7 @@ def user_profile(token, u_id):
     # full user also contains permission_id, password, token, etc.
     full_user = get_users_by_key("u_id", u_id)[0]
 
-    profile = {
+    user = {
         "u_id": full_user["u_id"],
         "email": full_user["email"],
         "name_first": full_user["name_first"],
@@ -39,7 +39,7 @@ def user_profile(token, u_id):
         "profile_img_url": full_user["profile_img_url"]
     }
 
-    return profile
+    return {"user": user}
 
 
 def user_profile_setname(token, name_first, name_last):
@@ -152,10 +152,10 @@ def is_crop_within_boundaries(x_start, y_start, x_end, y_end, width, height): # 
         raise InputError(description="y_start is not within dimensions of the image!")
     elif y_end < 0 or y_end > height:
         raise InputError(description="y_end is not within dimensions of the image!")
-    elif x_start > x_end:
-        raise InputError(description="x_start cannot be greater than x_end!")
-    elif y_start > y_end:
-        raise InputError(description="y_start cannot be greater than y_end!")
+    elif x_start >= x_end:
+        raise InputError(description="x_start cannot be greater than or equal to x_end!")
+    elif y_start >= y_end:
+        raise InputError(description="y_start cannot be greater than or equal to y_end!")
 
 def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # pylint: disable=too-many-arguments
     """
@@ -188,6 +188,10 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
     u_id = get_users_by_key("token", token)[0]["u_id"]
     # save the image to database_files/user_images/{u_id}.jpg
     dirname = os.path.dirname(__file__)
+    # make the user_images directory if it doesn't exist yet
+    if not os.path.exists("dirname/../database_files/user_images"):
+        os.makedirs("dirname/../database_files/user_images")
+    # save the image
     img.save(os.path.join(dirname, "../database_files/user_images/", f"{u_id}.jpg"), "JPEG")
 
     # update the profile_img_url key in user dict
