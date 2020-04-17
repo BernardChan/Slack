@@ -1,5 +1,11 @@
+"""
+System tests for slackr app
+"""
+
 import requests
 import helper_functions.system_test_helper_file as ch
+
+# pylint: disable=invalid-name
 
 # Test is very basic since it only needs to test the HTTP request portion of
 # the function, rather than their functionality (which is covered by integration tests)
@@ -15,9 +21,9 @@ import helper_functions.system_test_helper_file as ch
 # channel/leave |     POST    | (token, channel_id) |      {}
 
 
-# Check that the user left the channel
 def test_channel_leave_simple():
-
+    """System test for channel/leave"""
+    # pylint: disable=unreachable
     return  # Not implemented
 
     # Reset the database between tests so we don't have to restart the server
@@ -56,6 +62,8 @@ def test_channel_leave_simple():
 
 
 def test_channel_join_simple():
+    """System test for channel/join"""
+    # pylint: disable=unreachable
     return  # this function isn't implemented yet
 
     # Reset database and get relevant inputs
@@ -75,6 +83,7 @@ def test_channel_join_simple():
 
 
 def test_channel_addowner_simple():
+    """System test for channel/addowner"""
     # Reset database and get relevant inputs
     # Create the user and owner of the channel, and the channel itself
     ch.reset()
@@ -96,6 +105,7 @@ def test_channel_addowner_simple():
     assert ch.is_owner(user_token, channel_id)
 
 def test_channel_removeowner_simple():
+    """System test for channel/removeowner"""
     # Reset database and get relevant inputs
     # Create the user and owner of the channel, and the channel itself
     ch.reset()
@@ -123,6 +133,7 @@ def test_channel_removeowner_simple():
 
 
 def test_user_profile_setemail_simple():
+    """System test for user/profile/setemail"""
     # reset database
     ch.reset()
     # make memeber and inputs dictionary
@@ -138,6 +149,7 @@ def test_user_profile_setemail_simple():
     assert user["email"] == "somenewemail@test.com"
 
 def test_user_profile_sethandle_simple():
+    """System test for user/profile/sethandle"""
     # reset database
     ch.reset()
     # make member and inputs dictionary
@@ -154,6 +166,7 @@ def test_user_profile_sethandle_simple():
 
 
 def test_user_profile_setname_simple():
+    """System test for user/profile/setname"""
     # Reset
     ch.reset()
     # Make member
@@ -173,6 +186,7 @@ def test_user_profile_setname_simple():
 
 
 def test_user_profile_simple():
+    """System test for user/profile"""
     # Reset database
     ch.reset()
     # get relevant inputs
@@ -201,6 +215,7 @@ def test_user_profile_simple():
 # Send a message to the channel
 # Search for said messages and assert that they are found and returned
 def test_search_simple():
+    """System test for search"""
     # Reset database and get relevant inputs
     ch.reset()
     token = ch.get_channel_owner()[1]
@@ -219,6 +234,7 @@ def test_search_simple():
 
 # Reset the database
 def test_reset():
+    """System test for workspace/reset"""
     ch.make_post_request("workspace/reset", {})
     data = requests.get(f"http://127.0.0.1:42069/get/database")
     assert data.json() == {'users': [], 'messages': [], 'channels': []}
