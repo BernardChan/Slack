@@ -134,7 +134,7 @@ def test_user_profile_setemail_simple():
     # Assert returns correct output
     assert ch.make_put_request("user/profile/setemail", data) == {}
     # Check that email was changed
-    user = ch.get_user_details(token, u_id)
+    user = ch.get_user_details(token, u_id)["user"]
     assert user["email"] == "somenewemail@test.com"
 
 def test_user_profile_sethandle_simple():
@@ -149,7 +149,7 @@ def test_user_profile_sethandle_simple():
     # assert returns correct output
     assert ch.make_put_request("user/profile/sethandle", data) == {}
     # check that handle was changed
-    user = ch.get_user_details(token, u_id)
+    user = ch.get_user_details(token, u_id)["user"]
     assert user["handle_str"] == "newhandle"
 
 
@@ -167,7 +167,7 @@ def test_user_profile_setname_simple():
     # Assert returns correct output
     assert ch.make_put_request("user/profile/setname", data) == {}
     # Check that user's names were changed
-    user = ch.get_user_details(token, u_id)
+    user = ch.get_user_details(token, u_id)["user"]
     assert user["name_first"] == "Harry"
     assert user["name_last"] == "Potter"
 
@@ -182,12 +182,13 @@ def test_user_profile_simple():
         "u_id": u_id
     }
     # Assert returns correct output (using user info from helper.get_member())
-    assert ch.make_get_request("user/profile", data) == {
+    assert ch.make_get_request("user/profile", data)["user"] == {
         "u_id": u_id,
         "email": "user@test.tst",
         "name_first": "user",
         "name_last": "member",
-        "handle_str": "usermember"
+        "handle_str": "usermember",
+        "profile_img_url": ""
     }
 
 
