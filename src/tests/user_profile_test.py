@@ -19,7 +19,7 @@ def get_new_user():
 # Helper function to assert that user_profile was succesful
 def assert_profile_success(user_token, user_id, fname, lname, email, handle):
     # Call the profile to be tested and assert all info is correct
-    user = user_profile(user_token, user_id)
+    user = user_profile(user_token, user_id)["user"]
     assert(user["u_id"] == user_id)
     assert(user["name_first"] == fname)
     assert(user["name_last"] == lname)

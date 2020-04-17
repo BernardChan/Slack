@@ -28,7 +28,7 @@ def user2():
 # Helper function to assert that sethandle was successful
 def assert_sethandle_success(user_token, user_id, handle):
     # Call the profile to be tested and assert that handle is correct
-    user = user_profile(user_token, user_id)
+    user = user_profile(user_token, user_id)["user"]
     assert(user["handle_str"] == handle)
 
 # Test successful sethandle

@@ -28,7 +28,7 @@ def user2():
 # Helper function to assert that setemail was successful
 def assert_setemail_success(user_token, user_id, email):
     # Call the profile to be tested and assert that names are correct
-    user = user_profile(user_token, user_id)
+    user = user_profile(user_token, user_id)["user"]
     assert(user["email"] == email)
     
 # Tests successful profile setemail
