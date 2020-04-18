@@ -1,7 +1,8 @@
 """
  database_retrieval.py
-This file contains functions to query the database, so to avoid directly accessing database at all times possible since implementation/structure may change during the agile iteration process.
-"""
+This file contains functions to query the database, so to avoid directly accessing
+database at all times possible since implementation/structure may change
+during the agile iteration process.
 
 # Usage:
 #   Functions ending with "_by_key(key, value)"
@@ -13,9 +14,10 @@ This file contains functions to query the database, so to avoid directly accessi
 
 # Additions
     # 21/03/20
-    # added is_duplicate moved here from auth file. 
+    # added is_duplicate moved here from auth file.
+"""
 
-# import database_files.database as db
+# pylint: disable=W0105 #pointless-string-statement
 import database_files.database as db
 
 """
@@ -23,20 +25,21 @@ import database_files.database as db
 Database Get Functions
 ----------------------------------------------------------------------------------
 """
-# Returns messages list
 def get_messages():
+    """Returns messages list"""
     return db.DATABASE["messages"]
 
-# Returns channels list
 def get_channels():
+    """Returns channels list"""
     return db.DATABASE["channels"]
 
-# Returns users list
 def get_users():
+    """Returns users list"""
     return db.DATABASE["users"]
 
 
 def get_messages_by_key(key, value):
+    """returns all messages of given key"""
     messages = get_messages()
     return_messages = []
 
@@ -50,18 +53,18 @@ def get_messages_by_key(key, value):
     print(f"returning messages: {return_messages}")
     return return_messages
 
-# returns all messages from a given channel_id
 def get_channel_messages(channel_id):
+    """returns all messages from a given channel_id"""
     messages = db.DATABASE["messages"]
     return [message for message in messages if message["channel_id"] == channel_id]
-    
-# gets channels by key
+
 def get_channels_by_key(key, value):
+    """gets channels by key"""
     channels = get_channels()
     return [channel for channel in channels if channel[key] == value]
-    
-# gets the standup queue in channel_id
+
 def get_channel_standup(channel_id):
+    """gets the standup queue in channel_id"""
     channel = get_channels_by_key("channel_id", channel_id)[0]
     return channel["standup"]
 
@@ -70,27 +73,30 @@ def get_channel_standup(channel_id):
 ----------------------------------------------------------------------------------
 Database Query Functions
 ----------------------------------------------------------------------------------
-"""    
-
-# gets specific users by key
+"""
 def get_users_by_key(key, value):
+    """gets specific users by key"""
     users = get_users()
     return [user for user in users if user[key] == value]
-    
-    
+
+
 def is_duplicate(key, value):
+    """checks if given key is duplicate to one in the database"""
     db_user = get_users_by_key(key, value)
     if db_user != []:
         return True
-    else:
-        return False 
+    return False
 
 
-# returns boolean if a user is part of a channel
-# user key is what property (key) of the user we're searching
-# e.g. is_user_in_channel("token", token, 2) # Checks if a user is in channel 2 by their token
-# e.g. is_user_in_channel("u_id", 6, 3) # Check if a user is in channel 3 by their u_id (u_id = 6 here)
 def is_user_in_channel(key, value, channel_id):
+    """
+    Returns boolean if a user is part of a channel
+    User key is what property (key) of the user we're searching
+    e.g. is_user_in_channel("token", token, 2) # Checks if a user is in channel
+    2 by their token
+    e.g. is_user_in_channel("u_id", 6, 3) # Check if user is in channel 3 by their
+    u_id (u_id = 6 here)
+    """
     channels = get_channels()
     print(f"matching value {value}")
     # Go through the list of channels and check only the ones matching channel_id
@@ -106,8 +112,8 @@ def is_user_in_channel(key, value, channel_id):
     return False
 
 
-# returns boolean if a user is owner of a channel
 def is_owner_in_channel(key, value, channel_id):
+    """returns boolean if a user is owner of a channel"""
     channels = get_channels()
 
     # Go through the list of channels and check only the ones matching channel_id
@@ -121,10 +127,10 @@ def is_owner_in_channel(key, value, channel_id):
     return False
 
 
-# Gets all the channels a user is a part of
 def get_user_channels_by_key(key, value):
+    """Gets all the channels a user is a part of"""
     channels = get_channels()
-    
+
     user_channels = []
 
     # Find what channels a user is in
@@ -136,4 +142,3 @@ def get_user_channels_by_key(key, value):
                 user_channels.append(channel)
 
     return user_channels
-
