@@ -43,9 +43,7 @@ def auth_register(email, password, name_first, name_last):
         name_first, name_last, ah.create_handle(name_first, name_last), \
         u_id_returned \
     )
-
     return register_dict
-
 
 def auth_login(email, password):
     """Logs in user if they are already registered"""
@@ -53,7 +51,7 @@ def auth_login(email, password):
     ah.validate_email(email)
     user_rec = dr.get_users_by_key("email", email)
     if user_rec == []:
-        raise InputError(description='Email entered does not belong to a user')
+        raise InputError(description='Login attempt not successsful')
 
     # Validate Password
     hash_pw = ah.hash_data(password)
@@ -66,10 +64,8 @@ def auth_login(email, password):
 
     return login_dict
 
+
 def auth_logout(token):
     """logs out a user if they were registered and currently logged in"""
     is_success = du.logout_user(token)
     return {"is_success": is_success}
-
-if __name__ == '__main__':
-    pass

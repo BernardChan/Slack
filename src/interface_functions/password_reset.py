@@ -7,6 +7,7 @@ import helper_functions.interface_function_helpers as help
 import helper_functions.auth_helper as auth
 from error import InputError
 
+
 """
 File for password resetting
 """
@@ -89,14 +90,24 @@ def password_reset(reset_code, new_password):
     :param new_password: string for a new password to overwrite the previous one
     :return: returns empty dictionary
     """
+    try:
+        reset_code = int(reset_code)
+    except ValueError:
+        print("couldn't convert to int")
+        raise InputError("Invalid reset code provided")
+
 
     user = db.get_users_by_key("reset_code", reset_code)
 
     # Reset code wasn't found in the database
     if len(user) == 0:
+        print("couldn't find user")
         raise InputError("Invalid reset code provided")
 
     # Validate password given
+    print(f"new password given was {new_password}")
     auth.validate_password(new_password)
-    user[0]["password"] = new_password
+    user[0]["password"] = auth.hash_data(new_password)
+    print(f"new password was {user[0]['password']}")
+
     return {}
