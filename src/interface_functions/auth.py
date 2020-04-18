@@ -44,29 +44,27 @@ def auth_register(email, password, name_first, name_last):
     )
 
     return register_dict 
- 
-        
+
+
 def auth_login(email, password):
     # Validate Email
     ah.validate_email(email)
     user_rec =  dr.get_users_by_key("email", email)
     if user_rec == []:
-        raise InputError(description = 'Email entered does not belong to a user')
+        raise InputError(description='Email entered does not belong to a user')
     
     # Validate Password
     hash_pw = ah.hash_data(password)
     if hash_pw != user_rec[0]["password"]:
-        raise InputError(description = 'Password is not correct')
+        raise InputError(description='Password is not correct')
 
     # Create and assign token to database
     # new_token = ah.get_valid_token(email)
     login_dict = du.login_user(email)
 
     return login_dict
-        
+
+
 def auth_logout(token):
     is_success = du.logout_user(token)
     return {"is_success": is_success}
-
-if __name__ == '__main__':
-    pass

@@ -1,13 +1,11 @@
 from error import InputError, AccessError
 import database_files.database_retrieval as db
-from database_files.database import DATABASE
 import uuid
 
 
 # Check is a channel_id is valid
 # Returns true if it finds the channel with channel_id, else false
 def channel_is_valid(channel_id):
-
     array = db.get_channels_by_key("channel_id", channel_id)
     return True if array else False
 
@@ -47,7 +45,7 @@ def is_user_valid_channel_member(token, channel_id):
 
 # Checks if u_id actually exists for a profile, throws Inputerror if not
 def is_valid_uid(u_id):
-    if db.get_users_by_key("u_id", u_id) == []:
+    if not db.get_users_by_key("u_id", u_id):
         raise InputError(description="The given user id was not found!")
 
 
@@ -57,6 +55,7 @@ def is_slackr_admin(token):
     if (match[0]["permission_id"] != 1):
         raise AccessError(description="User is not an admin or owner!")
 
+
 def is_valid_token(token):
     if db.get_users_by_key("token", token) == []:
         raise AccessError(description="The given token was not found!")
@@ -65,4 +64,4 @@ def is_valid_token(token):
 # Returns a unique 15 digit long integer
 def get_unique_id():
     # bit shifting it so the number is smaller and doesn't reveal mac address
-    return int(uuid.uuid1())>>80  
+    return int(uuid.uuid1()) >> 80
