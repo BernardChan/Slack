@@ -5,7 +5,7 @@ File for functions relating to user profiles in the slackr app
 import re
 import urllib.request
 import os.path
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from error import InputError
 from database_files.database_retrieval import get_users_by_key
 import database_files.database as db
@@ -174,12 +174,16 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
     if urllib.request.urlopen(img_url).getcode() != 200:
         raise InputError(description="Image URL returns a HTTP status other than 200!")
 
-    # Raise InputError if image isn't a jpg
-    if not img_url.endswith(".jpg"):
+    # Open the image in RGB mode
+    try:
+        img = Image.open(urllib.request.urlopen(img_url))
+    except UnidentifiedImageError:
+        raise InputError(description="Url given is not a JPG image!")
+
+    # Raise InputError if the image isn't a jpg
+    if not img.format == "JPEG":
         raise InputError(description="Image uploaded is not a JPG!")
 
-    # Open the image in RGB mode
-    img = Image.open(urllib.request.urlopen(img_url))
     width, height = img.size
     is_crop_within_boundaries(x_start, y_start, x_end, y_end, width, height)
 
