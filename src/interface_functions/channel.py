@@ -1,10 +1,10 @@
+# pylint: disable=W0105, W0622, C0200
 """
 File for functions relating to a Slackr channel
 """
 import database_files.database_retrieval as db
 import helper_functions.interface_function_helpers as help
-from error import InputError
-from error import AccessError
+from error import InputError, AccessError
 
 
 def channel_invite(token, channel_id, u_id):
