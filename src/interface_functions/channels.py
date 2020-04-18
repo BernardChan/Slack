@@ -1,3 +1,7 @@
+"""
+File for functions relating to channels in Slackr
+"""
+
 # pylint: disable=W0105, W0622
 from error import InputError
 import database_files.database_retrieval as db
@@ -6,12 +10,11 @@ from database_files.database_retrieval import get_channels
 from helper_functions.interface_function_helpers import is_valid_token
 import helper_functions.interface_function_helpers as help
 
-"""
-File for functions relating to channels in Slackr
-"""
-
-
 def channels_list(token):
+    """
+    Provides a list of all channels and their details that the user is part of
+    :param token: authorised user's identifier
+    """
     # Raise an access error if not a valid token
     is_valid_token(token)
     # Get the list of all channels the user is part of
@@ -21,6 +24,10 @@ def channels_list(token):
 
 
 def channels_listall(token):
+    """
+    Provides a list of all channels and their details
+    :param token: authorised user's identifier
+    """
     # Raise an access error if not a valid token
     is_valid_token(token)
     # Get the list of all channels the user is part of
@@ -32,6 +39,7 @@ def channels_listall(token):
 
 def channels_create(token, name, is_public):
     """
+    Creates a new channel
     :param token: authorised user's identifier
     :param name: string for the name of a channel
     :param is_public: boolean for whether the channel is public or not
