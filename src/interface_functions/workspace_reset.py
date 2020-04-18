@@ -3,11 +3,16 @@
 Resets the workspace state by resetting the database to blank
 """
 
-import database_files.database as db
 import os
 import shutil
+import database_files.database as db
 
 def workspace_reset():
+    """
+    Resets the workspace state by resetting database.
+    :param: no parameters
+    :return: returns nothing
+    """
     db.DATABASE = {
         "users": [],
         "messages": [],
@@ -23,5 +28,11 @@ def workspace_reset():
 
 
 def workspace_reset_messages():
+    """
+    Resets the messages in the database.
+    :param: no parameters
+    :return: returns nothing
+    """
     db.DATABASE["messages"] = []
+
     return {}
