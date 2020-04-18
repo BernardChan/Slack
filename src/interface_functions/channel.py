@@ -1,37 +1,33 @@
-# pylint: disable=W0105, W0622, C0200
-import database_files.database_retrieval as db
-from database_files.database import DATABASE
-import helper_functions.interface_function_helpers as help
-from error import InputError, AccessError
-
-
 """
 File for functions relating to a Slackr channel
 """
+import database_files.database_retrieval as db
+import helper_functions.interface_function_helpers as help
+from error import InputError
+from error import AccessError
 
 
 def channel_invite(token, channel_id, u_id):
-    # include valid token function here, stub function atm
+    """
+    Given a user with ID u_id, invites them to join a channel with ID
+    channel_id. When invited the user is added to the channel immediately
+    :param token: authorised user's identifier
+    :param channel_id: Integer for a specific channel
+    :param u_id: integer for a specific user
+    :return: returns an empty dictionary
+    """
     help.is_valid_token(token)
-
-    # check if channel is valid
     help.check_channel_validity(channel_id)
-
-    # check if user is valid
     help.is_valid_uid(u_id)
 
-    # finds the user dictionary with user id and assigns it to user_invite
     user = db.get_users_by_key("token", token)[0]
-
-    # adds user to members list in channel
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
     channel["members"].append(user)
-
     if user["permission_id"] == 1:
         channel["owner_members"].append(user)
 
-
-    return {}
+    return {
+    }
 
 
 # Given a Channel with ID channel_id that the authorised user is part of,
@@ -113,18 +109,21 @@ def channel_messages(token, channel_id, start):
 # Note: this assumes that the user dictionary is identical to the members dictionary
 #   this should be the case if we are inviting users correctly
 def channel_leave(token, channel_id):
-
-    # check if channel is valid
-    help.check_channel_validity(channel_id)
-
-    # check if user is a member of the channel
-    help.is_user_valid_channel_member(token, channel_id)
+    """
+    Given a channel with ID channel_ID, removes a user from the channel
+    denoted by the token
+    :param token: authorised user's identifier
+    :param channel_id: Integer for a specific channel
+    :return: returns an empty dictionary
+    """
     help.is_valid_token(token)
+    help.check_channel_validity(channel_id)
+    help.is_user_valid_channel_member(token, channel_id)
 
     # remove the authorised user from the channel
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
-
     user = db.get_users_by_key("token", token)[0]
+
     try:
         channel["owner_members"].remove(user)
     except ValueError:
@@ -132,14 +131,20 @@ def channel_leave(token, channel_id):
 
     channel["members"].remove(user)
 
-    return {}
+    return {
+    }
 
 
 def channel_join(token, channel_id):
-
-    # check if channel is valid
-    help.check_channel_validity(channel_id)
+    """
+    Given a channel with ID channel_ID that the user can join,
+    adds an authorised user to the channel
+    :param token: authorised user's identifier
+    :param channel_id: Integer for a specific channel
+    :return: returns an empty dictionary
+    """
     help.is_valid_token(token)
+    help.check_channel_validity(channel_id)
 
     # If the channel is private, check if the user is authorised to join
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
@@ -150,7 +155,8 @@ def channel_join(token, channel_id):
     user = db.get_users_by_key('token', token)[0]
     channel["members"].append(user)
 
-    return {}
+    return {
+    }
 
 
 def is_channel_owner(channel, u_id):
@@ -236,4 +242,3 @@ def channel_removeowner(token, channel_id, u_id):
 
     return {
     }
-
