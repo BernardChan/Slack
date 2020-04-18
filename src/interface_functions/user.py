@@ -175,7 +175,7 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
         raise InputError(description="Image URL returns a HTTP status other than 200!")
 
     # Raise InputError if image isn't a jpg
-    if not img_url.endswith(".jpg"):
+    if not img_url.endswith(".jpg") or img_url.endswith(".jpeg"):
         raise InputError(description="Image uploaded is not a JPG!")
 
     # Open the image in RGB mode
