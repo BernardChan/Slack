@@ -10,6 +10,7 @@ from database_files.database_retrieval import get_channels
 from helper_functions.interface_function_helpers import is_valid_token
 import helper_functions.interface_function_helpers as help
 
+
 def channels_list(token):
     """
     Provides a list of all channels and their details that the user is part of

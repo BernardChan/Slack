@@ -17,6 +17,7 @@ import interface_functions.channels as channels
 import interface_functions.auth as auth
 import interface_functions.workspace_reset as wr
 import interface_functions.hangman as hang
+import interface_functions.password_reset as pr
 
 def defaultHandler(err):
     response = err.get_response()
@@ -88,17 +89,32 @@ def auth_logout():
     return dumps(auth.auth_logout(token))
 
 
+@APP.route("/auth/passwordreset/request", methods=['POST'])
+def password_request():
+    resp = request.get_json()
+    email = resp["email"]
+    return dumps(pr.password_request(email))
+
+
+@APP.route("/auth/passwordreset/reset", methods=['POST'])
+def password_reset():
+    resp = request.get_json()
+    reset_code = resp["reset_code"]
+    new_password = resp["new_password"]
+    return dumps(pr.password_reset(reset_code, new_password))
+
+
 # ----------------------------------------------------------------------------------
 # CHANNEL Routes
 # ----------------------------------------------------------------------------------
 
-# @APP.route("/channel/invite", methods=['POST'])
-# def channel_invite():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     channel_id = resp["channel_id"]
-#     u_id = resp["u_id"]
-#     return dumps(ch.channel_invite(token, channel_id, u_id))
+@APP.route("/channel/invite", methods=['POST'])
+def channel_invite():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    u_id = int(resp["u_id"])
+    return dumps(ch.channel_invite(token, channel_id, u_id))
 
 
 @APP.route("/channel/details", methods=['GET'])
@@ -123,31 +139,29 @@ def channel_messages():
 
     return dumps(ch.channel_messages(token, channel_id, start))
 
-# """
-# @APP.route("/channel/leave", methods=['POST'])
-# def channel_leave():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     channel_id = resp["channel_id"]
-#     return dumps(ch.channel_leave(token, channel_id))
-# """
 
-# """
-# @APP.route("/channel/join", methods=['POST'])
-# def channel_join():
-#     resp = request.get_json()
-#     token = resp["token"]
-#     channel_id = resp["channel_id"]
-#     return dumps(ch.channel_join(token, channel_id))
-# """
+@APP.route("/channel/leave", methods=['POST'])
+def channel_leave():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    return dumps(ch.channel_leave(token, channel_id))
+
+
+@APP.route("/channel/join", methods=['POST'])
+def channel_join():
+    resp = request.get_json()
+    token = resp["token"]
+    channel_id = int(resp["channel_id"])
+    return dumps(ch.channel_join(token, channel_id))
 
 
 @APP.route("/channel/addowner", methods=['POST'])
 def channel_addowner():
     resp = request.get_json()
     token = resp["token"]
-    channel_id = resp["channel_id"]
-    u_id = resp["u_id"]
+    channel_id = int(resp["channel_id"])
+    u_id = int(resp["u_id"])
     return dumps(ch.channel_addowner(token, channel_id, u_id))
 
 
@@ -155,7 +169,7 @@ def channel_addowner():
 def channel_removeowner():
     resp = request.get_json()
     token = resp["token"]
-    channel_id = resp["channel_id"]
+    channel_id = int(resp["channel_id"])
     u_id = resp["u_id"]
     return dumps(ch.channel_removeowner(token, channel_id, u_id))
 
@@ -357,7 +371,7 @@ def standup_start():
 @APP.route("/standup/active", methods=['GET'])
 def standup_active():
     token = request.args.get("token")
-    channel_id = request.args.get("channel_id")
+    channel_id = int(request.args.get("channel_id"))
 
     return dumps(su.standup_active(token, int(channel_id)))
 

@@ -50,16 +50,19 @@ def get_messages_by_key(key, value):
     print(f"returning messages: {return_messages}")
     return return_messages
 
+
 # returns all messages from a given channel_id
 def get_channel_messages(channel_id):
     messages = db.DATABASE["messages"]
     return [message for message in messages if message["channel_id"] == channel_id]
-    
+
+
 # gets channels by key
 def get_channels_by_key(key, value):
     channels = get_channels()
     return [channel for channel in channels if channel[key] == value]
-    
+
+
 # gets the standup queue in channel_id
 def get_channel_standup(channel_id):
     channel = get_channels_by_key("channel_id", channel_id)[0]
@@ -71,6 +74,7 @@ def get_channel_standup(channel_id):
 Database Query Functions
 ----------------------------------------------------------------------------------
 """    
+
 
 # gets specific users by key
 def get_users_by_key(key, value):
