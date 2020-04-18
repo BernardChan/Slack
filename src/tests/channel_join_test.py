@@ -45,7 +45,7 @@ def test_join_access_error():
 
     # User is not admin and attempts to join a private channel
     with pytest.raises(AccessError):
-        join(ch.member_id, ch.private_channel_id)
+        join(ch.member_token, ch.private_channel_id)
 
     # User does not exist, raise AccessError
     with pytest.raises(AccessError):
@@ -58,5 +58,5 @@ def test_join_input_error():
     ch.init_helper()
     # Channel does not exist, raise InputError
     with pytest.raises(InputError):
-        join(ch.member_id, -100000)
+        join(ch.member_token, -100000)
     workspace_reset()
