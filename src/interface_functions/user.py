@@ -5,11 +5,11 @@ File for functions relating to user profiles in the slackr app
 import re
 import urllib.request
 import os.path
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from error import InputError
 from database_files.database_retrieval import get_users_by_key
 import database_files.database as db
-from helper_functions.interface_function_helpers import is_valid_token
+from helper_functions.interface_function_helpers import is_valid_token, get_unique_id
 
 def user_profile(token, u_id):
     """
@@ -174,12 +174,16 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
     if urllib.request.urlopen(img_url).getcode() != 200:
         raise InputError(description="Image URL returns a HTTP status other than 200!")
 
-    # Raise InputError if image isn't a jpg
-    if not img_url.endswith(".jpg"):
+    # Open the image in RGB mode
+    try:
+        img = Image.open(urllib.request.urlopen(img_url))
+    except UnidentifiedImageError:
+        raise InputError(description="Url given is not a JPG image!")
+
+    # Raise InputError if the image isn't a jpg
+    if not img.format == "JPEG":
         raise InputError(description="Image uploaded is not a JPG!")
 
-    # Open the image in RGB mode
-    img = Image.open(urllib.request.urlopen(img_url))
     width, height = img.size
     is_crop_within_boundaries(x_start, y_start, x_end, y_end, width, height)
 
@@ -188,19 +192,21 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
 
     # get the u_id of the user by token
     u_id = get_users_by_key("token", token)[0]["u_id"]
-    # save the image to database_files/user_images/{u_id}.jpg
+    # generate unique id for image
+    img_id = get_unique_id()
+    # save the image to database_files/user_images/{img_id}.jpg
     dirname = os.path.dirname(__file__)
     # make the user_images directory if it doesn't exist yet
     if not os.path.exists("dirname/../database_files/user_images"):
         os.makedirs("dirname/../database_files/user_images")
     # save the image
-    img.save(os.path.join(dirname, "../database_files/user_images/", f"{u_id}.jpg"), "JPEG")
+    img.save(os.path.join(dirname, "../database_files/user_images/", f"{img_id}.jpg"), "JPEG")
 
     # update the profile_img_url key in user dict
     for profile in db.DATABASE["users"]:
         if profile["u_id"] == u_id:
             # assumes that the port is 42069
-            profile["profile_img_url"] = f"http://localhost:42069/userimages/{u_id}.jpg"
+            profile["profile_img_url"] = f"http://localhost:42069/userimages/{img_id}.jpg"
             break
 
     return {}
