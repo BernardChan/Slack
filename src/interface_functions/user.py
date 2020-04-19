@@ -197,8 +197,8 @@ def user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end): # 
     # save the image to database_files/user_images/{img_id}.jpg
     dirname = os.path.dirname(__file__)
     # make the user_images directory if it doesn't exist yet
-    if not os.path.exists("dirname/../database_files/user_images"):
-        os.makedirs("dirname/../database_files/user_images")
+    if not os.path.exists(f"{dirname}/../database_files/user_images"):
+        os.makedirs(f"{dirname}/../database_files/user_images")
     # save the image
     img.save(os.path.join(dirname, "../database_files/user_images/", f"{img_id}.jpg"), "JPEG")
 
