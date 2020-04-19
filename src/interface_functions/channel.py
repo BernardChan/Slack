@@ -20,7 +20,7 @@ def channel_invite(token, channel_id, u_id):
     help.check_channel_validity(channel_id)
     help.is_valid_uid(u_id)
 
-    user = db.get_users_by_key("token", token)[0]
+    user = db.get_users_by_key("u_id", u_id)[0]
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
     channel["members"].append(user)
     if user["permission_id"] == 1:
