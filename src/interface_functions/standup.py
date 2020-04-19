@@ -1,3 +1,7 @@
+"""
+Module that contains functions for a standup in a given channel
+"""
+
 # pylint: disable=W0105, W0622, C0103
 import time
 import threading
@@ -6,10 +10,6 @@ from helper_functions.interface_function_helpers import check_channel_validity
 import database_files.database_retrieval as db
 from error import InputError
 
-
-"""
-Module that contains functions for a standup in a given channel
-"""
 
 
 # Sets the standup tag on the given channel_id to True/False (is_active)
@@ -42,7 +42,7 @@ def end_standup(token, channel_id):
     :param channel_id: Integer for a specific channel
     :return: returns nothing
     """
-
+    help.is_valid_token(token)
     # Set "standup" key to False
     set_standup(channel_id, False, None)
     standup_message = db.get_channel_standup(channel_id)
@@ -76,7 +76,7 @@ def standup_start(token, channel_id, length):
     :param length: Integer for standup length in seconds
     :return: returns a dictionary with the finish time for the standup
     """
-
+    help.is_valid_token(token)
     check_channel_validity(channel_id)
     # Set the "standup" key on channel dict to True to show a standup has started
     time_finish = time.time() + length
@@ -98,6 +98,7 @@ def standup_active(token, channel_id):
     :return: returns a dictionary with standup active status and its time finish
     """
     # Check for errors
+    help.is_valid_token(token)
     help.check_channel_validity(channel_id)
 
     # Retrieve and return the relevant information from the database
@@ -131,6 +132,7 @@ def standup_send(token, channel_id, message):
     :return: empty dictionary
     """
     # Error check
+    help.is_valid_token(token)
     help.is_message_valid(token, message, channel_id)
     help.is_user_valid_channel_member(token, channel_id)
     validate_active_standup(channel_id)
