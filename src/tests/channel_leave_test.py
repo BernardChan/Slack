@@ -100,5 +100,5 @@ def test_leave_input_error():
     ch.init_helper()
     # Channel does not exist, raise InputError
     with pytest.raises(InputError):
-        leave(ch.chan_owner_id, -100000)
+        leave(ch.chan_owner_token, -100000)
     workspace_reset()
