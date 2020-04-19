@@ -1,15 +1,14 @@
-# pylint: disable=W0105, W0622, W0603
+"""
+File for functions relating to messages in Slackr
+"""
+
+# pylint: disable=W0105, W0622, W0603, len-as-condition
 import threading
 import time
 import sched
 import database_files.database_retrieval as db
 import helper_functions.interface_function_helpers as help
 from error import InputError, AccessError
-
-
-"""
-File for functions relating to messages in Slackr
-"""
 
 
 def insert_message(token, channel_id, message, message_id):
@@ -61,18 +60,25 @@ def message_send(token, channel_id, message):
 
 
 def is_valid_message_change(user, message):
+    """Helper function for determining if a user has permissions to change a message"""
     # Authorised user did not make the message and is not the owner
     if user["u_id"] != message["u_id"] and user["permission_id"] != 1:
         raise AccessError("You are not authorised to delete this message")
 
 
 def is_valid_message_id(message):
+    """Helper function for determining if a message is valid"""
     if len(message) == 0:
         raise InputError("Message Not found")
 
 
 def message_remove(token, message_id):
-
+    """
+    Remove a message from a channel
+    :param token: authorised user's identifier
+    :param message_id: id for the message to be removed
+    :return: returns nothing
+    """
     help.is_valid_token(token)
 
     message = db.get_messages_by_key("message_id", message_id)
@@ -92,7 +98,13 @@ def message_remove(token, message_id):
 
 # Assumption - input error raised if message not found
 def message_edit(token, message_id, message):
-    
+    """
+    Update a message's text with new text
+    :param token: authorised user's identifier
+    :param message_id: id for the message to be edited
+    :param message: new message
+    :return: returns nothing
+    """
     help.is_valid_token(token)
 
     message_string = message
@@ -105,7 +117,7 @@ def message_edit(token, message_id, message):
     message = message[0]
     is_valid_message_change(user, message)
 
-    message["message"] = message_string  # TODO: verify this works
+    message["message"] = message_string
 
     return {}
 
@@ -181,14 +193,19 @@ def send_later(token, channel_id, message, time_sent):
          "token": token,
          "channel_id": channel_id,
          "message_id": message_id
-         })
+        })
     DO_WORK.set()
 
     return {"message_id": message_id}
 
 
 def message_pin(token, message_id):
-    
+    """
+    Mark a message as "pinned"
+    :param token: authorised user's identifier
+    :param message_id: id for the message to be pinned
+    :return: returns nothing
+    """
     help.is_valid_token(token)
 
     message = db.get_messages_by_key("message_id", message_id)
@@ -209,7 +226,12 @@ def message_pin(token, message_id):
 
 
 def message_unpin(token, message_id):
-    
+    """
+    Remove the mark that a message is pinned
+    :param token: authorised user's identifier
+    :param message_id: id for the message to be unpinned
+    :return: returns nothing
+    """
     help.is_valid_token(token)
 
     message = db.get_messages_by_key("message_id", message_id)
@@ -230,11 +252,13 @@ def message_unpin(token, message_id):
 
 
 def is_valid_react(react_id):
+    """Helper function for raising error for invalid react id"""
     if react_id != 1:
         raise InputError
 
 
 def get_react_by_key(key, value, message):
+    """Helper function for getting a react by key"""
     reacts = message["reacts"]
     for react in reacts:
         if react[key] == value:
@@ -242,6 +266,7 @@ def get_react_by_key(key, value, message):
     return None
 
 def is_already_reacted(message, react_id, user_id):
+    """Helper function for determining if a message has already been reacted to by a user"""
     react = get_react_by_key("react_id", react_id, message)
 
     # No reacts exist yet
@@ -254,7 +279,13 @@ def is_already_reacted(message, react_id, user_id):
 
 
 def message_react(token, message_id, react_id):
-    
+    """
+    Add a react to a specific message
+    :param token: authorised user's identifier
+    :param message_id: id for the message to be reacted to
+    :param react_id: id for the type of react
+    :return: returns nothing
+    """
     help.is_valid_token(token)
 
     message = db.get_messages_by_key("message_id", message_id)
@@ -284,9 +315,15 @@ def message_react(token, message_id, react_id):
 
 
 def message_unreact(token, message_id, react_id):
-    
+    """
+    Remove a react from a specific message
+    :param token: authorised user's identifier
+    :param message_id: id for the message to be unreacted
+    :param react_id: id for the type of react
+    :return: returns nothing
+    """
     help.is_valid_token(token)
-    
+
     print(f"message id was {message_id}")
     message = db.get_messages_by_key("message_id", message_id)
     print(f"message returned was {message}")
