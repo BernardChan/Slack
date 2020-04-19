@@ -181,12 +181,22 @@ def send_later(token, channel_id, message, time_sent):
     return {"message_id": message_id}
 
 
+def is_valid_pinner(token, channel_id):
+    user = db.get_users_by_key("token", token)[0]
+
+    if user["permission_id"] != 1 and not \
+            db.is_owner_in_channel("token", token, channel_id):
+        raise AccessError("You aren't authorised to pin this!")
+
+
 def message_pin(token, message_id):
     message = db.get_messages_by_key("message_id", message_id)
 
     # Error Checking
     is_valid_message_id(message)
-    help.is_slackr_admin(token)
+    channel_id = message[0]["channel_id"]
+    is_valid_pinner(token, channel_id)
+
     message = message[0]
     if message["is_pinned"]:
         raise InputError("Message already pinned")
@@ -204,7 +214,8 @@ def message_unpin(token, message_id):
 
     # Error Checking
     is_valid_message_id(message)
-    help.is_slackr_admin(token)
+    channel_id = message[0]["channel_id"]
+    is_valid_pinner(token, channel_id)
     message = message[0]
     if not message["is_pinned"]:
         raise InputError("Message already pinned")
@@ -228,6 +239,7 @@ def get_react_by_key(key, value, message):
         if react[key] == value:
             return react
     return None
+
 
 def is_already_reacted(message, react_id, user_id):
     react = get_react_by_key("react_id", react_id, message)
@@ -269,9 +281,7 @@ def message_react(token, message_id, react_id):
 
 
 def message_unreact(token, message_id, react_id):
-    print(f"message id was {message_id}")
     message = db.get_messages_by_key("message_id", message_id)
-    print(f"message returned was {message}")
     # Error checking
     is_valid_message_id(message)
     message = message[0]

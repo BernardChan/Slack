@@ -23,7 +23,7 @@ def send_email(message, email):
     # set up the SMTP server
     s = smt.SMTP("smtp.gmail.com", 587)
     s.starttls()
-    s.login("import.slack.h11a@gmail.com", "ImportSlack11")  # TODO: move this to another file
+    s.login("import.slack.h11a@gmail.com", "ImportSlack11")
 
     msg = MIMEMultipart()
     msg["From"] = "import.slack.h11a@gmail.com"
