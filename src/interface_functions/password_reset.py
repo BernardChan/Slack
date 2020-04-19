@@ -1,4 +1,8 @@
-# pylint: disable=W0105, W0622
+"""
+File for password resetting in the slackr app
+"""
+
+# pylint: disable=W0105, W0622, len-as-condition, invalid-name
 import smtplib as smt
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -7,10 +11,6 @@ import helper_functions.interface_function_helpers as help
 import helper_functions.auth_helper as auth
 from error import InputError
 
-
-"""
-File for password resetting
-"""
 
 
 def send_email(message, email):
