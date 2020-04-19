@@ -1,7 +1,5 @@
 """
- auth.py
-This function takes in input from the user, validates it,checks against
-the database, then authenticates them if everything is correct.
+File for user facing functions that handle authentication in the slackr app
 """
 #pylint: disable=W0105
 
@@ -26,7 +24,14 @@ User Interface Functions
 ----------------------------------------------------------------------------------
 """
 def auth_register(email, password, name_first, name_last):
-    """Registers user in database"""
+    """
+    Registers a new user in database
+    :param email: inputted email of the user
+    :param password: user's inputted password
+    :param name_first: the user's given name
+    :param name_last: the user's family name
+    :return: returns dictionary containing u_id and token
+    """
     # Stage 1 - Validate input.
     ah.validate_email(email)
     ah.validate_password(password)
@@ -46,7 +51,12 @@ def auth_register(email, password, name_first, name_last):
     return register_dict
 
 def auth_login(email, password):
-    """Logs in user if they are already registered"""
+    """
+    Logs in user that are already registered in the database
+    :param email: inputted email of the user
+    :param password: user's inputted password
+    :return: returns dictionary containing u_id and token
+    """
     # Validate Email
     ah.validate_email(email)
     user_rec = dr.get_users_by_key("email", email)
@@ -59,13 +69,16 @@ def auth_login(email, password):
         raise InputError(description='Password is not correct')
 
     # Create and assign token to database
-    # new_token = ah.get_valid_token(email)
     login_dict = du.login_user(email)
 
     return login_dict
 
 
 def auth_logout(token):
-    """logs out a user if they were registered and currently logged in"""
+    """
+    logs out a user if they were registered and currently logged in
+    :param token: the user's current login token
+    :return: returns dictionary containing is_success
+    """
     is_success = du.logout_user(token)
     return {"is_success": is_success}

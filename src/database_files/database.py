@@ -1,5 +1,5 @@
 """
-This module contains the database for the Slackr server and functions to pickle and unpickle it
+File for the database for the Slackr server and functions to pickle and unpickle it
 """
 import pickle
 import time

@@ -1,8 +1,5 @@
 """
- database_update.py
-This file contains functions to change or add data to the database, so to avoid
-directly accessing database at all times possible since implementation/structure
-may change during the agile iteration process.
+File for functions that change or update the information in the Slackr database
 """
 
 # pylint: disable=W0105 #pointless-string-statement
@@ -18,7 +15,11 @@ Token Functions
 ----------------------------------------------------------------------------------
 """
 def get_valid_token(email):
-    """Generates a valid token based on the hash of input email"""
+    """
+    Generates a valid token based on the hash of input email
+    :param email: inputted email of the user
+    :return: returns token
+    """    
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
     unique_combo = current_time + email
     token = hash_data(unique_combo)
@@ -30,9 +31,18 @@ def get_valid_token(email):
 Data Entry Functions
 ----------------------------------------------------------------------------------
 """
-# Adding user.
 def add_user_to_database(email, password, name_first, name_last, handle, u_id):
     """adds a user"""
+    """
+    Adds a user to the database
+    :param email: inputted email of the user
+    :param password: user's inputted password
+    :param name_first: the user's given name
+    :param name_last: the user's family name
+    :param handle: the user's Slackr handle
+    :param u_id: the user's unique identifier for their record in the database
+    :return: returns dictonary containing u_id and token
+    """
     permission_id = 0
     if not db.DATABASE["users"]:
         permission_id = 1
@@ -64,7 +74,11 @@ def add_user_to_database(email, password, name_first, name_last, handle, u_id):
 
 
 def login_user(email):
-    """returns a token and u_id given a token"""
+    """
+    Records the user log in token in the database and returns the u_id and token
+    :param email: inputted email of the user
+    :return: returns dictionary containing u_id and token
+    """
     for user in db.DATABASE['users']:
         if user["email"] == email:
             token = get_valid_token(email)
@@ -78,7 +92,11 @@ def login_user(email):
 
 
 def logout_user(token):
-    """Logs out user given a token"""
+    """
+    Erases the user log in token in the database and returns boolean is_success
+    :param token: the user's current login token
+    :return: returns boolean is_success
+    """
     is_success = False
     for user in db.DATABASE['users']:
         if user["token"] == token:
