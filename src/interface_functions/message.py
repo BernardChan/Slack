@@ -21,6 +21,7 @@ def insert_message(token, channel_id, message, message_id):
     :param message_id: Integer for a unique identifier of the message
     :return: returns nothing
     """
+    help.is_valid_token(token)
     # Get the messages list from the database and append the current message to it
     messages = db.get_messages()
     user = db.get_users_by_key("token", token)[0]
@@ -45,6 +46,7 @@ def message_send(token, channel_id, message):
     :return: returns dictionary with the generated message_id for the message
     """
     # Error checking
+    help.is_valid_token(token)
     help.check_message_length(message)
     help.check_member_status_of_channel(token, channel_id)
 
@@ -71,11 +73,12 @@ def is_valid_message_id(message):
 
 def message_remove(token, message_id):
 
+    help.is_valid_token(token)
+
     message = db.get_messages_by_key("message_id", message_id)
 
     # Raise errors
     is_valid_message_id(message)
-    help.is_valid_token(token)
     user = db.get_users_by_key("token", token)[0]
     message = message[0]
     is_valid_message_change(user, message)
@@ -89,13 +92,15 @@ def message_remove(token, message_id):
 
 # Assumption - input error raised if message not found
 def message_edit(token, message_id, message):
+    
+    help.is_valid_token(token)
+
     message_string = message
 
     message = db.get_messages_by_key("message_id", message_id)
 
     # Raise errors
     is_valid_message_id(message)
-    help.is_valid_token(token)
     user = db.get_users_by_key("token", token)[0]
     message = message[0]
     is_valid_message_change(user, message)
@@ -161,6 +166,7 @@ def send_later(token, channel_id, message, time_sent):
     :param time_sent: unix time for when the message should be sent
     :return: returns dictionary with the message_id
     """
+    help.is_valid_token(token)
     help.is_message_valid(token, message, channel_id)
     message_id = help.get_unique_id()
     curr = time.time()
@@ -182,6 +188,9 @@ def send_later(token, channel_id, message, time_sent):
 
 
 def message_pin(token, message_id):
+    
+    help.is_valid_token(token)
+
     message = db.get_messages_by_key("message_id", message_id)
 
     # Error Checking
@@ -200,6 +209,9 @@ def message_pin(token, message_id):
 
 
 def message_unpin(token, message_id):
+    
+    help.is_valid_token(token)
+
     message = db.get_messages_by_key("message_id", message_id)
 
     # Error Checking
@@ -242,6 +254,9 @@ def is_already_reacted(message, react_id, user_id):
 
 
 def message_react(token, message_id, react_id):
+    
+    help.is_valid_token(token)
+
     message = db.get_messages_by_key("message_id", message_id)
 
     # Error checking
@@ -269,6 +284,9 @@ def message_react(token, message_id, react_id):
 
 
 def message_unreact(token, message_id, react_id):
+    
+    help.is_valid_token(token)
+    
     print(f"message id was {message_id}")
     message = db.get_messages_by_key("message_id", message_id)
     print(f"message returned was {message}")
