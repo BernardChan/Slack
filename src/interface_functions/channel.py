@@ -19,6 +19,7 @@ def channel_invite(token, channel_id, u_id):
     help.is_valid_token(token)
     help.check_channel_validity(channel_id)
     help.is_valid_uid(u_id)
+    help.check_user_not_in_channel("u_id", u_id, channel_id)
 
     user = db.get_users_by_key("u_id", u_id)[0]
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
@@ -26,8 +27,7 @@ def channel_invite(token, channel_id, u_id):
     if user["permission_id"] == 1:
         channel["owner_members"].append(user)
 
-    return {
-    }
+    return {}
 
 
 # Given a Channel with ID channel_id that the authorised user is part of,
@@ -131,8 +131,7 @@ def channel_leave(token, channel_id):
 
     channel["members"].remove(user)
 
-    return {
-    }
+    return {}
 
 
 def channel_join(token, channel_id):
@@ -145,6 +144,7 @@ def channel_join(token, channel_id):
     """
     help.is_valid_token(token)
     help.check_channel_validity(channel_id)
+    help.check_user_not_in_channel("token", token, channel_id)
 
     # If the channel is private, check if the user is authorised to join
     channel = db.get_channels_by_key("channel_id", channel_id)[0]
@@ -155,8 +155,7 @@ def channel_join(token, channel_id):
     user = db.get_users_by_key('token', token)[0]
     channel["members"].append(user)
 
-    return {
-    }
+    return {}
 
 
 def is_channel_owner(channel, u_id):
@@ -203,11 +202,9 @@ def channel_addowner(token, channel_id, u_id):
     if not db.is_user_in_channel("u_id", u_id, channel_id):
         channel["members"].append(user)
 
-
     channel["owner_members"].append(user)
 
-    return {
-    }
+    return {}
 
 
 def channel_removeowner(token, channel_id, u_id):
@@ -240,5 +237,4 @@ def channel_removeowner(token, channel_id, u_id):
     user = db.get_users_by_key("u_id", u_id)[0]
     channel["owner_members"].remove(user)
 
-    return {
-    }
+    return {}
