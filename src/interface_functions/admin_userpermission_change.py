@@ -1,5 +1,9 @@
-from error import AccessError, InputError
-from database_files.database_retrieval import get_users_by_key
+"""
+File for admin functions in slackr app.
+"""
+
+from error import InputError
+# pylint: disable=line-too-long
 from helper_functions.interface_function_helpers import is_valid_uid, is_slackr_admin, is_valid_token
 import database_files.database as db
 
@@ -14,6 +18,13 @@ import database_files.database as db
     # Authorised user is not an admin or owner
     # Invalid token
 def admin_userpermission_change(token, u_id, permission_id):
+    """
+    Change the permissions of a user.
+    :param token: authorised user's identifier
+    :param u_id: user id for which permissions are changed
+    :param permission_id: permission identifier to change to
+    :return: returns nothing
+    """
 
     # Access errors:
     # if invalid token
