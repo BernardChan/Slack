@@ -1,19 +1,24 @@
+"""
+Module containing users/all, and search/ functions. This module is for functions that do not
+fit the description of other modules.
+"""
+
 from database_files.database_retrieval import get_user_channels_by_key, get_channel_messages
 from database_files.database_retrieval import get_users
 from helper_functions.interface_function_helpers import is_valid_token
 
 # pylint: disable=W0105
-"""
-Module containing users/all, and search/ functions. This module is for functions that do not
-fit the description of other modules.
-"""
 
 
 # USERS/ALL
 # Provides a list of all users and their respective details
 # Only raises AccessError for invalid token
 def users_all(token):
-
+    """
+    Returns a list of all users in the slackr and their details
+    :param token: authorised user's identifier
+    :return: list of users in the slackr
+    """
     # Raise an access error if not a valid token
     is_valid_token(token)
 
@@ -26,6 +31,9 @@ def users_all(token):
 # Sorts by time_created
 # Can be altered to accept any parameter and sort by that if needed
 def sort_messages(messages):
+    """
+    Helper function to sort messages by time created
+    """
     messages.sort(key=lambda message: message["time_created"])
 
 
@@ -37,12 +45,11 @@ def search(token, query_str):
     """
     Searches all messages the user can see and returns messages matching
     the query_str provided
-
     :param token: authorised user's identifier
     :param query_str: string to be matched with messages in the database
     :return: list of messages matching the query string
     """
-
+    is_valid_token(token)
     user_channels = get_user_channels_by_key("token", token)
     found_messages = []
 

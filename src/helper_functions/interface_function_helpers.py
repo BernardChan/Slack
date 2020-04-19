@@ -61,6 +61,10 @@ def is_valid_token(token):
         raise AccessError(description="The given token was not found!")
 
 
+def check_user_not_in_channel(key, value, channel_id):
+    if db.is_user_in_channel(key, value, channel_id):
+        raise AccessError("User is already in this channel")
+
 # Returns a unique 15 digit long integer
 def get_unique_id():
     # bit shifting it so the number is smaller and doesn't reveal mac address
