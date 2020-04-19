@@ -1,6 +1,5 @@
 """
- database_retrieval.py
-This file contains functions to query the database, so to avoid directly accessing database at all times possible since implementation/structure may change during the agile iteration process.
+File for functions that retrieve information from the Slackr database
 """
 
 # Usage:
@@ -13,9 +12,9 @@ This file contains functions to query the database, so to avoid directly accessi
 
 # Additions
     # 21/03/20
-    # added is_duplicate moved here from auth file. 
+    # added is_duplicate moved here from auth file.
 
-# import database_files.database as db
+# pylint: disable=W0105 #pointless-string-statement
 import database_files.database as db
 
 """
@@ -23,20 +22,35 @@ import database_files.database as db
 Database Get Functions
 ----------------------------------------------------------------------------------
 """
-# Returns messages list
 def get_messages():
+    """
+    Returns messages list
+    :return: returns the database part containing all the messages
+    """
     return db.DATABASE["messages"]
 
-# Returns channels list
 def get_channels():
+    """
+    Returns channels list
+    :return: returns the database part containing all the channels
+    """
     return db.DATABASE["channels"]
 
-# Returns users list
 def get_users():
+    """
+    Returns users list
+    :return: returns the database part containing all the users
+    """
     return db.DATABASE["users"]
 
 
 def get_messages_by_key(key, value):
+    """
+    Returns all messages of given key
+    :param key: the key segment of the dictionary
+    :param value: the value segment of the dictionary
+    :return: returns a list containing all the messages that match the search
+    """
     messages = get_messages()
     return_messages = []
 
@@ -50,21 +64,31 @@ def get_messages_by_key(key, value):
     print(f"returning messages: {return_messages}")
     return return_messages
 
-
-# returns all messages from a given channel_id
 def get_channel_messages(channel_id):
+    """
+    Returns all messages from a given channel_id
+    :param channel_id: the channel_id that will be used for the search
+    :return: returns a list containing all the messages that match the channel_id
+    """
     messages = db.DATABASE["messages"]
     return [message for message in messages if message["channel_id"] == channel_id]
 
-
-# gets channels by key
 def get_channels_by_key(key, value):
+    """
+    Returns channels that match a particular key and value
+    :param key: the key segment of the search
+    :param value: the value segment of the search
+    :return: returns a list containing all the channels that match the search
+    """
     channels = get_channels()
     return [channel for channel in channels if channel[key] == value]
 
-
-# gets the standup queue in channel_id
 def get_channel_standup(channel_id):
+    """
+    gets the standup queue in channel_id
+    :param channel_id: the channel_id that will be used for the search
+    :return: returns a list containing the queue in the standup channel
+    """
     channel = get_channels_by_key("channel_id", channel_id)[0]
     return channel["standup"]
 
@@ -73,28 +97,39 @@ def get_channel_standup(channel_id):
 ----------------------------------------------------------------------------------
 Database Query Functions
 ----------------------------------------------------------------------------------
-"""    
-
-
-# gets specific users by key
+"""
 def get_users_by_key(key, value):
+    """
+    gets specific user by key
+    :param key: the key segment of the search
+    :param value: the value segment of the search
+    :return: returns a list containing the user if one matched the search
+    """
     users = get_users()
     return [user for user in users if user[key] == value]
-    
-    
+
+
 def is_duplicate(key, value):
+    """
+    checks if given key/value is duplicate to one in the database and returns a boolean
+    :param key: the key segment of the search
+    :param value: the value segment of the search
+    :return: returns a boolean of True or False
+    """
     db_user = get_users_by_key(key, value)
     if db_user != []:
         return True
-    else:
-        return False 
+    return False
 
 
-# returns boolean if a user is part of a channel
-# user key is what property (key) of the user we're searching
-# e.g. is_user_in_channel("token", token, 2) # Checks if a user is in channel 2 by their token
-# e.g. is_user_in_channel("u_id", 6, 3) # Check if a user is in channel 3 by their u_id (u_id = 6 here)
 def is_user_in_channel(key, value, channel_id):
+    """
+    checks if given user is in a channel and returns a boolean if they are
+    :param key: User key is what property (key) of the user being searched
+    :param value: the value of the propery being searched
+    :param channel_id: the id of the channel being searched
+    :return: returns a boolean of True or False
+    """
     channels = get_channels()
     print(f"matching value {value}")
     # Go through the list of channels and check only the ones matching channel_id
@@ -110,8 +145,14 @@ def is_user_in_channel(key, value, channel_id):
     return False
 
 
-# returns boolean if a user is owner of a channel
 def is_owner_in_channel(key, value, channel_id):
+    """
+    checks if given user owns a channel and returns a boolean True if they are
+    :param key: User key is what property (key) of the user being searched
+    :param value: the value of the user propery being searched
+    :param channel_id: the id of the channel being searched
+    :return: returns a boolean of True or False
+    """
     channels = get_channels()
 
     # Go through the list of channels and check only the ones matching channel_id
@@ -125,10 +166,16 @@ def is_owner_in_channel(key, value, channel_id):
     return False
 
 
-# Gets all the channels a user is a part of
 def get_user_channels_by_key(key, value):
+    """Gets all the channels a user is a part of"""
+    """
+    Gets all the channels a user is a part of
+    :param key: User key is what property (key) of the user being searched
+    :param value: the value of the user propery being searched
+    :return: returns a list of channels mathcing search criteria
+    """
     channels = get_channels()
-    
+
     user_channels = []
 
     # Find what channels a user is in
@@ -140,4 +187,3 @@ def get_user_channels_by_key(key, value):
                 user_channels.append(channel)
 
     return user_channels
-

@@ -1,11 +1,12 @@
+"""
+File for the database for the Slackr server and functions to pickle and unpickle it
+"""
 import pickle
 import time
 from pathlib import Path
 
-# pylint: disable=W0105
-"""
-This module contains the database for the Slackr server and functions to pickle and unpickle it
-"""
+# pylint: disable=W0105 #pointless-string-statement
+# pylint: disable=W0603 #global-statement
 
 # Dictionary for all data to be contained within the server
 DATABASE = {
@@ -25,8 +26,8 @@ def pickle_database():
     :return: returns nothing
     """
     global DATABASE
-    with open(PICKLED_FILE, "wb+") as FILE:
-        pickle.dump(DATABASE, FILE)
+    with open(PICKLED_FILE, "wb+") as files:
+        pickle.dump(DATABASE, files)
 
 
 # Restores the database_files from last save
@@ -37,8 +38,8 @@ def unpickle_database():
     """
     global DATABASE
     try:
-        with open(PICKLED_FILE, "rb") as FILE:
-            DATABASE = pickle.load(FILE)
+        with open(PICKLED_FILE, "rb") as files:
+            DATABASE = pickle.load(files)
     except FileNotFoundError:
         pickle_database()
 
