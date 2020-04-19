@@ -167,7 +167,6 @@ def is_owner_in_channel(key, value, channel_id):
 
 
 def get_user_channels_by_key(key, value):
-    """Gets all the channels a user is a part of"""
     """
     Gets all the channels a user is a part of
     :param key: User key is what property (key) of the user being searched
